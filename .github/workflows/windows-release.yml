@@ -54,9 +54,13 @@ jobs:
           "Source commit: $env:GITHUB_SHA" | Set-Content work\ci-evidence\source-commit.txt
           "Runner image: $env:ImageOS / $env:ImageVersion" | Set-Content work\ci-evidence\runner.txt
           [Environment]::OSVersion.VersionString | Add-Content work\ci-evidence\runner.txt
-          go version | Tee-Object -FilePath work\ci-evidence\go-version.txt
+          $goExecutable = (Get-Command go -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
+          $nodeExecutable = (Get-Command node -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
+          "LKVS_GO_EXE=$goExecutable" >> $env:GITHUB_ENV
+          "LKVS_NODE_EXE=$nodeExecutable" >> $env:GITHUB_ENV
+          & $goExecutable version | Tee-Object -FilePath work\ci-evidence\go-version.txt
           if ($LASTEXITCODE -ne 0) { throw 'Go could not report its version.' }
-          node --version | Tee-Object -FilePath work\ci-evidence\node-version.txt
+          & $nodeExecutable --version | Tee-Object -FilePath work\ci-evidence\node-version.txt
           if ($LASTEXITCODE -ne 0) { throw 'Node could not report its version.' }
 
       - name: Test Windows filename and ZIP defenses
@@ -98,7 +102,7 @@ jobs:
       - name: Build current native executables and source receipt
         run: |
           $ErrorActionPreference = 'Stop'
-          & .\scripts\Build-Windows.ps1 -GoExe (Get-Command go -CommandType Application).Source *>&1 | Tee-Object -FilePath work\ci-evidence\build.txt
+          & .\scripts\Build-Windows.ps1 -GoExe $env:LKVS_GO_EXE *>&1 | Tee-Object -FilePath work\ci-evidence\build.txt
           if (-not $?) { throw 'The Windows build failed.' }
           Copy-Item -LiteralPath bin\BUILD-RECEIPT.json -Destination work\ci-evidence\BUILD-RECEIPT.json
 
@@ -107,7 +111,7 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           $env:JP300_RETAIN_QUALIFICATION_FIXTURES = '1'
-          $env:JA21_ENGINE_NODE = (Get-Command node -CommandType Application).Source
+          $env:JA21_ENGINE_NODE = $env:LKVS_NODE_EXE
           $env:JA21_ENGINE_WEB = "$env:GITHUB_WORKSPACE\appliance\web"
           $env:JA21_ENGINE_SOURCE_ROOT = $env:GITHUB_WORKSPACE
           $env:TEMP = "$env:RUNNER_TEMP\lk-t"
@@ -119,7 +123,7 @@ jobs:
       - name: Run every appliance regression
         run: |
           $ErrorActionPreference = 'Stop'
-          node --test appliance/tests/client-flow.test.mjs appliance/tests/core.test.mjs *>&1 | Tee-Object -FilePath work\ci-evidence\appliance-tests.txt
+          & $env:LKVS_NODE_EXE --test appliance/tests/client-flow.test.mjs appliance/tests/core.test.mjs *>&1 | Tee-Object -FilePath work\ci-evidence\appliance-tests.txt
           if ($LASTEXITCODE -ne 0) { throw 'The appliance regression suite failed.' }
 
       - name: Verify the built package inventory
