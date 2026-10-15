@@ -117,7 +117,6 @@ $jpEnvironmentBackup = @{}
 foreach ($jpEnvironmentName in $jpEnvironmentNames) {
     $jpEnvironmentBackup[$jpEnvironmentName] = [Environment]::GetEnvironmentVariable($jpEnvironmentName, 'Process')
 }
-$jpLocationPushed = $false
 try {
     [void][IO.Directory]::CreateDirectory($jpBinDirectory)
     foreach ($jpBuildSubdirectory in @('tmp', 'go-cache', 'gopath', 'go-modules')) {
@@ -139,8 +138,6 @@ try {
     $env:GOCACHE = Join-Path $jpBuildDirectory 'go-cache'
     $env:TEMP = Join-Path $jpBuildDirectory 'tmp'
     $env:TMP = $env:TEMP
-    Push-Location -LiteralPath $jpNativeDirectory
-    $jpLocationPushed = $true
     $jpGoVersionOutput = (& $jpGoPath version | Out-String).Trim()
     if ($LASTEXITCODE -ne 0) { throw 'The selected Go executable could not report its version.' }
     if ($jpGoVersionOutput -notmatch '\bgo(\d+)\.(\d+)(?:\.(\d+))?\b') {
@@ -157,9 +154,11 @@ try {
     Write-Output ('Selected toolchain: ' + $jpGoVersionOutput)
     $jpSourceRecordsBefore = @(Get-JPBuildSourceRecords)
     $jpProductVersionBefore = [IO.File]::ReadAllText((Join-Path $jpBuildRoot 'VERSION')).Trim()
-    & $jpGoPath build '-work' '-buildvcs=false' '-trimpath' '-ldflags=-s -w' '-o' (Join-Path $jpBinDirectory 'JPBroker.exe') '.'
+    # Go changes its own working directory; the caller's pipeline location stays
+    # stable for relative log paths and other downstream command arguments.
+    & $jpGoPath '-C' $jpNativeDirectory build '-work' '-buildvcs=false' '-trimpath' '-ldflags=-s -w' '-o' (Join-Path $jpBinDirectory 'JPBroker.exe') '.'
     if ($LASTEXITCODE -ne 0) { throw 'Native broker compilation failed.' }
-    & $jpGoPath test '-c' '-work' '-buildvcs=false' '-trimpath' '-o' (Join-Path $jpBinDirectory 'JPTests.exe') '.'
+    & $jpGoPath '-C' $jpNativeDirectory test '-c' '-work' '-buildvcs=false' '-trimpath' '-o' (Join-Path $jpBinDirectory 'JPTests.exe') '.'
     if ($LASTEXITCODE -ne 0) { throw 'Native regression executable compilation failed.' }
     & $jpCompilerPath '/nologo' '/target:exe' '/platform:x64' '/optimize+' '/main:VBJA21.JPConsoleEntry' ('/out:' + (Join-Path $jpBinDirectory 'JPConsole.exe')) @jpCompilerReferences @jpHostSources
     if ($LASTEXITCODE -ne 0) { throw 'Native WPF presenter compilation failed.' }
@@ -193,7 +192,6 @@ try {
     Write-Output ('Go -work preserves intermediate compiler directories under ' + $env:TEMP + '. No build directories were deleted.')
 }
 finally {
-    if ($jpLocationPushed) { Pop-Location }
     foreach ($jpEnvironmentName in $jpEnvironmentNames) {
         [Environment]::SetEnvironmentVariable($jpEnvironmentName, $jpEnvironmentBackup[$jpEnvironmentName], 'Process')
     }

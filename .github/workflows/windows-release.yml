@@ -50,23 +50,23 @@ jobs:
         run: |
           $ErrorActionPreference = 'Stop'
           if ($env:GITHUB_WORKSPACE.Length -gt 100) { throw 'The checkout exceeds the supported Windows installation-root limit.' }
-          New-Item -ItemType Directory -Force -Path work\ci-evidence, work\ci-temp | Out-Null
-          "Source commit: $env:GITHUB_SHA" | Set-Content work\ci-evidence\source-commit.txt
-          "Runner image: $env:ImageOS / $env:ImageVersion" | Set-Content work\ci-evidence\runner.txt
-          [Environment]::OSVersion.VersionString | Add-Content work\ci-evidence\runner.txt
+          New-Item -ItemType Directory -Force -Path "$env:GITHUB_WORKSPACE\work\ci-evidence", "$env:GITHUB_WORKSPACE\work\ci-temp" | Out-Null
+          "Source commit: $env:GITHUB_SHA" | Set-Content "$env:GITHUB_WORKSPACE\work\ci-evidence\source-commit.txt"
+          "Runner image: $env:ImageOS / $env:ImageVersion" | Set-Content "$env:GITHUB_WORKSPACE\work\ci-evidence\runner.txt"
+          [Environment]::OSVersion.VersionString | Add-Content "$env:GITHUB_WORKSPACE\work\ci-evidence\runner.txt"
           $goExecutable = (Get-Command go -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
           $nodeExecutable = (Get-Command node -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
           "LKVS_GO_EXE=$goExecutable" >> $env:GITHUB_ENV
           "LKVS_NODE_EXE=$nodeExecutable" >> $env:GITHUB_ENV
-          & $goExecutable version | Tee-Object -FilePath work\ci-evidence\go-version.txt
+          & $goExecutable version | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\ci-evidence\go-version.txt"
           if ($LASTEXITCODE -ne 0) { throw 'Go could not report its version.' }
-          & $nodeExecutable --version | Tee-Object -FilePath work\ci-evidence\node-version.txt
+          & $nodeExecutable --version | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\ci-evidence\node-version.txt"
           if ($LASTEXITCODE -ne 0) { throw 'Node could not report its version.' }
 
       - name: Test Windows filename and ZIP defenses
         run: |
           $ErrorActionPreference = 'Stop'
-          & .\scripts\Test-WindowsPaths.ps1 -SelfTest -FixtureDirectory "$env:RUNNER_TEMP\lkvs-path-fixtures" -ReportPath work\ci-evidence\path-self-tests.json
+          & .\scripts\Test-WindowsPaths.ps1 -SelfTest -FixtureDirectory "$env:RUNNER_TEMP\lkvs-path-fixtures" -ReportPath "$env:GITHUB_WORKSPACE\work\ci-evidence\path-self-tests.json"
 
       - name: Verify and unpack the reference dependency archive
         run: |
@@ -78,7 +78,7 @@ jobs:
           $digest = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
           if ($digest -ne $env:REFERENCE_SHA256) { throw 'The dependency archive SHA-256 does not match the reviewed release asset.' }
           $reference = "$env:RUNNER_TEMP\lkvs-reference"
-          & .\scripts\Test-WindowsPaths.ps1 -Archive $archive -InstallationRoot $reference -ReportPath work\ci-evidence\reference-paths.json
+          & .\scripts\Test-WindowsPaths.ps1 -Archive $archive -InstallationRoot $reference -ReportPath "$env:GITHUB_WORKSPACE\work\ci-evidence\reference-paths.json"
           Expand-Archive -LiteralPath $archive -DestinationPath $reference
           $launchers = @(Get-ChildItem -LiteralPath $reference -Filter BOOT.cmd -File -Recurse)
           if ($launchers.Count -ne 1) { throw 'The reference archive must contain exactly one BOOT.cmd.' }
@@ -93,18 +93,18 @@ jobs:
           }
           if (Test-Path -LiteralPath "$referenceRoot\runtime\renderer.provenance.json" -PathType Leaf) {
             Copy-Item -LiteralPath "$referenceRoot\runtime\renderer.provenance.json" -Destination runtime\renderer.provenance.json
-            Copy-Item -LiteralPath "$referenceRoot\runtime\renderer.provenance.json" -Destination work\ci-evidence\renderer.provenance.json
+            Copy-Item -LiteralPath "$referenceRoot\runtime\renderer.provenance.json" -Destination "$env:GITHUB_WORKSPACE\work\ci-evidence\renderer.provenance.json"
           } else {
-            'The reference archive contains no runtime/renderer.provenance.json; no vendor provenance record was fabricated.' | Set-Content work\ci-evidence\renderer-provenance-absence.txt
+            'The reference archive contains no runtime/renderer.provenance.json; no vendor provenance record was fabricated.' | Set-Content "$env:GITHUB_WORKSPACE\work\ci-evidence\renderer-provenance-absence.txt"
           }
-          "Reference: $env:REFERENCE_URL`nSHA256: $digest" | Set-Content work\ci-evidence\dependency-reference.txt
+          "Reference: $env:REFERENCE_URL`nSHA256: $digest" | Set-Content "$env:GITHUB_WORKSPACE\work\ci-evidence\dependency-reference.txt"
 
       - name: Build current native executables and source receipt
         run: |
           $ErrorActionPreference = 'Stop'
-          & .\scripts\Build-Windows.ps1 -GoExe $env:LKVS_GO_EXE *>&1 | Tee-Object -FilePath work\ci-evidence\build.txt
+          & .\scripts\Build-Windows.ps1 -GoExe $env:LKVS_GO_EXE *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\ci-evidence\build.txt"
           if (-not $?) { throw 'The Windows build failed.' }
-          Copy-Item -LiteralPath bin\BUILD-RECEIPT.json -Destination work\ci-evidence\BUILD-RECEIPT.json
+          Copy-Item -LiteralPath "$env:GITHUB_WORKSPACE\bin\BUILD-RECEIPT.json" -Destination "$env:GITHUB_WORKSPACE\work\ci-evidence\BUILD-RECEIPT.json"
 
       - name: Run every native regression from the compiled test executable
         working-directory: native
@@ -117,19 +117,19 @@ jobs:
           $env:TEMP = "$env:RUNNER_TEMP\lk-t"
           $env:TMP = $env:TEMP
           New-Item -ItemType Directory -Force -Path $env:TEMP | Out-Null
-          & ..\bin\JPTests.exe '-test.v' '-test.timeout=10m' *>&1 | Tee-Object -FilePath ..\work\ci-evidence\native-tests.txt
+          & ..\bin\JPTests.exe '-test.v' '-test.timeout=10m' *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\ci-evidence\native-tests.txt"
           if ($LASTEXITCODE -ne 0) { throw 'The native regression suite failed.' }
 
       - name: Run every appliance regression
         run: |
           $ErrorActionPreference = 'Stop'
-          & $env:LKVS_NODE_EXE --test appliance/tests/client-flow.test.mjs appliance/tests/core.test.mjs *>&1 | Tee-Object -FilePath work\ci-evidence\appliance-tests.txt
+          & $env:LKVS_NODE_EXE --test appliance/tests/client-flow.test.mjs appliance/tests/core.test.mjs *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\ci-evidence\appliance-tests.txt"
           if ($LASTEXITCODE -ne 0) { throw 'The appliance regression suite failed.' }
 
       - name: Verify the built package inventory
         run: |
           $ErrorActionPreference = 'Stop'
-          & .\bin\JPBroker.exe --boot --verify *>&1 | Tee-Object -FilePath work\ci-evidence\package-verify.txt
+          & .\bin\JPBroker.exe --boot --verify *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\ci-evidence\package-verify.txt"
           if ($LASTEXITCODE -ne 0) { throw 'The compiled broker rejected the built package inventory.' }
 
       - name: Assemble and audit the full portable candidate
@@ -161,7 +161,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: windows-build-evidence
-          path: work/ci-evidence/
+          path: ${{ github.workspace }}/work/ci-evidence/
           if-no-files-found: error
           retention-days: 30
 
