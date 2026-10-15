@@ -36,7 +36,7 @@ The historical archive is not required for startup. It also contains further nes
 
 ## Version boundaries
 
-The **JP300 3.0.0 reference package** preserves its historical compiled binaries and corresponding source. It receives current distribution notices and a conservative launcher path preflight, with private evidence and nested history removed. It is identified as a legacy reference, not a new 3.0.1 build or a clean-machine certification. Historical launchers are retained where that binary version requires them.
+The **JP300 3.0.0 reference package** preserves its historical compiled binaries and corresponding source. It receives current distribution notices and a conservative launcher path preflight, with private evidence and nested history removed. It is identified as a legacy reference, not a new 3.0.1 build or a clean-machine certification. Historical launchers are retained where that binary version requires them. This reference ZIP retains a top-level `JP300/` folder: after extraction, run `JP300/BOOT.cmd`. The 100-unit root budget applies to the folder containing BOOT.cmd. New 3.0.1 packages assembled by Package-Windows.ps1 place BOOT.cmd directly at the ZIP root.
 
 The **3.0.1 candidate** on the main branch contains the consolidated native BOOT dispatch, qualification corrections and new path guards. Its executable artifacts must be rebuilt from the exact source. The packaging script refuses to combine those sources with stale executables from the reference package.
 

@@ -10,8 +10,8 @@ This publication is a source snapshot. It is not a certified, complete binary re
 | Relocated immutable inventory check | Observed on the existing Windows 11 x64 host |
 | Actual CLR/WPF/SDK and Fixed renderer probe | Passed on the existing host, including a path with spaces/symbols/non-English characters and Internet download marking on key files |
 | Read-only managed probe | Observed not to create normal application data |
-| Full current native regression run | Incomplete: 28 top-level groups passed, zero group failures reported, then the ten-minute test timeout occurred in automatic temporary-directory cleanup |
-| Fixture-retention correction | Present in source; not rebuilt or validated at this publication checkpoint |
+| Earlier local native regression run | Incomplete: 28 top-level groups passed, zero group failures reported, then the ten-minute test timeout occurred in automatic temporary-directory cleanup |
+| Fixture-retention correction | Present in source; local rebuild/acceptance incomplete. Any later hosted build evidence is attached to its release and workflow run |
 | Current complete WPF/Worker command qualification | Pending |
 | Current no-argument BOOT end-to-end check | Pending |
 | Genuine clean Windows 11 x64 qualification | Pending; no clean guest was available |
