@@ -1,0 +1,1803 @@
+{
+  "module": "vb.browser",
+  "imports": [
+    "Core"
+  ],
+  "policy": "no_network",
+  "records": {
+    "Model": [
+      {
+        "name": "active",
+        "type": "Count"
+      },
+      {
+        "name": "count",
+        "type": "Count"
+      },
+      {
+        "name": "can_back",
+        "type": "Flag"
+      },
+      {
+        "name": "can_forward",
+        "type": "Flag"
+      },
+      {
+        "name": "loading",
+        "type": "Flag"
+      }
+    ],
+    "Event": [
+      {
+        "name": "kind",
+        "type": "Text"
+      },
+      {
+        "name": "id",
+        "type": "Count"
+      },
+      {
+        "name": "input",
+        "type": "Text"
+      }
+    ],
+    "Action": [
+      {
+        "name": "kind",
+        "type": "Text"
+      },
+      {
+        "name": "id",
+        "type": "Count"
+      },
+      {
+        "name": "value",
+        "type": "Text"
+      }
+    ],
+    "Address": [
+      {
+        "name": "text",
+        "type": "Text"
+      },
+      {
+        "name": "scheme",
+        "type": "Text"
+      },
+      {
+        "name": "explicit",
+        "type": "Flag"
+      },
+      {
+        "name": "local",
+        "type": "Flag"
+      },
+      {
+        "name": "host",
+        "type": "Flag"
+      },
+      {
+        "name": "valid",
+        "type": "Flag"
+      }
+    ]
+  },
+  "functions": {
+    "action": {
+      "params": [
+        {
+          "name": "kind",
+          "type": "Text"
+        },
+        {
+          "name": "id",
+          "type": "Count"
+        },
+        {
+          "name": "value",
+          "type": "Text"
+        }
+      ],
+      "returns": "Action",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "record",
+            "name": "Action",
+            "fields": [
+              {
+                "name": "kind",
+                "value": {
+                  "op": "name",
+                  "name": "kind"
+                }
+              },
+              {
+                "name": "id",
+                "value": {
+                  "op": "name",
+                  "name": "id"
+                }
+              },
+              {
+                "name": "value",
+                "value": {
+                  "op": "name",
+                  "name": "value"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "line": 13
+    },
+    "page_allowed": {
+      "params": [
+        {
+          "name": "scheme",
+          "type": "Text"
+        },
+        {
+          "name": "internal",
+          "type": "Flag"
+        }
+      ],
+      "returns": "Flag",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "or",
+                "left": {
+                  "op": "name",
+                  "name": "internal"
+                },
+                "right": {
+                  "op": "binary",
+                  "kind": "==",
+                  "left": {
+                    "op": "name",
+                    "name": "scheme"
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": "https"
+                  }
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "name",
+                  "name": "scheme"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "http"
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "name",
+                "name": "scheme"
+              },
+              "right": {
+                "op": "literal",
+                "value": "about_blank"
+              }
+            }
+          }
+        }
+      ],
+      "line": 16
+    },
+    "deletion_allowed": {
+      "params": [
+        {
+          "name": "confirmed",
+          "type": "Flag"
+        },
+        {
+          "name": "installation",
+          "type": "Flag"
+        }
+      ],
+      "returns": "Flag",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "binary",
+            "kind": "and",
+            "left": {
+              "op": "name",
+              "name": "confirmed"
+            },
+            "right": {
+              "op": "name",
+              "name": "installation"
+            }
+          }
+        }
+      ],
+      "line": 19
+    },
+    "normalize": {
+      "params": [
+        {
+          "name": "input",
+          "type": "Text"
+        }
+      ],
+      "returns": "Text",
+      "body": [
+        {
+          "op": "let",
+          "name": "address",
+          "type": "Address",
+          "value": {
+            "op": "call",
+            "callee": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "URL"
+              },
+              "key": "analyze"
+            },
+            "args": [
+              {
+                "op": "name",
+                "name": "input"
+              }
+            ]
+          }
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "address"
+                },
+                "key": "text"
+              },
+              "right": {
+                "op": "literal",
+                "value": ""
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "address"
+                },
+                "key": "text"
+              },
+              "right": {
+                "op": "literal",
+                "value": "vb://new-tab"
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "literal",
+                "value": "vb://new-tab"
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "==",
+            "left": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "address"
+              },
+              "key": "text"
+            },
+            "right": {
+              "op": "literal",
+              "value": "about:blank"
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "literal",
+                "value": "about:blank"
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "get",
+            "object": {
+              "op": "name",
+              "name": "address"
+            },
+            "key": "explicit"
+          },
+          "yes": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "binary",
+                "kind": "and",
+                "left": {
+                  "op": "binary",
+                  "kind": "or",
+                  "left": {
+                    "op": "binary",
+                    "kind": "==",
+                    "left": {
+                      "op": "get",
+                      "object": {
+                        "op": "name",
+                        "name": "address"
+                      },
+                      "key": "scheme"
+                    },
+                    "right": {
+                      "op": "literal",
+                      "value": "https"
+                    }
+                  },
+                  "right": {
+                    "op": "binary",
+                    "kind": "==",
+                    "left": {
+                      "op": "get",
+                      "object": {
+                        "op": "name",
+                        "name": "address"
+                      },
+                      "key": "scheme"
+                    },
+                    "right": {
+                      "op": "literal",
+                      "value": "http"
+                    }
+                  }
+                },
+                "right": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "address"
+                  },
+                  "key": "valid"
+                }
+              },
+              "yes": [
+                {
+                  "op": "return",
+                  "value": {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "address"
+                    },
+                    "key": "text"
+                  }
+                }
+              ],
+              "no": []
+            },
+            {
+              "op": "return",
+              "value": {
+                "op": "literal",
+                "value": ""
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "get",
+            "object": {
+              "op": "name",
+              "name": "address"
+            },
+            "key": "local"
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "binary",
+                "kind": "+",
+                "left": {
+                  "op": "literal",
+                  "value": "http://"
+                },
+                "right": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "address"
+                  },
+                  "key": "text"
+                }
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "get",
+            "object": {
+              "op": "name",
+              "name": "address"
+            },
+            "key": "host"
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "binary",
+                "kind": "+",
+                "left": {
+                  "op": "literal",
+                  "value": "https://"
+                },
+                "right": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "address"
+                  },
+                  "key": "text"
+                }
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "return",
+          "value": {
+            "op": "binary",
+            "kind": "+",
+            "left": {
+              "op": "literal",
+              "value": "https://html.duckduckgo.com/html/?q="
+            },
+            "right": {
+              "op": "call",
+              "callee": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "URL"
+                },
+                "key": "encode"
+              },
+              "args": [
+                {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "address"
+                  },
+                  "key": "text"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "line": 22
+    },
+    "on_event": {
+      "params": [
+        {
+          "name": "model",
+          "type": "Model"
+        },
+        {
+          "name": "event",
+          "type": "Event"
+        }
+      ],
+      "returns": "Action",
+      "body": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "new_tab"
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "private_tab"
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "popup"
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "binary",
+                "kind": ">=",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "model"
+                  },
+                  "key": "count"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": 32
+                }
+              },
+              "yes": [
+                {
+                  "op": "return",
+                  "value": {
+                    "op": "call",
+                    "callee": {
+                      "op": "name",
+                      "name": "action"
+                    },
+                    "args": [
+                      {
+                        "op": "literal",
+                        "value": "status"
+                      },
+                      {
+                        "op": "literal",
+                        "value": 0
+                      },
+                      {
+                        "op": "literal",
+                        "value": "The 32-tab limit has been reached."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "no": []
+            },
+            {
+              "op": "let",
+              "name": "target",
+              "type": "Text",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "normalize"
+                },
+                "args": [
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "input"
+                  }
+                ]
+              }
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "name",
+                  "name": "target"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": ""
+                }
+              },
+              "yes": [
+                {
+                  "op": "return",
+                  "value": {
+                    "op": "call",
+                    "callee": {
+                      "op": "name",
+                      "name": "action"
+                    },
+                    "args": [
+                      {
+                        "op": "literal",
+                        "value": "status"
+                      },
+                      {
+                        "op": "literal",
+                        "value": 0
+                      },
+                      {
+                        "op": "literal",
+                        "value": "This address type is blocked."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "no": []
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "private_tab"
+                }
+              },
+              "yes": [
+                {
+                  "op": "return",
+                  "value": {
+                    "op": "call",
+                    "callee": {
+                      "op": "name",
+                      "name": "action"
+                    },
+                    "args": [
+                      {
+                        "op": "literal",
+                        "value": "create_private"
+                      },
+                      {
+                        "op": "literal",
+                        "value": 0
+                      },
+                      {
+                        "op": "name",
+                        "name": "target"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "no": []
+            },
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "create"
+                  },
+                  {
+                    "op": "literal",
+                    "value": 0
+                  },
+                  {
+                    "op": "name",
+                    "name": "target"
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "==",
+            "left": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "event"
+              },
+              "key": "kind"
+            },
+            "right": {
+              "op": "literal",
+              "value": "navigate"
+            }
+          },
+          "yes": [
+            {
+              "op": "let",
+              "name": "target",
+              "type": "Text",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "normalize"
+                },
+                "args": [
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "input"
+                  }
+                ]
+              }
+            },
+            {
+              "op": "if",
+              "condition": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "name",
+                  "name": "target"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": ""
+                }
+              },
+              "yes": [
+                {
+                  "op": "return",
+                  "value": {
+                    "op": "call",
+                    "callee": {
+                      "op": "name",
+                      "name": "action"
+                    },
+                    "args": [
+                      {
+                        "op": "literal",
+                        "value": "status"
+                      },
+                      {
+                        "op": "literal",
+                        "value": 0
+                      },
+                      {
+                        "op": "literal",
+                        "value": "This address type is blocked."
+                      }
+                    ]
+                  }
+                }
+              ],
+              "no": []
+            },
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "load"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "model"
+                    },
+                    "key": "active"
+                  },
+                  {
+                    "op": "name",
+                    "name": "target"
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "==",
+            "left": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "event"
+              },
+              "key": "kind"
+            },
+            "right": {
+              "op": "literal",
+              "value": "home"
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "load"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "model"
+                    },
+                    "key": "active"
+                  },
+                  {
+                    "op": "literal",
+                    "value": "vb://new-tab"
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "==",
+            "left": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "event"
+              },
+              "key": "kind"
+            },
+            "right": {
+              "op": "literal",
+              "value": "select_tab"
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "select"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "id"
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "==",
+            "left": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "event"
+              },
+              "key": "kind"
+            },
+            "right": {
+              "op": "literal",
+              "value": "close_tab"
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "close"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "id"
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "==",
+            "left": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "event"
+              },
+              "key": "kind"
+            },
+            "right": {
+              "op": "literal",
+              "value": "close_active"
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "close"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "model"
+                    },
+                    "key": "active"
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "and",
+            "left": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "back"
+              }
+            },
+            "right": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "model"
+              },
+              "key": "can_back"
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "back"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "model"
+                    },
+                    "key": "active"
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "and",
+            "left": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "forward"
+              }
+            },
+            "right": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "model"
+              },
+              "key": "can_forward"
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "forward"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "model"
+                    },
+                    "key": "active"
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "==",
+            "left": {
+              "op": "get",
+              "object": {
+                "op": "name",
+                "name": "event"
+              },
+              "key": "kind"
+            },
+            "right": {
+              "op": "literal",
+              "value": "refresh"
+            }
+          },
+          "yes": [
+            {
+              "op": "if",
+              "condition": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "model"
+                },
+                "key": "loading"
+              },
+              "yes": [
+                {
+                  "op": "return",
+                  "value": {
+                    "op": "call",
+                    "callee": {
+                      "op": "name",
+                      "name": "action"
+                    },
+                    "args": [
+                      {
+                        "op": "literal",
+                        "value": "stop"
+                      },
+                      {
+                        "op": "get",
+                        "object": {
+                          "op": "name",
+                          "name": "model"
+                        },
+                        "key": "active"
+                      },
+                      {
+                        "op": "literal",
+                        "value": ""
+                      }
+                    ]
+                  }
+                }
+              ],
+              "no": []
+            },
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "literal",
+                    "value": "reload"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "model"
+                    },
+                    "key": "active"
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "reload"
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "stop"
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "kind"
+                  },
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "model"
+                    },
+                    "key": "active"
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "downloads"
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "clear_data"
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "about"
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "kind"
+                  },
+                  {
+                    "op": "literal",
+                    "value": 0
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "drawer_toggle"
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "drawer_close"
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "kind"
+                  },
+                  {
+                    "op": "literal",
+                    "value": 0
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "helper_verify"
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "helper_pulse"
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "helper_status"
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "kind"
+                  },
+                  {
+                    "op": "literal",
+                    "value": 0
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "or",
+                "left": {
+                  "op": "binary",
+                  "kind": "or",
+                  "left": {
+                    "op": "binary",
+                    "kind": "==",
+                    "left": {
+                      "op": "get",
+                      "object": {
+                        "op": "name",
+                        "name": "event"
+                      },
+                      "key": "kind"
+                    },
+                    "right": {
+                      "op": "literal",
+                      "value": "minimize"
+                    }
+                  },
+                  "right": {
+                    "op": "binary",
+                    "kind": "==",
+                    "left": {
+                      "op": "get",
+                      "object": {
+                        "op": "name",
+                        "name": "event"
+                      },
+                      "key": "kind"
+                    },
+                    "right": {
+                      "op": "literal",
+                      "value": "maximize"
+                    }
+                  }
+                },
+                "right": {
+                  "op": "binary",
+                  "kind": "==",
+                  "left": {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "kind"
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": "fullscreen"
+                  }
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "event"
+                  },
+                  "key": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "close_window"
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "event"
+                },
+                "key": "kind"
+              },
+              "right": {
+                "op": "literal",
+                "value": "focus_address"
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "call",
+                "callee": {
+                  "op": "name",
+                  "name": "action"
+                },
+                "args": [
+                  {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "event"
+                    },
+                    "key": "kind"
+                  },
+                  {
+                    "op": "literal",
+                    "value": 0
+                  },
+                  {
+                    "op": "literal",
+                    "value": ""
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "return",
+          "value": {
+            "op": "call",
+            "callee": {
+              "op": "name",
+              "name": "action"
+            },
+            "args": [
+              {
+                "op": "literal",
+                "value": "none"
+              },
+              {
+                "op": "literal",
+                "value": 0
+              },
+              {
+                "op": "literal",
+                "value": ""
+              }
+            ]
+          }
+        }
+      ],
+      "line": 34
+    }
+  },
+  "sourceHash": "3b647d50066b9bd922e72169fe2c1de7af62d715a3837f24f5c7886d30c276b1",
+  "profile": "vb-ja21-core/2"
+}

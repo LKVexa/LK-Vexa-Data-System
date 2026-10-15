@@ -1,0 +1,6 @@
+#!vcmd 1
+echo JP300-native-window-standalone
+mkdir -p /tmp/portable
+echo saved-through-native-window > /tmp/portable/probe.txt
+cat /tmp/portable/probe.txt
+photon verify

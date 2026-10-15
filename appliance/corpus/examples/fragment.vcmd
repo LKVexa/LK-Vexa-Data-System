@@ -1,0 +1,5 @@
+#!vcmd 1
+@name Reusable virtual inspection fragment
+# Included scripts inherit the root error policy.
+id
+disk

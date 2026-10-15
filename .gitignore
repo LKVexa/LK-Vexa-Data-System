@@ -1,0 +1,28 @@
+# Mutable application state and environment-specific configuration
+/workspace/
+/certs/
+/server-config.json
+
+# Built executables, separately acquired vendor dependencies and archives
+/bin/
+/runtime/
+/history/
+/SHA256SUMS.txt
+/package.integrity.json
+*.exe
+*.dll
+*.pdb
+*.zip
+*.cab
+*.key
+*.pfx
+*.p12
+
+# Developer and editor scratch data
+/.vs/
+/.vscode/
+/work/
+*.tmp
+*.log
+__pycache__/
+*.pyc

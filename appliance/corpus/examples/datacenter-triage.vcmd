@@ -1,0 +1,8 @@
+#!vcmd 1
+@name Data-center reference walkthrough
+@on-error stop
+dc status
+dc show CMD-001
+dc show CMD-040
+dc show CMD-078
+echo "Reference review complete; no physical-host operation was performed."

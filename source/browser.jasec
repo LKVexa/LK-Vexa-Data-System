@@ -1,0 +1,29 @@
+ja source 0.3
+module vb.browser.security
+use Security
+policy explicit_network
+
+principal Ja21MirrorRuntime
+role JAMirrorDocumentEngine { grant network.http:approved grant network.https:approved grant browser.navigation:approved grant document.parse:bounded grant document.layout:bounded deny script.javascript:* }
+role WebView2LiveRenderer { grant browser.navigation:approved grant site.javascript:runtime grant media.playback:runtime deny host.privilege:* }
+role DFSmallHelper { grant helper.inspect:local grant helper.verify:explicit deny network.* }
+resource RemoteDocument classification public
+resource LocalFile classification restricted
+resource HelperPayload classification controlled
+resource LiveWebProfile classification restricted
+policy BrowserNavigationPolicy {
+    deny file.* by default
+    deny script.* by default
+    deny data.* by default
+    deny credential.inline by default
+    allow RemoteDocument when principal.role == JAMirrorDocumentEngine
+    require explicit_capability for network.*
+    audit all privileged_effects
+    redact secret.values
+    resolve conflicts explicit_deny_wins
+}
+policy HelperIsolationPolicy { deny network.* by default allow HelperPayload when principal.role == DFSmallHelper require explicit_capability for helper.verify audit all privileged_effects resolve conflicts explicit_deny_wins }
+policy LiveWebProfilePolicy { deny host.privilege:* by default require explicit_capability for permission.sensitive audit all privileged_effects redact secret.values resolve conflicts explicit_deny_wins }
+assert policy.secret_leak == false
+emit mcrt "BrowserNavigationPolicy.decision.mcrt"
+emit mcrt "HelperIsolationPolicy.decision.mcrt"

@@ -1,0 +1,11 @@
+#!vcmd 1
+@name Virtual filesystem demonstration
+@on-error stop
+# Changes virtual files only; the two demo files are deliberately replaced on repeat runs.
+mkdir -p /tmp/vcmd-demo
+echo "alpha" > /tmp/vcmd-demo/input.txt
+echo "beta" >> /tmp/vcmd-demo/input.txt
+cat /tmp/vcmd-demo/input.txt | sort > /tmp/vcmd-demo/sorted.txt
+cat /tmp/vcmd-demo/sorted.txt
+wc -l /tmp/vcmd-demo/sorted.txt
+sync

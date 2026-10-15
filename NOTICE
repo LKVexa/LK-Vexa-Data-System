@@ -1,0 +1,30 @@
+LK/Vexa Data System
+Copyright (C) 2026 RUSSELL PHILIP SMITHSON
+SPDX-License-Identifier: GPL-3.0-only
+
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the
+Free Software Foundation, version 3 of the License.
+
+This program is distributed in the hope that it will be useful, but
+WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY
+or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License
+for more details. A copy is supplied in LICENSE.
+
+Project lineage: JA21 Blank Virtual Console, the 9.8.7 presenter ABI,
+retained HERMIT/SPIRAL virtual command components, compatible Generic
+Photon 0.2.0 data, and the JP300 Windows-native integration source.
+Existing executable names, protocol identifiers and schema identifiers
+remain compatibility names; the new project name does not change their
+wire or storage formats.
+
+The current project-owned GPL grant supersedes prior restrictive terms
+for the rights holder's included material. Historical HERMIT attribution
+is preserved in licenses/HERMIT-HISTORICAL-NOTICE.txt. Original JA21 and
+Photon attribution remains in the corresponding licenses and notices.
+
+This repository is a source distribution. It excludes Microsoft browser
+runtime/SDK binaries, compiled application and test executables, archived
+private packages, certificates, active configuration and user state.
+Separately acquired third-party software retains its own terms. See
+LICENSING.md and THIRD_PARTY_NOTICES.md for component boundaries.

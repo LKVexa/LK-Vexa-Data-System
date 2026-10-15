@@ -1,0 +1,4 @@
+VB JA21 DF_Medium Browser 8.0.2
+
+JA21 web-engine candidate derived from the user-supplied DF_Medium portable VM.
+The package preserves upstream/source licensing and notices inside their respective trees.

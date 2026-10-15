@@ -1,0 +1,17 @@
+LK/Vexa Data System
+Copyright (C) 2026 RUSSELL PHILIP SMITHSON
+
+The copyright holder authorizes the included project-owned source, console
+integration, documentation, and HERMIT/SPIRAL/VT/VWS material under the GNU
+General Public License, version 3 only (SPDX: GPL-3.0-only).
+
+For material owned by the granting rights holder, this current grant
+supersedes earlier project-owned "All rights reserved" and private-use
+restrictions. Historical attribution is retained for provenance and is not
+removed by the LK/Vexa Data System name.
+
+Third-party copyright and license grants remain with their respective
+holders. This grant does not relicense Microsoft software, Go, the Free
+Software Foundation's license text, or other separately licensed material.
+The retained Apache-2.0 Photon and corpus components keep their notices.
+See LICENSE, NOTICE, LICENSING.md, and THIRD_PARTY_NOTICES.md.

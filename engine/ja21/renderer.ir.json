@@ -1,0 +1,401 @@
+{
+  "module": "vb.dfmedium.webpolicy",
+  "imports": [
+    "Core"
+  ],
+  "policy": "no_network",
+  "records": {
+    "FetchMeta": [
+      {
+        "name": "scheme",
+        "type": "Text"
+      },
+      {
+        "name": "mime",
+        "type": "Text"
+      },
+      {
+        "name": "bytes",
+        "type": "Count"
+      },
+      {
+        "name": "redirects",
+        "type": "Count"
+      }
+    ],
+    "RenderPolicy": [
+      {
+        "name": "allow",
+        "type": "Flag"
+      },
+      {
+        "name": "scripts",
+        "type": "Flag"
+      },
+      {
+        "name": "reason",
+        "type": "Text"
+      }
+    ]
+  },
+  "functions": {
+    "fetch_allowed": {
+      "params": [
+        {
+          "name": "meta",
+          "type": "FetchMeta"
+        }
+      ],
+      "returns": "Flag",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "binary",
+            "kind": "and",
+            "left": {
+              "op": "binary",
+              "kind": "and",
+              "left": {
+                "op": "binary",
+                "kind": "or",
+                "left": {
+                  "op": "binary",
+                  "kind": "==",
+                  "left": {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "meta"
+                    },
+                    "key": "scheme"
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": "https"
+                  }
+                },
+                "right": {
+                  "op": "binary",
+                  "kind": "==",
+                  "left": {
+                    "op": "get",
+                    "object": {
+                      "op": "name",
+                      "name": "meta"
+                    },
+                    "key": "scheme"
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": "http"
+                  }
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "<=",
+                "left": {
+                  "op": "get",
+                  "object": {
+                    "op": "name",
+                    "name": "meta"
+                  },
+                  "key": "bytes"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": 8388608
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "<=",
+              "left": {
+                "op": "get",
+                "object": {
+                  "op": "name",
+                  "name": "meta"
+                },
+                "key": "redirects"
+              },
+              "right": {
+                "op": "literal",
+                "value": 8
+              }
+            }
+          }
+        }
+      ],
+      "line": 9
+    },
+    "document_policy": {
+      "params": [
+        {
+          "name": "mime",
+          "type": "Text"
+        }
+      ],
+      "returns": "RenderPolicy",
+      "body": [
+        {
+          "op": "if",
+          "condition": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "or",
+                "left": {
+                  "op": "binary",
+                  "kind": "==",
+                  "left": {
+                    "op": "name",
+                    "name": "mime"
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": "text/html"
+                  }
+                },
+                "right": {
+                  "op": "binary",
+                  "kind": "==",
+                  "left": {
+                    "op": "name",
+                    "name": "mime"
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": "application/xhtml+xml"
+                  }
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "name",
+                  "name": "mime"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "text/plain"
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "name",
+                "name": "mime"
+              },
+              "right": {
+                "op": "literal",
+                "value": ""
+              }
+            }
+          },
+          "yes": [
+            {
+              "op": "return",
+              "value": {
+                "op": "record",
+                "name": "RenderPolicy",
+                "fields": [
+                  {
+                    "name": "allow",
+                    "value": {
+                      "op": "literal",
+                      "value": true
+                    }
+                  },
+                  {
+                    "name": "scripts",
+                    "value": {
+                      "op": "literal",
+                      "value": false
+                    }
+                  },
+                  {
+                    "name": "reason",
+                    "value": {
+                      "op": "literal",
+                      "value": "document accepted by DF_Medium JA21 web profile; arbitrary site scripts isolated"
+                    }
+                  }
+                ]
+              }
+            }
+          ],
+          "no": []
+        },
+        {
+          "op": "return",
+          "value": {
+            "op": "record",
+            "name": "RenderPolicy",
+            "fields": [
+              {
+                "name": "allow",
+                "value": {
+                  "op": "literal",
+                  "value": false
+                }
+              },
+              {
+                "name": "scripts",
+                "value": {
+                  "op": "literal",
+                  "value": false
+                }
+              },
+              {
+                "name": "reason",
+                "value": {
+                  "op": "literal",
+                  "value": "content type outside DF_Medium JA21 document profile"
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "line": 12
+    },
+    "resource_allowed": {
+      "params": [
+        {
+          "name": "kind",
+          "type": "Text"
+        },
+        {
+          "name": "scheme",
+          "type": "Text"
+        }
+      ],
+      "returns": "Flag",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "binary",
+            "kind": "and",
+            "left": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "or",
+                "left": {
+                  "op": "binary",
+                  "kind": "or",
+                  "left": {
+                    "op": "binary",
+                    "kind": "or",
+                    "left": {
+                      "op": "binary",
+                      "kind": "==",
+                      "left": {
+                        "op": "name",
+                        "name": "kind"
+                      },
+                      "right": {
+                        "op": "literal",
+                        "value": "document"
+                      }
+                    },
+                    "right": {
+                      "op": "binary",
+                      "kind": "==",
+                      "left": {
+                        "op": "name",
+                        "name": "kind"
+                      },
+                      "right": {
+                        "op": "literal",
+                        "value": "stylesheet"
+                      }
+                    }
+                  },
+                  "right": {
+                    "op": "binary",
+                    "kind": "==",
+                    "left": {
+                      "op": "name",
+                      "name": "kind"
+                    },
+                    "right": {
+                      "op": "literal",
+                      "value": "image"
+                    }
+                  }
+                },
+                "right": {
+                  "op": "binary",
+                  "kind": "==",
+                  "left": {
+                    "op": "name",
+                    "name": "kind"
+                  },
+                  "right": {
+                    "op": "literal",
+                    "value": "video"
+                  }
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "name",
+                  "name": "kind"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "audio"
+                }
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "or",
+              "left": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "name",
+                  "name": "scheme"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "https"
+                }
+              },
+              "right": {
+                "op": "binary",
+                "kind": "==",
+                "left": {
+                  "op": "name",
+                  "name": "scheme"
+                },
+                "right": {
+                  "op": "literal",
+                  "value": "http"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "line": 18
+    }
+  },
+  "sourceHash": "1962e038608858d41ac706afd8a0d34554025b52497ac578dd07401f4d674432",
+  "profile": "vb-ja21-core/2"
+}

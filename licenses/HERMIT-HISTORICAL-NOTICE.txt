@@ -1,0 +1,10 @@
+Historical provenance only. Superseded for authorized project-owned material by COPYRIGHT and appliance/licenses/HERMIT-LICENSE.txt. Third-party rights are unchanged.
+
+Copyright (c) 2026 David Paul Russell
+
+All rights reserved.
+
+This software and its source code are provided to the copyright holder for their
+own use. Redistribution terms are at the copyright holder's discretion; replace
+this file with the license of your choice (e.g. MIT, Apache-2.0) before
+publishing.

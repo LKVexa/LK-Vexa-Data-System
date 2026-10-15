@@ -1,0 +1,25 @@
+ja source 0.2
+module jp250.policy.admission
+use JP250
+policy no_execute_unknown_code
+policy no_hidden_network
+policy explicit_host_abi
+
+// Hosted profile jp250.ja02.hosted.1. JP250 is a reviewed decision-only route.
+// Input facts come from verified broker state. No network or file primitive is
+// exposed to this policy evaluator. && and || short circuit; integers are checked.
+let bounded: Flag = request.body_bytes >= 0 && request.body_bytes <= 16777216
+let public_http: Flag = request.operation == "http.static" || request.operation == "http.health" || request.operation == "http.ready" || request.operation == "http.capabilities"
+let engine_socket: Flag = request.operation == "ws.engine" && request.token_valid
+let client_socket: Flag = request.operation == "ws.client" && request.token_valid && request.engine_ready
+let owner_rpc: Flag = request.operation == "store.read" || request.operation == "store.write" || request.operation == "local.read" || request.operation == "photon.status" || request.operation == "photon.verify" || request.operation == "photon.snapshot"
+let authenticated_owner: Flag = owner_rpc && request.token_valid && request.owner
+let admitted: Flag = request.origin_valid && bounded && (public_http || engine_socket || client_socket || authenticated_owner)
+assert size(request.operation) <= 128
+
+when admitted {
+    route JP250 <- {"allowed": true, "operation": request.operation, "status": 200, "reason": "admitted by JA source policy"}
+}
+when admitted == false {
+    route JP250 <- {"allowed": false, "operation": request.operation, "status": 403, "reason": "JA source policy denied operation, identity, origin, readiness, or size"}
+}

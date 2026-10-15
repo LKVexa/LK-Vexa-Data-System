@@ -1,0 +1,143 @@
+ja experience.design 0.1
+module vb.browser.experience
+use Experience.Core
+policy no_network
+
+experience JA21OpticalInstrument {
+  tokens Foundation {
+    color surface.canvas = color("#F6F8FA")
+    color surface.glass.0 = color("#26FFFFFF")
+    color surface.glass.1 = color("#5CFFFFFF")
+    color surface.glass.2 = color("#90FFFFFF")
+    color surface.glass.3 = color("#D4FFFFFF")
+    color surface.glass.4 = color("#F2FFFFFF")
+    color hairline.structural = color("#2493A9BD")
+    color hairline.soft = color("#1693A9BD")
+    color accent.primary = color("#1E93A9")
+    color text.primary = color("#172128")
+    color text.secondary = color("#5F6D77")
+    color text.tertiary = color("#82909A")
+    length space.1 = 2px
+    length space.2 = 4px
+    length space.3 = 6px
+    length space.4 = 8px
+    length space.6 = 12px
+    length space.8 = 16px
+    length space.12 = 24px
+    length space.16 = 32px
+    length space.24 = 48px
+    length space.32 = 64px
+    radius control.pill = 999px
+    radius control.standard = 14px
+    radius panel = 22px
+    radius card = 28px
+    duration motion.micro = 120ms
+    duration motion.control = 190ms
+    duration motion.structural = 300ms
+  }
+  principle CalmTechnology { priority content; status meaningful_only; motion continuous false; }
+  principle FlowStateUX { interruption minimal; disclosure progressive; primary_path frictionless; }
+  principle TrustForward { boundaries explicit; microcopy emotionally_neutral; hidden_network false; }
+  principle OpticalPrecision { geometry physical_pixel; whitespace structural; accent_count 1; ornament semantic_only; }
+  principle MotionSemantics { transform_first true; layout_animation false; reduced_motion supported; overshoot 2px; }
+
+  component OpticalPlaneStack {
+    property planes: Count = 7
+    layout overlay full_bleed
+    style { background token(surface.canvas); }
+  }
+  component FloatingOmniRail {
+    property label: Text = "JA21 Optical Instrument"
+    state placement_x: Scalar = 0.5
+    state placement_y: Scalar = 0.0
+    layout popup_surface browser_owned overlay floating movable normalized_position viewport_clamped page_independent
+    style { background token(surface.glass.3); radius token(control.pill); border token(hairline.structural); }
+    accessibility { role toolbar; name "JA21 movable floating omni bar"; keyboard activate [Ctrl+L, Ctrl+Shift+L]; focus visible; }
+    interaction drag { affordance dedicated_grip; motion transform_only; persist workspace.state; snap [left,center,right,top,middle,bottom]; }
+    interaction recenter { action browser.omni_recenter requires browser.control; feedback immediate within 50ms; }
+  }
+  component OmniDragGrip {
+    property label: Text = "Move omni bar"
+    style { background transparent; radius token(control.pill); }
+    accessibility { role button; name "Move floating omni bar"; focus visible; }
+    interaction drag { capture pointer; constrain viewport; write normalized_position; }
+  }
+  component HairlineOmniInput {
+    property label: Text = "Search, navigate, or command"
+    state focused: Flag = false
+    layout stack vertical gap token(space.1)
+    style { background token(surface.glass.1); radius token(control.pill); border token(hairline.structural); }
+    accessibility { role textbox; name "Search, navigate, or command"; keyboard activate [Enter]; focus visible; }
+    interaction change { affordance predictive; feedback immediate within 50ms; }
+  }
+  component AutomaticRendererRouter {
+    property preferred: Text = "modern web"
+    property fallback: Text = "DF_Medium inspection"
+    interaction resolve { policy automatic; user_selector false; fallback fail_closed; }
+  }
+  component SpatialTabRail {
+    property label: Text = "Tabs"
+    style { background token(surface.glass.1); radius token(control.pill); border token(hairline.soft); }
+    interaction activate { action browser.select_tab requires browser.control; motion spring critically_damped; }
+  }
+  component CommandPalette {
+    property title: Text = "Command palette"
+    state open: Flag = false
+    style { background token(surface.glass.4); radius token(panel); border token(hairline.structural); }
+    accessibility { role dialog; name "JA21 command palette"; keyboard activate [Ctrl+K]; focus visible; }
+    interaction activate { action browser.command_palette requires browser.control; disclosure progressive; motion cubic_bezier(0.22,1,0.36,1); }
+  }
+  component ContextualDrawer {
+    property title: Text = "Instrument context"
+    state open: Flag = false
+    layout stack vertical gap token(space.8)
+    style { background token(surface.glass.4); radius token(panel); border token(hairline.structural); }
+    interaction activate { action browser.drawer_toggle requires browser.control; disclosure progressive; motion spring critically_damped; }
+  }
+  component TrustPill {
+    property label: Text = "Origin and VEC1 state"
+    style { background token(surface.glass.2); radius token(control.pill); border token(hairline.soft); }
+  }
+  component FloatingActionBubble {
+    property label: Text = "JA21 scene vessel"
+    style { background token(surface.glass.3); radius token(control.pill); border token(hairline.structural); }
+    interaction hover { motion spring critically_damped; scale 1.018; }
+  }
+  component LiveWebSurface {
+    property engine: Text = "Microsoft Edge WebView2 CompositionControl"
+    style { background token(surface.canvas); }
+    rendering subpixel_smoothing true
+    layout full_bleed true
+    motion zero_jitter true
+  }
+  component NativeInspectionSurface {
+    property engine: Text = "DF_Medium JA21 Web Engine"
+    style { background token(surface.canvas); }
+    rendering subpixel_smoothing true
+    layout full_bleed true
+    motion zero_jitter true
+  }
+
+  screen Browser target [desktop, headless] {
+    region main role main {
+      place OpticalPlaneStack in main;
+      place LiveWebSurface in main;
+      place NativeInspectionSurface in main;
+      place FloatingOmniRail in main;
+      place OmniDragGrip in FloatingOmniRail;
+      place SpatialTabRail in main;
+      place HairlineOmniInput in main;
+      place AutomaticRendererRouter in main;
+      place ContextualDrawer in main;
+      place CommandPalette in main;
+      place TrustPill in main;
+      place FloatingActionBubble in main;
+    }
+  }
+  journey BrowseFlow {
+    actor user; goal "Navigate modern web content with automatic renderer fallback while preserving trust, accessibility, and VEC1 evidence boundaries"; start Ready;
+    step Ready { success Ready; recover retry with "Review the address or runtime status."; }
+  }
+  evidence { emit r12; emit mcrt; emit accessibility_report; }
+  emit package "ja21-optical-instrument.experience"
+}

@@ -1,0 +1,10 @@
+{
+  "host": "0.0.0.0",
+  "port": 8877,
+  "publicOrigin": "https://your-host.example:8877",
+  "allowedOrigins": [],
+  "tlsCert": "certs/server.crt",
+  "tlsKey": "certs/server.key",
+  "allowInsecureNetwork": false,
+  "vcmdRoots": []
+}

@@ -1,0 +1,8 @@
+{
+  "name": "ja21-photon-console",
+  "version": "3.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": {},
+  "description": "Retained browser command engine. Production startup uses packaged native executables. Node is a developer test runner only."
+}

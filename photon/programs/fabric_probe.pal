@@ -1,0 +1,39 @@
+#PA-LCTL/1.6
+#PROFILE pa.lctl.quantum.parallel.distributed
+#NETWORK deny
+#BACKEND none
+#COLUMNS ROW¦FACE¦LANE¦QSPACE¦OP¦OUT¦CTRL¦A¦B¦PARAM¦TYPE¦BASIS¦REGIME¦ASSUME¦ERROR¦RESOURCE¦CONF¦PROOF¦DOMAIN¦NODE¦LINK¦FAMILY
+R000¦FEDERATION¦-¦-¦DECLARE_FEDERATION¦DF0¦-¦-¦-¦-¦federation¦-¦EXACT¦-¦-¦trust=LOCAL_TRUSTED;network=deny;backend=none;release=DF-PA21.2-1.0.0;profiles=single_process_deterministic|multi_thread_deterministic|multi_process_deterministic|multi_process_throughput¦1.0¦DF_PROVENANCE¦-¦-¦-¦-
+R001¦FEDERATION¦-¦-¦DECLARE_DOMAIN¦D_BR¦-¦-¦-¦-¦execution_domain¦-¦EXACT¦-¦-¦lineage=BOTTLE_ROCKET;trust=LOCAL_TRUSTED;failure_boundary=DOMAIN¦1.0¦-¦-¦-¦-¦-
+R002¦FEDERATION¦-¦-¦DECLARE_DOMAIN¦D_QVM¦-¦-¦-¦-¦execution_domain¦-¦EXACT¦-¦-¦lineage=QUORUM_VM;trust=LOCAL_TRUSTED;failure_boundary=DOMAIN¦1.0¦-¦-¦-¦-¦-
+R010¦TOPOLOGY¦-¦-¦DECLARE_NODE¦N_SMALL¦-¦-¦-¦-¦node¦-¦EXACT¦-¦-¦device=classical_vm;container=DF_Small;worker=W_SMALL;group=G_BR3;failure_domain=FD_SMALL;dialect=MSSL_ASM-1;word_bits=1048576;registers=16;opcodes=24;qubits=0;max_rows_per_lowering=84¦1.0¦DF_Small_NODE_DESCRIPTOR¦D_BR¦-¦-¦-
+R011¦TOPOLOGY¦-¦-¦DECLARE_NODE¦N_MEDIUM¦-¦-¦-¦-¦node¦-¦EXACT¦-¦-¦device=classical_vm;container=DF_Medium;worker=W_MEDIUM;group=G_ISA41;failure_domain=FD_MEDIUM;dialect=LCTLC_1.1;word_bits=1048576;registers=16;opcodes=32;qubits=0;max_rows_per_lowering=84¦1.0¦DF_Medium_NODE_DESCRIPTOR¦D_BR¦-¦-¦-
+R012¦TOPOLOGY¦-¦-¦DECLARE_NODE¦N_LARGE¦-¦-¦-¦-¦node¦-¦EXACT¦-¦-¦device=classical_vm;container=DF_Large;worker=W_LARGE;group=G_BR11;failure_domain=FD_LARGE;dialect=LCTLC_1.2;word_bits=1048576;registers=16;opcodes=41;qubits=0;max_rows_per_lowering=84¦1.0¦DF_Large_NODE_DESCRIPTOR¦D_BR¦-¦-¦-
+R013¦TOPOLOGY¦-¦-¦DECLARE_NODE¦N_XLARGE¦-¦-¦-¦-¦node¦-¦EXACT¦-¦-¦device=classical_vm;container=DF_Xtra_Large;worker=W_XLARGE;group=G_QVM1;failure_domain=FD_XLARGE;dialect=LCTLC_1.0;word_bits=1048576;registers=16;opcodes=24;qubits=0;max_rows_per_lowering=21843¦1.0¦DF_Xtra_Large_NODE_DESCRIPTOR¦D_QVM¦-¦-¦-
+R020¦TOPOLOGY¦-¦-¦DECLARE_LINK¦C0¦-¦N_SMALL¦N_MEDIUM¦-¦classical_channel¦-¦EXACT¦-¦-¦transport=local_process;alpha_ticks=1;beta_bytes_per_tick=1000000;payload=classical_only¦1.0¦-¦D_BR¦-¦-¦-
+R021¦TOPOLOGY¦-¦-¦DECLARE_LINK¦C1¦-¦N_SMALL¦N_LARGE¦-¦classical_channel¦-¦EXACT¦-¦-¦transport=local_process;alpha_ticks=1;beta_bytes_per_tick=1000000;payload=classical_only¦1.0¦-¦D_BR¦-¦-¦-
+R022¦TOPOLOGY¦-¦-¦DECLARE_LINK¦C2¦-¦N_SMALL¦N_XLARGE¦-¦classical_channel¦-¦EXACT¦-¦-¦transport=local_process;alpha_ticks=1;beta_bytes_per_tick=1000000;payload=classical_only¦1.0¦-¦-¦-¦-¦-
+R023¦TOPOLOGY¦-¦-¦DECLARE_LINK¦C3¦-¦N_MEDIUM¦N_LARGE¦-¦classical_channel¦-¦EXACT¦-¦-¦transport=local_process;alpha_ticks=1;beta_bytes_per_tick=1000000;payload=classical_only¦1.0¦-¦D_BR¦-¦-¦-
+R024¦TOPOLOGY¦-¦-¦DECLARE_LINK¦C4¦-¦N_MEDIUM¦N_XLARGE¦-¦classical_channel¦-¦EXACT¦-¦-¦transport=local_process;alpha_ticks=1;beta_bytes_per_tick=1000000;payload=classical_only¦1.0¦-¦-¦-¦-¦-
+R025¦TOPOLOGY¦-¦-¦DECLARE_LINK¦C5¦-¦N_LARGE¦N_XLARGE¦-¦classical_channel¦-¦EXACT¦-¦-¦transport=local_process;alpha_ticks=1;beta_bytes_per_tick=1000000;payload=classical_only¦1.0¦-¦-¦-¦-¦-
+R030¦TOPOLOGY¦-¦-¦DECLARE_TOPOLOGY¦T0¦-¦-¦-¦-¦topology¦-¦EXACT¦-¦-¦nodes=4;domains=2;groups=4;links=6;qcapacity=0;quantum_links=0¦1.0¦FEDERATION_JSON¦-¦-¦-¦-
+R040¦CONTROL¦L_REPLICA¦-¦SPAWN¦t_replica_small¦-¦-¦-¦program=replica;chain_segments=true¦ctask¦-¦EXACT¦unit_of_distribution=sealed_rows_not_images¦-¦cost=rows;cpu_slots=1;qpu_slots=0¦1.0¦DF_FABRIC_GATE_F4¦D_BR¦N_SMALL¦-¦CLASSICAL_REPLICA_PARALLEL
+R041¦CONTROL¦L_REPLICA¦-¦SPAWN¦t_replica_medium¦-¦-¦-¦program=replica;chain_segments=true¦ctask¦-¦EXACT¦unit_of_distribution=sealed_rows_not_images¦-¦cost=rows;cpu_slots=1;qpu_slots=0¦1.0¦DF_FABRIC_GATE_F4¦D_BR¦N_MEDIUM¦-¦CLASSICAL_REPLICA_PARALLEL
+R042¦CONTROL¦L_REPLICA¦-¦SPAWN¦t_replica_large¦-¦-¦-¦program=replica;chain_segments=true¦ctask¦-¦EXACT¦unit_of_distribution=sealed_rows_not_images¦-¦cost=rows;cpu_slots=1;qpu_slots=0¦1.0¦DF_FABRIC_GATE_F4¦D_BR¦N_LARGE¦-¦CLASSICAL_REPLICA_PARALLEL
+R043¦CONTROL¦L_REPLICA¦-¦SPAWN¦t_replica_xlarge¦-¦-¦-¦program=replica;chain_segments=true¦ctask¦-¦EXACT¦unit_of_distribution=sealed_rows_not_images¦-¦cost=rows;cpu_slots=1;qpu_slots=0¦1.0¦DF_FABRIC_GATE_F4¦D_QVM¦N_XLARGE¦-¦CLASSICAL_REPLICA_PARALLEL
+R050¦CONTROL¦L_REPLICA¦-¦BARRIER¦-¦-¦-¦-¦level=federation¦barrier¦-¦EXACT¦fence_over_pending_work¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦-
+R051¦CONTROL¦L_REPLICA¦-¦AWAIT¦-¦-¦-¦-¦tasks=t_replica_small;t_replica_medium;t_replica_large;t_replica_xlarge¦future¦-¦EXACT¦-¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦-
+R052¦ASSERT¦L_REPLICA¦-¦ASSERT_INVARIANT¦-¦-¦-¦-¦-¦proof_record¦-¦EXACT¦unanimity_with_cpython_reference;token=CROSS_NODE_DIFFERENTIAL_AGREEMENT¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦CLASSICAL_REPLICA_PARALLEL
+R060¦CONTROL¦L_PIPELINE¦-¦REGION_BEGIN¦-¦-¦-¦-¦region=DATAFLOW_REGION;placement=static|dynamic¦parallel_region¦-¦EXACT¦segments_of_84_rows;chained_by_accumulator;span_equals_work¦-¦-¦1.0¦DF_FABRIC_GATE_F6¦-¦-¦-¦TASK_PARALLEL
+R061¦CONTROL¦L_PIPELINE¦-¦SPAWN¦t_segment_k¦-¦-¦-¦program=pipeline;depends_on=t_segment_k_minus_1¦ctask¦-¦EXACT¦acc_in_from_previous_segment¦-¦cost=rows¦1.0¦DF_FABRIC_GATE_F6¦-¦-¦-¦TASK_PARALLEL
+R062¦CONTROL¦L_PIPELINE¦-¦REGION_END¦-¦-¦-¦-¦region=DATAFLOW_REGION¦parallel_region¦-¦EXACT¦-¦-¦-¦1.0¦DF_FABRIC_GATE_F6¦-¦-¦-¦TASK_PARALLEL
+R070¦CONTROL¦L_BSP¦-¦REGION_BEGIN¦-¦-¦-¦-¦region=BSP_REGION;supersteps=2¦parallel_region¦-¦EXACT¦phases=local_compute|communication|barrier¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦CLASSICAL_REPLICA_PARALLEL
+R071¦COMM¦L_BSP¦-¦ALLGATHER¦witnesses¦-¦-¦-¦algorithm=select_algorithm;rule=R5;message_bytes=8¦collective¦-¦EXACT¦explicit_transfer_schedule¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦CLASSICAL_REPLICA_PARALLEL
+R072¦COMM¦L_BSP¦-¦ALLREDUCE¦witness_min_max¦-¦-¦-¦reduce=min|max;rule=R5¦collective¦-¦EXACT¦min_equals_max_iff_unanimous¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦CLASSICAL_REPLICA_PARALLEL
+R073¦CONTROL¦L_BSP¦-¦BARRIER¦-¦-¦-¦-¦level=federation¦barrier¦-¦EXACT¦hierarchical_barrier_worker_group_domain_federation¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦-
+R074¦CONTROL¦L_BSP¦-¦REGION_END¦-¦-¦-¦-¦region=BSP_REGION¦parallel_region¦-¦EXACT¦-¦-¦-¦1.0¦DF_FABRIC_GATE_F4¦-¦-¦-¦CLASSICAL_REPLICA_PARALLEL
+R080¦MODEL¦-¦-¦NOTE¦-¦-¦-¦-¦-¦proof_record¦-¦EXACT¦distributed_state_ceiling=DISTRIBUTED_CLASSICAL_EMULATION;parallel_state_ceiling=PARALLEL_EMULATION;one_host_local_processes¦-¦-¦1.0¦DF_FABRIC_GATE_F8¦-¦-¦-¦-
+R081¦MODEL¦-¦-¦NOTE¦-¦-¦-¦-¦-¦proof_record¦-¦IMPOSSIBLE¦cross_machine_federation=BLOCKED;network=deny;physical_outputs=BLOCKED_EXTERNAL_AUTHORITY¦-¦-¦1.0¦DF_FABRIC_GATE_F8¦-¦-¦-¦-
+R082¦MODEL¦-¦-¦NOTE¦-¦-¦-¦-¦-¦proof_record¦-¦UNSUPPORTED¦quantum_face_execution=UNSUPPORTED_on_every_node;qcapacity=0¦-¦-¦1.0¦DF_FABRIC_GATE_F8¦-¦-¦-¦-
+R083¦MODEL¦-¦-¦NOTE¦-¦-¦-¦-¦-¦proof_record¦-¦EXACT¦image_portability=none;5.0.0_image_on_4.7.0=trap_17;BRIM_on_QVM=rejected¦-¦-¦1.0¦DF_FABRIC_GATE_F7¦-¦-¦-¦-
+R090¦LEDGER¦-¦-¦EMIT_LEDGER¦-¦-¦-¦-¦-¦proof_record¦-¦EXACT¦-¦-¦ledger=DF_CAPABILITY_LEDGER;event_log=PA-LCTL/EVENTLOG/1;replay=DETERMINISTIC_REPLAY_PASS¦1.0¦DF_FABRIC_GATE_RESULTS¦-¦-¦-¦-

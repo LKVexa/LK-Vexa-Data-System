@@ -1,0 +1,17 @@
+LK/Vexa Data System — authorized project-owned HERMIT/SPIRAL material
+Copyright (C) 2026 RUSSELL PHILIP SMITHSON
+Historical attribution: Copyright (c) 2026 David Paul Russell
+SPDX-License-Identifier: GPL-3.0-only
+
+The rights holder authorizes the included project-owned HERMIT, SPIRAL, VT and
+VWS source under the GNU General Public License, version 3 only. The complete
+license text is supplied in the repository root LICENSE.
+
+This current grant supersedes the earlier private-use/all-rights-reserved
+restriction for material owned by the granting rights holder. The superseded
+notice is preserved as provenance in licenses/HERMIT-HISTORICAL-NOTICE.txt.
+Third-party copyright, license and attribution requirements remain unchanged.
+
+This software is supplied WITHOUT ANY WARRANTY, including implied warranties
+of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GPL for the
+full terms. See root COPYRIGHT, NOTICE and LICENSING.md for component boundaries.

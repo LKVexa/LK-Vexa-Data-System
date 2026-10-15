@@ -1,0 +1,31 @@
+ja source 0.3
+module vb.browser.interface
+use Interface
+policy no_network
+
+interface JA21OpticalInstrument {
+    state active_tab: Count = 0
+    state address: Text = ""
+    state loading: Flag = false
+    state drawer_open: Flag = false
+    state command_palette_open: Flag = false
+    state immersive: Flag = false
+    state omni_position_x: Scalar = 0.5
+    state omni_position_y: Scalar = 0.0
+    derived can_navigate = address != "" and not loading
+    component OpticalWindow { label "JA21 Optical Instrument" accessibility role application name "JA21 Optical Instrument Browser" action fullscreen requires browser.window }
+    component FloatingOmniRail { label "Movable browser omni bar" accessibility role toolbar name "JA21 movable floating omni bar" action focus_address requires browser.control }
+    component OmniDragGrip { label "Move omni bar" accessibility role button name "Move floating omni bar" action omni_reposition requires browser.control }
+    component OmniRecenter { label "Recenter omni bar" accessibility role button name "Recenter floating omni bar" action omni_recenter requires browser.control }
+    component PredictiveOmniInput { label "Search, navigate, or command" accessibility role textbox name "Search, navigate, or command" action navigate requires browser.control }
+    component AutomaticRendererRouter { label "Automatic web renderer" accessibility role status name "Automatic renderer routing" action none requires browser.control }
+    component SpatialTabRail { label "Tabs" accessibility role tablist name "Open tabs" action select_tab requires browser.control }
+    component LiveWebSurface { label "WebView2 composition surface" accessibility role document name "Live web document" action navigate requires browser.control }
+    component NativeInspectionSurface { label "DF_Medium inspection surface" accessibility role document name "Native inspected web document" action navigate requires browser.control }
+    component CommandPalette { label "Command palette" accessibility role dialog name "JA21 command palette" action command_palette requires browser.control }
+    component ContextDrawer { label "Instrument context" accessibility role complementary name "Browser context and VEC1 diagnostics" action drawer_toggle requires browser.control }
+    component TrustPill { label "Trust state" accessibility role status name "Current origin and VEC1 state" action drawer_toggle requires browser.control }
+    component FloatingActionBubble { label "JA21 scene vessel" accessibility role button name "Open JA21 scene vessel" action omni_bin requires browser.control }
+}
+assert accessibility.keyboard_path.complete == true
+emit interface JA21OpticalInstrument

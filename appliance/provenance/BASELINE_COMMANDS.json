@@ -1,0 +1,362 @@
+[
+  {
+    "name": "help",
+    "summary": "list available commands",
+    "usage": "help [command]",
+    "aliases": []
+  },
+  {
+    "name": "man",
+    "summary": "display the manual for a command",
+    "usage": "man command",
+    "aliases": []
+  },
+  {
+    "name": "about",
+    "summary": "show the HERMIT / SPIRAL architecture",
+    "usage": "about",
+    "aliases": []
+  },
+  {
+    "name": "clear",
+    "summary": "clear the terminal screen",
+    "usage": "clear",
+    "aliases": [
+      "cls"
+    ]
+  },
+  {
+    "name": "history",
+    "summary": "show the command history",
+    "usage": "history [-c]",
+    "aliases": []
+  },
+  {
+    "name": "env",
+    "summary": "print the environment",
+    "usage": "env",
+    "aliases": [
+      "printenv"
+    ]
+  },
+  {
+    "name": "export",
+    "summary": "set an environment variable",
+    "usage": "export NAME[=value] ...",
+    "aliases": [
+      "set"
+    ]
+  },
+  {
+    "name": "unset",
+    "summary": "remove an environment variable",
+    "usage": "unset NAME ...",
+    "aliases": []
+  },
+  {
+    "name": "alias",
+    "summary": "define or list command aliases",
+    "usage": "alias [name=value ...]",
+    "aliases": []
+  },
+  {
+    "name": "unalias",
+    "summary": "remove an alias",
+    "usage": "unalias name ...",
+    "aliases": []
+  },
+  {
+    "name": "which",
+    "summary": "locate a command",
+    "usage": "which name ...",
+    "aliases": [
+      "type"
+    ]
+  },
+  {
+    "name": "whoami",
+    "summary": "print the current user",
+    "usage": "whoami",
+    "aliases": []
+  },
+  {
+    "name": "uname",
+    "summary": "print system information",
+    "usage": "uname [-a]",
+    "aliases": []
+  },
+  {
+    "name": "date",
+    "summary": "print the current date and time",
+    "usage": "date",
+    "aliases": []
+  },
+  {
+    "name": "sysinfo",
+    "summary": "terminal runtime status",
+    "usage": "sysinfo",
+    "aliases": []
+  },
+  {
+    "name": "exit",
+    "summary": "close the session",
+    "usage": "exit [code]",
+    "aliases": [
+      "logout",
+      "quit"
+    ]
+  },
+  {
+    "name": "pwd",
+    "summary": "print working directory",
+    "usage": "pwd",
+    "aliases": []
+  },
+  {
+    "name": "cd",
+    "summary": "change the working directory",
+    "usage": "cd [dir]",
+    "aliases": []
+  },
+  {
+    "name": "ls",
+    "summary": "list directory contents",
+    "usage": "ls [-l] [-a] [-h] [path...]",
+    "aliases": [
+      "dir"
+    ]
+  },
+  {
+    "name": "tree",
+    "summary": "list contents recursively as a tree",
+    "usage": "tree [path]",
+    "aliases": []
+  },
+  {
+    "name": "find",
+    "summary": "search for files by name",
+    "usage": "find [path] [-name PATTERN] [-type f|d]",
+    "aliases": []
+  },
+  {
+    "name": "mkdir",
+    "summary": "make directories",
+    "usage": "mkdir [-p] dir...",
+    "aliases": []
+  },
+  {
+    "name": "rmdir",
+    "summary": "remove empty directories",
+    "usage": "rmdir dir...",
+    "aliases": []
+  },
+  {
+    "name": "rm",
+    "summary": "remove files or directories",
+    "usage": "rm [-r] [-f] path...",
+    "aliases": []
+  },
+  {
+    "name": "touch",
+    "summary": "create empty files / update mtime",
+    "usage": "touch file...",
+    "aliases": []
+  },
+  {
+    "name": "cp",
+    "summary": "copy files",
+    "usage": "cp src dst",
+    "aliases": []
+  },
+  {
+    "name": "mv",
+    "summary": "move or rename files",
+    "usage": "mv src dst",
+    "aliases": []
+  },
+  {
+    "name": "stat",
+    "summary": "display file status",
+    "usage": "stat file...",
+    "aliases": []
+  },
+  {
+    "name": "write",
+    "summary": "write text into a file (write FILE text...)",
+    "usage": "write [-a] FILE text...",
+    "aliases": []
+  },
+  {
+    "name": "echo",
+    "summary": "write arguments to standard output",
+    "usage": "echo [-n] [-e] [args...]",
+    "aliases": []
+  },
+  {
+    "name": "printf",
+    "summary": "format and print data",
+    "usage": "printf FORMAT [args...]",
+    "aliases": []
+  },
+  {
+    "name": "cat",
+    "summary": "concatenate files and print",
+    "usage": "cat [-n] [file...]",
+    "aliases": []
+  },
+  {
+    "name": "head",
+    "summary": "output the first part of files",
+    "usage": "head [-n count] [file...]",
+    "aliases": []
+  },
+  {
+    "name": "tail",
+    "summary": "output the last part of files",
+    "usage": "tail [-n count] [file...]",
+    "aliases": []
+  },
+  {
+    "name": "wc",
+    "summary": "count lines, words and bytes",
+    "usage": "wc [-l] [-w] [-c] [file...]",
+    "aliases": []
+  },
+  {
+    "name": "grep",
+    "summary": "search for a pattern",
+    "usage": "grep [-i] [-v] [-n] [-c] PATTERN [file...]",
+    "aliases": []
+  },
+  {
+    "name": "sort",
+    "summary": "sort lines of text",
+    "usage": "sort [-r] [-n] [-u] [file...]",
+    "aliases": []
+  },
+  {
+    "name": "uniq",
+    "summary": "report or omit repeated adjacent lines",
+    "usage": "uniq [-c] [file...]",
+    "aliases": []
+  },
+  {
+    "name": "rev",
+    "summary": "reverse characters of each line",
+    "usage": "rev [file...]",
+    "aliases": []
+  },
+  {
+    "name": "tr",
+    "summary": "translate or delete characters",
+    "usage": "tr [-d] SET1 [SET2]",
+    "aliases": []
+  },
+  {
+    "name": "seq",
+    "summary": "print a sequence of numbers",
+    "usage": "seq [first [incr]] last",
+    "aliases": []
+  },
+  {
+    "name": "true",
+    "summary": "do nothing, successfully",
+    "usage": "true",
+    "aliases": []
+  },
+  {
+    "name": "false",
+    "summary": "do nothing, unsuccessfully",
+    "usage": "false",
+    "aliases": []
+  },
+  {
+    "name": "sleep",
+    "summary": "delay for a number of seconds",
+    "usage": "sleep SECONDS",
+    "aliases": []
+  },
+  {
+    "name": "browser",
+    "summary": "control the embedded browser pane",
+    "usage": "browser <open|go|close|info> [url]",
+    "aliases": [
+      "br"
+    ]
+  },
+  {
+    "name": "open",
+    "summary": "open a URL in the browser pane",
+    "usage": "open <url>",
+    "aliases": []
+  },
+  {
+    "name": "memstat",
+    "summary": "show the volume and page-cache ledger",
+    "usage": "memstat",
+    "aliases": []
+  },
+  {
+    "name": "image",
+    "summary": "show or verify the sealed boot image",
+    "usage": "image [verify]",
+    "aliases": []
+  },
+  {
+    "name": "disk",
+    "summary": "show the SSD volume this server is mounted from",
+    "usage": "disk",
+    "aliases": []
+  },
+  {
+    "name": "mount",
+    "summary": "show the only filesystem mount",
+    "usage": "mount",
+    "aliases": []
+  },
+  {
+    "name": "cxl",
+    "summary": "show this server's memory window as hot and warm tiers",
+    "usage": "cxl [status]",
+    "aliases": []
+  },
+  {
+    "name": "df",
+    "summary": "fabric roster stored on the SSD",
+    "usage": "df [status|nodes|where]",
+    "aliases": []
+  },
+  {
+    "name": "fabric",
+    "summary": "render the federation on this volume",
+    "usage": "fabric [status|topology]",
+    "aliases": []
+  },
+  {
+    "name": "node",
+    "summary": "inspect one fabric node on the volume",
+    "usage": "node <small|medium|large|xlarge> [status]",
+    "aliases": []
+  },
+  {
+    "name": "link",
+    "summary": "show the virtual websocket this terminal is attached to",
+    "usage": "link",
+    "aliases": []
+  },
+  {
+    "name": "poweroff",
+    "summary": "flush the SSD and cut power",
+    "usage": "poweroff",
+    "aliases": [
+      "halt",
+      "shutdown"
+    ]
+  },
+  {
+    "name": "reboot",
+    "summary": "flush the SSD and remount it",
+    "usage": "reboot",
+    "aliases": []
+  }
+]

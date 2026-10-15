@@ -1,0 +1,5 @@
+#!vcmd 1
+@name Hello virtual server
+echo "VCMD/1 is running in the virtual console."
+hostname
+pwd

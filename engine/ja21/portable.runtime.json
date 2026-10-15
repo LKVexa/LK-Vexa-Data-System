@@ -1,0 +1,50 @@
+{
+  "schema": "JA21/PORTABLE_RUNTIME_POLICY/1",
+  "version": "9.8.7",
+  "workspace": "workspace/",
+  "mutable_paths": [
+    "workspace/state",
+    "workspace/state/ui",
+    "workspace/desktop",
+    "workspace/documents",
+    "workspace/downloads",
+    "workspace/uploads",
+    "workspace/logs",
+    "workspace/temp",
+    "workspace/cache",
+    "workspace/home",
+    "workspace/host-env",
+    "workspace/runtime",
+    "workspace/evidence",
+    "workspace/snapshots"
+  ],
+  "process_environment": {
+    "APPDATA": "workspace/host-env/RoamingAppData",
+    "LOCALAPPDATA": "workspace/host-env/LocalAppData",
+    "TEMP": "workspace/temp",
+    "TMP": "workspace/temp",
+    "HOME": "workspace/home",
+    "PYTHONPYCACHEPREFIX": "workspace/cache/pycache"
+  },
+  "webview2": {
+    "user_data": "workspace/state/webview2",
+    "sdk_adapter": "workspace/runtime/webview2-sdk unless a sealed runtime/webview2-sdk is present",
+    "fixed_runtime_slot": "runtime/webview2-fixed or workspace/runtime/webview2-fixed",
+    "evergreen_fallback": "allowed but recorded as external runtime dependency"
+  },
+  "vec1": {
+    "state": "workspace/state/vec1",
+    "receipts": "workspace/state/vec1/evidence",
+    "presenter_fabric_verdict": false
+  },
+  "reproducibility": {
+    "immutable_application": "package.integrity.json + runtime.integrity.json",
+    "mutable_workspace": "excluded from application seal; snapshot separately",
+    "fixed_webview2_requirement": "Full browser-engine binary reproducibility requires a pinned fixed-version runtime in the fixed runtime slot. Evergreen fallback is portable-state-safe but not binary-identical across machines.",
+    "snapshot_tool": "Snapshot JA21 Portable Workspace.cmd"
+  },
+  "ui_state": {
+    "omni_bar_placement": "workspace/state/ui/omni-bar.position",
+    "coordinate_model": "normalized 0..1 x/y for portable cross-window-size placement"
+  }
+}

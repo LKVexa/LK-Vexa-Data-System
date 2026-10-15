@@ -1,0 +1,2558 @@
+#!vcmd 1
+@name JA21 command-language corpus
+@description Executable help/reference tour; operational examples below are comments, never native host actions.
+@on-error stop
+# Schema: VCMD-CORPUS/1
+# Application: 2.5.0
+# Entries: 281
+# Running this corpus invokes only virtual help and dc show. It does not run every operational example.
+
+# @entry TERM-about
+# @name about
+# @action show the HERMIT / SPIRAL architecture
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax about
+help about
+
+# @entry TERM-alias
+# @name alias
+# @action define or list command aliases
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax alias [name=value ...]
+help alias
+
+# @entry TERM-auditctl
+# @name auditctl
+# @action Inspect or change Linux audit rules and audit subsystem configuration.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax auditctl [host arguments]
+help auditctl
+
+# @entry TERM-aureport
+# @name aureport
+# @action Summarize selected Linux audit records.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax aureport [host arguments]
+help aureport
+
+# @entry TERM-ausearch
+# @name ausearch
+# @action Search Linux audit records by explicit criteria.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ausearch [host arguments]
+help ausearch
+
+# @entry TERM-biosnoop
+# @name biosnoop
+# @action Trace individual block-I/O events and optional queue-time information.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax biosnoop [host arguments]
+help biosnoop
+
+# @entry TERM-browser
+# @name browser
+# @action control the local informational surface (not a web engine)
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax browser <open|go|close|info> [url]
+help browser
+
+# @entry TERM-busctl
+# @name busctl
+# @action Inspect D-Bus objects and properties on the selected system or BMC.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax busctl [host arguments]
+help busctl
+
+# @entry TERM-cat
+# @name cat
+# @action concatenate files and print
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax cat [-n] [file...]
+help cat
+
+# @entry TERM-cd
+# @name cd
+# @action change the working directory
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax cd [dir]
+help cd
+
+# @entry TERM-chrt
+# @name chrt
+# @action Inspect or change a process scheduling policy and priority.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax chrt [host arguments]
+help chrt
+
+# @entry TERM-clear
+# @name clear
+# @action clear the terminal screen
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax clear
+help clear
+
+# @entry TERM-commands
+# @name commands
+# @action search all built-in commands, aliases and data-center references
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax commands [search terms]
+help commands
+
+# @entry TERM-cp
+# @name cp
+# @action copy files
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax cp src dst
+help cp
+
+# @entry TERM-cpupower
+# @name cpupower
+# @action Inspect or change supported CPU frequency and power policies.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax cpupower [host arguments]
+help cpupower
+
+# @entry TERM-cryptsetup
+# @name cryptsetup
+# @action Inspect or administer encrypted volumes; destructive/key-sensitive subcommands require review.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax cryptsetup [host arguments]
+help cryptsetup
+
+# @entry TERM-cxl
+# @name cxl
+# @action show simulated memory tiers and virtual file quotas
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax cxl [status]
+help cxl
+
+# @entry TERM-date
+# @name date
+# @action print the current date and time
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax date
+help date
+
+# @entry TERM-dc
+# @name dc
+# @action browse and check the hardened data-center command catalog
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax dc [list [query]|show ID|check ID|run ID|status]
+help dc
+
+# @entry TERM-df
+# @name df
+# @action fabric roster stored on the configured storage
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax df [status|nodes|where]
+help df
+
+# @entry TERM-disk
+# @name disk
+# @action show the virtual volume and persistence status
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax disk
+help disk
+
+# @entry TERM-dmesg
+# @name dmesg
+# @action Read the kernel ring buffer where access is permitted.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax dmesg [host arguments]
+help dmesg
+
+# @entry TERM-dmidecode
+# @name dmidecode
+# @action Decode firmware-reported system, board and memory inventory.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax dmidecode [host arguments]
+help dmidecode
+
+# @entry TERM-echo
+# @name echo
+# @action write arguments to standard output
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax echo [-n] [-e] [args...]
+help echo
+
+# @entry TERM-env
+# @name env
+# @action print the environment
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax env
+help env
+
+# @entry TERM-ethtool
+# @name ethtool
+# @action Inspect or change Ethernet link, ring, offload and coalescing settings.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ethtool [host arguments]
+help ethtool
+
+# @entry TERM-exit
+# @name exit
+# @action close the session
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax exit [code]
+help exit
+
+# @entry TERM-export
+# @name export
+# @action set an environment variable
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax export NAME[=value] ...
+help export
+
+# @entry TERM-fabric
+# @name fabric
+# @action render the metadata-only virtual fabric topology
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax fabric [status|topology]
+help fabric
+
+# @entry TERM-false
+# @name false
+# @action do nothing, unsuccessfully
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax false
+help false
+
+# @entry TERM-find
+# @name find
+# @action search for files by name
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax find [path] [-name PATTERN] [-type f|d]
+help find
+
+# @entry TERM-findmnt
+# @name findmnt
+# @action Inspect mount-table and filesystem information.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax findmnt [host arguments]
+help findmnt
+
+# @entry TERM-grep
+# @name grep
+# @action search literal text (not regular expressions)
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax grep [-F] [-i] [-v] [-n] [-c] TEXT [file...]
+help grep
+
+# @entry TERM-head
+# @name head
+# @action output the first part of files
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax head [-n count] [file...]
+help head
+
+# @entry TERM-help
+# @name help
+# @action list available commands
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax help [command]
+help help
+
+# @entry TERM-history
+# @name history
+# @action show the command history
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax history [-c]
+help history
+
+# @entry TERM-hostname
+# @name hostname
+# @action print the configured virtual host label
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax hostname
+help hostname
+
+# @entry TERM-ibstat
+# @name ibstat
+# @action Inspect available InfiniBand adapter and port status.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ibstat [host arguments]
+help ibstat
+
+# @entry TERM-ibv_devinfo
+# @name ibv_devinfo
+# @action Inspect RDMA verbs device capabilities and port information.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ibv_devinfo [host arguments]
+help ibv_devinfo
+
+# @entry TERM-id
+# @name id
+# @action print the virtual operator identity (not an OS account)
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax id
+help id
+
+# @entry TERM-image
+# @name image
+# @action compare virtual file content against a baseline hash (not a signature)
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax image [verify]
+help image
+
+# @entry TERM-ip
+# @name ip
+# @action Inspect or change network links, addresses and routes.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ip [host arguments]
+help ip
+
+# @entry TERM-ipmitool
+# @name ipmitool
+# @action Inspect or control BMC sensors, event logs, chassis power and serial-over-LAN.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ipmitool [host arguments]
+help ipmitool
+
+# @entry TERM-journalctl
+# @name journalctl
+# @action Read selected systemd journal records.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax journalctl [host arguments]
+help journalctl
+
+# @entry TERM-kubectl
+# @name kubectl
+# @action Inspect or change Kubernetes resources in an explicit cluster and namespace context.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax kubectl [host arguments]
+help kubectl
+
+# @entry TERM-link
+# @name link
+# @action show the virtual websocket this terminal is attached to
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax link
+help link
+
+# @entry TERM-ls
+# @name ls
+# @action list directory contents
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ls [-l] [-a] [-h] [path...]
+help ls
+
+# @entry TERM-lsblk
+# @name lsblk
+# @action List block devices and their reported relationships.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax lsblk [host arguments]
+help lsblk
+
+# @entry TERM-lscpu
+# @name lscpu
+# @action Inspect CPU architecture, topology and supported information fields.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax lscpu [host arguments]
+help lscpu
+
+# @entry TERM-lspci
+# @name lspci
+# @action Inspect PCI devices, negotiated links and available error capabilities.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax lspci [host arguments]
+help lspci
+
+# @entry TERM-man
+# @name man
+# @action display the manual for a command
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax man command
+help man
+
+# @entry TERM-memstat
+# @name memstat
+# @action show the volume and page-cache ledger
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax memstat
+help memstat
+
+# @entry TERM-mkdir
+# @name mkdir
+# @action make directories
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax mkdir [-p] dir...
+help mkdir
+
+# @entry TERM-mount
+# @name mount
+# @action show the only filesystem mount
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax mount
+help mount
+
+# @entry TERM-multipath
+# @name multipath
+# @action Inspect device-mapper multipath maps or request a map reload.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax multipath [host arguments]
+help multipath
+
+# @entry TERM-mv
+# @name mv
+# @action move or rename files
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax mv src dst
+help mv
+
+# @entry TERM-node
+# @name node
+# @action inspect one fabric node on the volume
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax node <small|medium|large|xlarge> [status]
+help node
+
+# @entry TERM-numactl
+# @name numactl
+# @action Inspect NUMA topology or launch a process with a selected NUMA policy.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax numactl [host arguments]
+help numactl
+
+# @entry TERM-numastat
+# @name numastat
+# @action Read NUMA allocation counters or per-node memory information.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax numastat [host arguments]
+help numastat
+
+# @entry TERM-nvme
+# @name nvme
+# @action Inspect NVMe inventory, logs and controller information; other subcommands can destroy data.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax nvme [host arguments]
+help nvme
+
+# @entry TERM-offcputime
+# @name offcputime
+# @action Collect stack traces for time spent off CPU.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax offcputime [host arguments]
+help offcputime
+
+# @entry TERM-open
+# @name open
+# @action open about:blank or ram://status in the local informational surface
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax open <url>
+help open
+
+# @entry TERM-perf
+# @name perf
+# @action Collect or inspect kernel performance-counter samples and recordings.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax perf [host arguments]
+help perf
+
+# @entry TERM-perfquery
+# @name perfquery
+# @action Read applicable InfiniBand performance-management counters.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax perfquery [host arguments]
+help perfquery
+
+# @entry TERM-photon
+# @name photon
+# @action inspect or verify the supplied Photon identity; snapshot its VEC state
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax photon [status|verify|snapshot]
+help photon
+
+# @entry TERM-poweroff
+# @name poweroff
+# @action flush storage and stop this virtual runtime (not the computer)
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax poweroff
+help poweroff
+
+# @entry TERM-printf
+# @name printf
+# @action format and print data
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax printf FORMAT [args...]
+help printf
+
+# @entry TERM-pwd
+# @name pwd
+# @action print working directory
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax pwd
+help pwd
+
+# @entry TERM-rdma
+# @name rdma
+# @action Inspect RDMA links, resources and device state.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax rdma [host arguments]
+help rdma
+
+# @entry TERM-reboot
+# @name reboot
+# @action flush storage and restart virtual sessions (not the operating system)
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax reboot
+help reboot
+
+# @entry TERM-rev
+# @name rev
+# @action reverse characters of each line
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax rev [file...]
+help rev
+
+# @entry TERM-rm
+# @name rm
+# @action remove files or directories
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax rm [-r] [-f] path...
+help rm
+
+# @entry TERM-rmdir
+# @name rmdir
+# @action remove empty directories
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax rmdir dir...
+help rmdir
+
+# @entry TERM-run
+# @name run
+# @action run a .vcmd file by virtual path or an explicitly authorized server-local file path
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax run [--local] [--trace] [--dry-run] PATH.vcmd
+help run
+
+# @entry TERM-runqlat
+# @name runqlat
+# @action Trace scheduler run-queue latency distributions with BCC.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax runqlat [host arguments]
+help runqlat
+
+# @entry TERM-seq
+# @name seq
+# @action print a sequence of numbers
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax seq [first [incr]] last
+help seq
+
+# @entry TERM-slabtop
+# @name slabtop
+# @action Inspect kernel slab-cache allocation.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax slabtop [host arguments]
+help slabtop
+
+# @entry TERM-sleep
+# @name sleep
+# @action delay for a number of seconds
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax sleep SECONDS
+help sleep
+
+# @entry TERM-smartctl
+# @name smartctl
+# @action Inspect drive SMART information or initiate a supported self-test.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax smartctl [host arguments]
+help smartctl
+
+# @entry TERM-sort
+# @name sort
+# @action sort lines of text
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax sort [-r] [-n] [-u] [file...]
+help sort
+
+# @entry TERM-ss
+# @name ss
+# @action Inspect host sockets and available TCP state information.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax ss [host arguments]
+help ss
+
+# @entry TERM-stat
+# @name stat
+# @action display file status
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax stat file...
+help stat
+
+# @entry TERM-storcli
+# @name storcli
+# @action Inspect or administer supported RAID controllers and virtual-drive policies.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax storcli [host arguments]
+help storcli
+
+# @entry TERM-sudo
+# @name sudo
+# @action Request host privilege elevation under an operating-system policy; unavailable here.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax sudo [host arguments]
+help sudo
+
+# @entry TERM-swapon
+# @name swapon
+# @action Inspect or activate swap; only reviewed inspection examples are routine diagnostics.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax swapon [host arguments]
+help swapon
+
+# @entry TERM-sync
+# @name sync
+# @action commit the virtual filesystem to its configured store
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax sync
+help sync
+
+# @entry TERM-sysinfo
+# @name sysinfo
+# @action terminal runtime status
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax sysinfo
+help sysinfo
+
+# @entry TERM-systemctl
+# @name systemctl
+# @action Inspect or control systemd units on the selected host.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax systemctl [host arguments]
+help systemctl
+
+# @entry TERM-systemd-detect-virt
+# @name systemd-detect-virt
+# @action Report detected virtualization or container context; not a trusted asset inventory.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax systemd-detect-virt [host arguments]
+help systemd-detect-virt
+
+# @entry TERM-tail
+# @name tail
+# @action output the last part of files
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tail [-n count] [file...]
+help tail
+
+# @entry TERM-taskset
+# @name taskset
+# @action Inspect or change a process or thread CPU affinity.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax taskset [host arguments]
+help taskset
+
+# @entry TERM-tcpretrans
+# @name tcpretrans
+# @action Trace or count TCP retransmission events with BCC.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tcpretrans [host arguments]
+help tcpretrans
+
+# @entry TERM-tee
+# @name tee
+# @action Copy input to output and selected files; writing changes the target file.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tee [host arguments]
+help tee
+
+# @entry TERM-timeout
+# @name timeout
+# @action Bound a host command run; a timeout does not guarantee blocked kernel work has stopped.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax timeout [host arguments]
+help timeout
+
+# @entry TERM-touch
+# @name touch
+# @action create empty files / update mtime
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax touch file...
+help touch
+
+# @entry TERM-tpm2_checkquote
+# @name tpm2_checkquote
+# @action Verify a TPM attestation quote against supplied verification material.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tpm2_checkquote [host arguments]
+help tpm2_checkquote
+
+# @entry TERM-tpm2_getcap
+# @name tpm2_getcap
+# @action Read TPM capability information.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tpm2_getcap [host arguments]
+help tpm2_getcap
+
+# @entry TERM-tpm2_pcrread
+# @name tpm2_pcrread
+# @action Read selected TPM platform-configuration registers.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tpm2_pcrread [host arguments]
+help tpm2_pcrread
+
+# @entry TERM-tpm2_quote
+# @name tpm2_quote
+# @action Produce a TPM-signed attestation quote for a selected key and PCR set.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tpm2_quote [host arguments]
+help tpm2_quote
+
+# @entry TERM-tr
+# @name tr
+# @action translate or delete characters
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tr [-d] SET1 [SET2]
+help tr
+
+# @entry TERM-tree
+# @name tree
+# @action list contents recursively as a tree
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax tree [path]
+help tree
+
+# @entry TERM-true
+# @name true
+# @action do nothing, successfully
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax true
+help true
+
+# @entry TERM-turbostat
+# @name turbostat
+# @action Sample supported CPU frequency, temperature, idle-state and power counters.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax turbostat [host arguments]
+help turbostat
+
+# @entry TERM-unalias
+# @name unalias
+# @action remove an alias
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax unalias name ...
+help unalias
+
+# @entry TERM-uname
+# @name uname
+# @action print system information
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax uname [-a]
+help uname
+
+# @entry TERM-uniq
+# @name uniq
+# @action report or omit repeated adjacent lines
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax uniq [-c] [file...]
+help uniq
+
+# @entry TERM-unset
+# @name unset
+# @action remove an environment variable
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax unset NAME ...
+help unset
+
+# @entry TERM-vcmd
+# @name vcmd
+# @action check, inspect, or run a VCMD/1 script from a virtual or authorized local path
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax vcmd run|check|show [--local] [--trace] [--dry-run] PATH.vcmd | vcmd corpus | vcmd help
+help vcmd
+
+# @entry TERM-virsh
+# @name virsh
+# @action Inspect or administer libvirt objects in an explicit connection context.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax virsh [host arguments]
+help virsh
+
+# @entry TERM-wc
+# @name wc
+# @action count lines, words and bytes
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax wc [-l] [-w] [-c] [file...]
+help wc
+
+# @entry TERM-which
+# @name which
+# @action locate a command
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax which name ...
+help which
+
+# @entry TERM-whoami
+# @name whoami
+# @action print the current user
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax whoami
+help whoami
+
+# @entry TERM-write
+# @name write
+# @action write text into a file (write FILE text...)
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax write [-a] FILE text...
+help write
+
+# @entry TERM-x86_energy_perf_policy
+# @name x86_energy_perf_policy
+# @action Inspect or change supported Intel energy-performance policy fields.
+# @risk Q | Host only
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax x86_energy_perf_policy [host arguments]
+help x86_energy_perf_policy
+
+# @entry ALIAS-cls
+# @name cls
+# @action Alias for clear: clear the terminal screen
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax cls
+help cls
+
+# @entry ALIAS-printenv
+# @name printenv
+# @action Alias for env: print the environment
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax printenv
+help printenv
+
+# @entry ALIAS-set
+# @name set
+# @action Alias for export: set an environment variable
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax set
+help set
+
+# @entry ALIAS-type
+# @name type
+# @action Alias for which: locate a command
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax type
+help type
+
+# @entry ALIAS-logout
+# @name logout
+# @action Alias for exit: close the session
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax logout
+help logout
+
+# @entry ALIAS-quit
+# @name quit
+# @action Alias for exit: close the session
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax quit
+help quit
+
+# @entry ALIAS-dir
+# @name dir
+# @action Alias for ls: list directory contents
+# @risk Q | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax dir
+help dir
+
+# @entry ALIAS-br
+# @name br
+# @action Alias for browser: control the local informational surface (not a web engine)
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax br
+help br
+
+# @entry ALIAS-halt
+# @name halt
+# @action Alias for poweroff: flush storage and stop this virtual runtime (not the computer)
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax halt
+help halt
+
+# @entry ALIAS-shutdown
+# @name shutdown
+# @action Alias for poweroff: flush storage and stop this virtual runtime (not the computer)
+# @risk C | Virtual executable
+# @plane SPIRAL virtual sandbox
+# @source Runtime registry 2.5.0
+# @syntax shutdown
+help shutdown
+
+# @entry CMD-001
+# @name ipmitool · Sensor Data Repository (SDR) & Real-Time Environmental Auditing
+# @action Read decoded full sensor-data records and available readings; fields depend on BMC firmware.
+# @risk Q | Host only
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sdr elist full
+dc show CMD-001
+
+# @entry CMD-002
+# @name ipmitool · Sensor Data Repository (SDR) & Real-Time Environmental Auditing
+# @action Read available power-supply sensor records and status; wattage is not guaranteed.
+# @risk Q | Host only
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sdr type 'Power Supply'
+dc show CMD-002
+
+# @entry CMD-003
+# @name ipmitool · Sensor Data Repository (SDR) & Real-Time Environmental Auditing
+# @action Read available fan sensor records and RPM values; PWM duty cycle is not guaranteed.
+# @risk Q | Host only
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sdr type 'Fan'
+dc show CMD-003
+
+# @entry CMD-004
+# @name ipmitool · System Event Log (SEL) Deep Inspection & Forensic Extraction
+# @action Display SEL capacity, total entry count, and allocation free space
+# @risk Q | Host only
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sel info
+dc show CMD-004
+
+# @entry CMD-005
+# @name ipmitool · System Event Log (SEL) Deep Inspection & Forensic Extraction
+# @action Output chronological hardware event log with human-readable timestamping and decoding
+# @risk Q | Host only
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sel elist
+dc show CMD-005
+
+# @entry CMD-006
+# @name ipmitool · System Event Log (SEL) Deep Inspection & Forensic Extraction
+# @action Export raw BMC system-event records to a new evidence file.
+# @risk Q | Host only
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sel writeraw "${EVIDENCE_DIR:?Create a fresh evidence directory}/sel.bin"
+dc show CMD-006
+
+# @entry CMD-007
+# @name ipmitool · System Event Log (SEL) Deep Inspection & Forensic Extraction
+# @action Clear the System Event Log following verified remediation (institutional procedure)
+# @risk X | Blocked change
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ipmitool -I open sel clear
+dc show CMD-007
+
+# @entry CMD-008
+# @name ipmitool · Out-of-Band Power Management & Chassis Control
+# @action Interrogate instantaneous power sequencer state
+# @risk Q | Host only
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open chassis power status
+dc show CMD-008
+
+# @entry CMD-009
+# @name ipmitool · Out-of-Band Power Management & Chassis Control
+# @action Request a soft chassis shutdown through the BMC; success depends on firmware and OS behavior.
+# @risk X | Blocked change
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ipmitool -I open chassis power soft
+dc show CMD-009
+
+# @entry CMD-010
+# @name ipmitool · Out-of-Band Power Management & Chassis Control
+# @action Immediately power-cycle the chassis; this is disruptive and has no general undo.
+# @risk X | Blocked change
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ipmitool -I open chassis power cycle
+dc show CMD-010
+
+# @entry CMD-011
+# @name ipmitool · Out-of-Band Power Management & Chassis Control
+# @action Pulse chassis front-panel identification (ID) beacon for physical datacenter location
+# @risk C | Blocked change
+# @plane Linux physical host with local IPMI access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ipmitool -I open chassis identify 30
+dc show CMD-011
+
+# @entry CMD-012
+# @name ipmitool · Serial-over-LAN (SoL) Emergency Console Redirection
+# @action Open an authenticated BMC serial-over-LAN console with interactive password entry.
+# @risk D | Host only
+# @plane Approved BMC management workstation
+# @source DC-TERM-OPS 1.1.0
+# @syntax ipmitool -I lanplus -C 17 -L OPERATOR -H "${BMC_HOST:?Set verified BMC_HOST}" -U "${BMC_USER:?Set approved BMC_USER}" -a sol activate
+dc show CMD-012
+
+# @entry CMD-013
+# @name ipmitool · Serial-over-LAN (SoL) Emergency Console Redirection
+# @action Deactivate an identified serial-over-LAN session after reviewing affected operators.
+# @risk C | Blocked change
+# @plane Approved BMC management workstation
+# @source DC-TERM-OPS 1.1.0
+# @syntax ipmitool -I lanplus -C 17 -L OPERATOR -H "$BMC_HOST" -U "$BMC_USER" -a sol deactivate
+dc show CMD-013
+
+# @entry CMD-014
+# @name busctl · OpenBMC D-Bus Interrogation via Terminal
+# @action Query chassis power state directly via OpenBMC D-Bus endpoint
+# @risk Q | Host only
+# @plane BMC operating system (not host D-Bus)
+# @source DC-TERM-OPS 1.1.0
+# @syntax busctl get-property xyz.openbmc_project.State.Chassis    /xyz/openbmc_project/state/chassis0    xyz.openbmc_project.State.Chassis CurrentPowerState
+dc show CMD-014
+
+# @entry CMD-015
+# @name busctl · OpenBMC D-Bus Interrogation via Terminal
+# @action List all hardware inventory items registered on OpenBMC D-Bus
+# @risk Q | Host only
+# @plane BMC operating system (not host D-Bus)
+# @source DC-TERM-OPS 1.1.0
+# @syntax busctl tree xyz.openbmc_project.Inventory.Manager
+dc show CMD-015
+
+# @entry CMD-016
+# @name dmidecode · SMBIOS/DMI Firmware & Component Enumeration
+# @action Read the baseboard serial number reported by firmware.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo dmidecode -s baseboard-serial-number
+dc show CMD-016
+
+# @entry CMD-017
+# @name dmidecode · SMBIOS/DMI Firmware & Component Enumeration
+# @action Keep system serial inventory; confirm physical-host versus guest identity.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo dmidecode -s system-serial-number
+dc show CMD-017
+
+# @entry CMD-018
+# @name dmidecode · SMBIOS/DMI Firmware & Component Enumeration
+# @action Read the complete firmware memory inventory without discarding evidence through a filter.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo dmidecode -t memory
+dc show CMD-018
+
+# @entry CMD-019
+# @name dmidecode · SMBIOS/DMI Firmware & Component Enumeration
+# @action Read firmware BIOS information; this does not establish the loaded CPU microcode revision.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo dmidecode -t bios
+dc show CMD-019
+
+# @entry CMD-020
+# @name lscpu · CPU Microarchitecture & Cache Topology
+# @action List portable CPU, core, socket, NUMA-node and online fields.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax lscpu --extended=CPU,CORE,SOCKET,NODE,ONLINE
+dc show CMD-020
+
+# @entry CMD-021
+# @name cat · CPU Microarchitecture & Cache Topology
+# @action Read each available CPU vulnerability status file and preserve its name.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax for f in /sys/devices/system/cpu/vulnerabilities/*; do
+# @syntax   [ -r "$f" ] || continue
+# @syntax   printf '\n%s\n' "$f"
+# @syntax   cat -- "$f"
+# @syntax done
+dc show CMD-021
+
+# @entry CMD-022
+# @name lspci · PCIe Topology, Link Negotiation, and Advanced Error Reporting (AER)
+# @action Enumerate all PCIe endpoints in hierarchical tree format showing bridges and switches
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax lspci -D -tv
+dc show CMD-022
+
+# @entry CMD-023
+# @name lspci · PCIe Topology, Link Negotiation, and Advanced Error Reporting (AER)
+# @action Read full PCIe link capabilities and negotiated state for an identified device.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo lspci -D -vv -s "${PCI_BDF:?Set the verified domain:bus:device.function}"
+dc show CMD-023
+
+# @entry CMD-024
+# @name lspci · PCIe Topology, Link Negotiation, and Advanced Error Reporting (AER)
+# @action Read full PCIe device details, including available AER capabilities and status.
+# @risk Q | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo lspci -D -vv -s "${PCI_BDF:?Set the verified domain:bus:device.function}"
+dc show CMD-024
+
+# @entry CMD-025
+# @name turbostat · MSR Telemetry & Turbostat Real-Time Auditing
+# @action Collect ten one-second CPU telemetry samples; requires supported hardware.
+# @risk D | Host only
+# @plane Linux physical host; guests expose only delegated or virtual inventory
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo turbostat --quiet --interval 1 --num_iterations 10
+dc show CMD-025
+
+# @entry CMD-026
+# @name numactl · Non-Uniform Memory Access (NUMA) Topology & Allocation Balance
+# @action Display physical NUMA memory node layout and memory allocation distance matrix
+# @risk Q | Host only
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax numactl --hardware
+dc show CMD-026
+
+# @entry CMD-027
+# @name numastat · Non-Uniform Memory Access (NUMA) Topology & Allocation Balance
+# @action Read per-node memory information; use plain numastat for allocation-counter context.
+# @risk Q | Host only
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax numastat -m
+dc show CMD-027
+
+# @entry CMD-028
+# @name numastat · Non-Uniform Memory Access (NUMA) Topology & Allocation Balance
+# @action Keep -c as compact formatting; add plain numastat for allocation-counter context.
+# @risk Q | Host only
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax numastat -c
+dc show CMD-028
+
+# @entry CMD-029
+# @name numactl · Process Affinity Pinning & NUMA Execution Scaffolding
+# @action Start the reviewed workload on an approved NUMA node and memory policy; requires a controlled change.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax numactl --cpunodebind="$NUMA_NODE" --membind="$NUMA_NODE" /absolute/path/to/approved-workload
+dc show CMD-029
+
+# @entry CMD-030
+# @name taskset · Process Affinity Pinning & NUMA Execution Scaffolding
+# @action Inspect affinity for all threads of an identified process.
+# @risk Q | Host only
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax taskset -a -p -c "${TARGET_PID:?Set verified TARGET_PID}"
+dc show CMD-030
+
+# @entry CMD-031
+# @name taskset · Process Affinity Pinning & NUMA Execution Scaffolding
+# @action Replace fixed CPU IDs with an approved list; verify all affected threads and restore their prior affinity.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax taskset -a -p -c "$CPU_LIST" "$TARGET_PID"
+dc show CMD-031
+
+# @entry CMD-032
+# @name chrt · Process Affinity Pinning & NUMA Execution Scaffolding
+# @action Apply an explicitly approved real-time priority; no default priority is provided.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax chrt --fifo --pid "$APPROVED_RT_PRIORITY" "$TARGET_PID"
+dc show CMD-032
+
+# @entry CMD-033
+# @name cpupower · Dynamic CPU Frequency & Energy Policy Control
+# @action Set the performance frequency governor on the approved CPU list after recording the current policy.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax cpupower -c "$CPU_LIST" frequency-set --governor performance
+dc show CMD-033
+
+# @entry CMD-034
+# @name x86_energy_perf_policy · Dynamic CPU Frequency & Energy Policy Control
+# @action Set the Intel energy-performance bias on the approved CPU list; no speed guarantee is implied.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax x86_energy_perf_policy --cpu "$CPU_LIST" --epb performance
+dc show CMD-034
+
+# @entry CMD-035
+# @name echo · Kernel Memory Subsystem & HugePages Configuration
+# @action Change an approved NUMA-node HugePage reservation after capacity review.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax printf '%s\n' "$HUGE_PAGE_COUNT" | sudo tee "$HUGE_PATH"
+dc show CMD-035
+
+# @entry CMD-036
+# @name cat · Kernel Memory Subsystem & HugePages Configuration
+# @action Verify Transparent HugePages (THP) runtime policy
+# @risk Q | Host only
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /sys/kernel/mm/transparent_hugepage/enabled
+dc show CMD-036
+
+# @entry CMD-037
+# @name echo · Kernel Memory Subsystem & HugePages Configuration
+# @action Change Transparent HugePage enablement only after workload-specific testing and rollback planning.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax printf '%s\n' never | sudo tee /sys/kernel/mm/transparent_hugepage/enabled
+dc show CMD-037
+
+# @entry CMD-038
+# @name echo · Kernel Memory Subsystem & HugePages Configuration
+# @action THP defrag changes require separate justification and exact-state restoration.
+# @risk C | Blocked change
+# @plane Selected Linux host or guest kernel; verify resource ownership
+# @source DC-TERM-OPS 1.1.0
+# @syntax printf '%s\n' never | sudo tee /sys/kernel/mm/transparent_hugepage/defrag
+dc show CMD-038
+
+# @entry CMD-039
+# @name nvme · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action Enumerate all NVMe controllers, namespaces, capacities, and firmware versions
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo nvme list -o json
+dc show CMD-039
+
+# @entry CMD-040
+# @name nvme · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action Interrogate NVMe SMART log: Available spare, endurance wear, and thermal data
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo nvme smart-log "${NVME_CTRL:?Set the verified NVMe controller device}"
+dc show CMD-040
+
+# @entry CMD-041
+# @name nvme · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action Extract non-volatile controller error log records
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo nvme error-log "${NVME_CTRL:?Set the verified NVMe controller device}" -e 16
+dc show CMD-041
+
+# @entry CMD-042
+# @name nvme · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action Destructive NVMe namespace formatting: removed from executable examples.
+# @risk X | Removed
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-042
+
+# @entry CMD-043
+# @name smartctl · S.M.A.R.T. Telemetry & Hardware Self-Testing (SAS/SATA Subsystems)
+# @action Comprehensive SMART attribute dump and defect list interrogation
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo smartctl -x "${SMART_DEVICE:?Set verified SMART_DEVICE}"
+dc show CMD-043
+
+# @entry CMD-044
+# @name smartctl · S.M.A.R.T. Telemetry & Hardware Self-Testing (SAS/SATA Subsystems)
+# @action Start a long drive self-test after impact review; it may outlive this terminal session.
+# @risk D | Blocked change
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax smartctl -t long "$SMART_DEVICE"
+dc show CMD-044
+
+# @entry CMD-045
+# @name smartctl · S.M.A.R.T. Telemetry & Hardware Self-Testing (SAS/SATA Subsystems)
+# @action Read the drive self-test log; current progress may require a separate status query.
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo smartctl -l selftest "${SMART_DEVICE:?Set verified SMART_DEVICE}"
+dc show CMD-045
+
+# @entry CMD-046
+# @name storcli · Enterprise Hardware RAID Administration (StorCLI / MegaCLI)
+# @action Query overall controller health, firmware build, and PCI location
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo storcli /c0 show all
+dc show CMD-046
+
+# @entry CMD-047
+# @name storcli · Enterprise Hardware RAID Administration (StorCLI / MegaCLI)
+# @action Interrogate physical drive enclosure slots and individual drive states
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo storcli /c0 /eall /sall show all
+dc show CMD-047
+
+# @entry CMD-048
+# @name storcli · Enterprise Hardware RAID Administration (StorCLI / MegaCLI)
+# @action Audit Backup Battery Unit (BBU) or CacheVault SuperCap health and learn cycle status
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo storcli /c0 /cv show all
+dc show CMD-048
+
+# @entry CMD-049
+# @name storcli · Enterprise Hardware RAID Administration (StorCLI / MegaCLI)
+# @action Request write-back cache policy; independently verify effective policy and healthy cache protection.
+# @risk C | Blocked change
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax storcli /c0 /v0 set wrcache=wb
+dc show CMD-049
+
+# @entry CMD-050
+# @name multipath · Fibre Channel & iSCSI Device Multipathing (DM-Multipath)
+# @action Query multipath topology, active/standby paths, priority groups, and failed links
+# @risk Q | Host only
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo multipath -ll
+dc show CMD-050
+
+# @entry CMD-051
+# @name multipath · Fibre Channel & iSCSI Device Multipathing (DM-Multipath)
+# @action Request an all-map multipath reload; this is not a scoped discovery or path-rescan query.
+# @risk C | Blocked change
+# @plane Linux physical storage host or approved storage controller
+# @source DC-TERM-OPS 1.1.0
+# @syntax multipath -r
+dc show CMD-051
+
+# @entry CMD-052
+# @name ethtool · Physical Layer & Optical Transceiver Diagnostics (DDM/DOM)
+# @action Read supported transceiver EEPROM and diagnostic data; available optical readings depend on the module.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -m "${IFACE:?Set verified physical interface}"
+dc show CMD-052
+
+# @entry CMD-053
+# @name ethtool · Physical Layer & Optical Transceiver Diagnostics (DDM/DOM)
+# @action Read link modes and negotiation state; use the separate FEC query for supported FEC details.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool "${IFACE:?Set verified physical interface}"
+dc show CMD-053
+
+# @entry CMD-054
+# @name ethtool · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Inspect configured and maximum ring sizes; this query does not change them.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -g "${IFACE:?Set verified interface}"
+dc show CMD-054
+
+# @entry CMD-055
+# @name ethtool · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Change interface ring sizes to explicitly approved values.
+# @risk C | Blocked change
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ethtool -G "$IFACE" rx "$APPROVED_RX_RING" tx "$APPROVED_TX_RING"
+dc show CMD-055
+
+# @entry CMD-056
+# @name ethtool · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Audit hardware offloading engines (TSO, LRO, GRO, Checksum, RSS)
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -k "${IFACE:?Set verified interface}"
+dc show CMD-056
+
+# @entry CMD-057
+# @name ethtool · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Inspect current interrupt-coalescing parameters without changing them.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -c "${IFACE:?Set verified interface}"
+dc show CMD-057
+
+# @entry CMD-058
+# @name ethtool · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Change interrupt-coalescing policy to explicitly approved values.
+# @risk C | Blocked change
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ethtool -C "$IFACE" adaptive-rx "$APPROVED_ADAPTIVE_RX" adaptive-tx "$APPROVED_ADAPTIVE_TX"
+dc show CMD-058
+
+# @entry CMD-059
+# @name ss · Low-Level Socket Telemetry & TCP Buffer Inspection
+# @action List TCP socket state and available extended details; validate installed ss flags for the intended socket scope.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ss -ntaeip
+dc show CMD-059
+
+# @entry CMD-060
+# @name ss · Low-Level Socket Telemetry & TCP Buffer Inspection
+# @action Extract real-time TCP socket buffer utilization, congestion algorithm, and RTT
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ss -ntim '( dport = :443 or sport = :443 )'
+dc show CMD-060
+
+# @entry CMD-061
+# @name ibstat · Remote Direct Memory Access (RDMA) & InfiniBand Subsystem Administration
+# @action Enumerate all InfiniBand/RoCE Host Channel Adapters (HCAs) and firmware revisions
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ibstat
+dc show CMD-061
+
+# @entry CMD-062
+# @name ibv_devinfo · Remote Direct Memory Access (RDMA) & InfiniBand Subsystem Administration
+# @action Keep verbs device details; do not conflate its interface with every other RDMA utility.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax ibv_devinfo -v
+dc show CMD-062
+
+# @entry CMD-063
+# @name perfquery · Remote Direct Memory Access (RDMA) & InfiniBand Subsystem Administration
+# @action Read applicable extended InfiniBand PMA counters; not a universal RoCE/PFC/CNP monitor.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax perfquery -x
+dc show CMD-063
+
+# @entry CMD-064
+# @name rdma · Remote Direct Memory Access (RDMA) & InfiniBand Subsystem Administration
+# @action Keep RDMA link query; correlate RoCE with Ethernet driver and switch counters.
+# @risk Q | Host only
+# @plane Selected Linux network host; physical telemetry requires device access
+# @source DC-TERM-OPS 1.1.0
+# @syntax rdma link show
+dc show CMD-064
+
+# @entry CMD-065
+# @name perf · Hardware Performance Monitoring Units & Instruction Profiling (`perf`)
+# @action Sample hardware cycle and instruction counters for five seconds.
+# @risk D | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo perf stat -a -e '{cycles,instructions}' -- sleep 5
+dc show CMD-065
+
+# @entry CMD-066
+# @name perf · Hardware Performance Monitoring Units & Instruction Profiling (`perf`)
+# @action Record a bounded system-wide CPU call-graph sample in the selected evidence directory.
+# @risk D | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo perf record -F 99 -a -g -o "${EVIDENCE_DIR:?Create a fresh evidence directory}/perf.data" -- sleep 10
+dc show CMD-066
+
+# @entry CMD-067
+# @name perf · Hardware Performance Monitoring Units & Instruction Profiling (`perf`)
+# @action Generate a noninteractive text report from the selected perf.data recording.
+# @risk Q | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo perf report -i "${EVIDENCE_DIR:?Set evidence directory}/perf.data" -n --stdio --percent-limit 1.0
+dc show CMD-067
+
+# @entry CMD-068
+# @name runqlat · Extended BPF (eBPF) Real-Time Kernel Instrumentation
+# @action Trace runqueue latency: Time threads spend waiting runnable in scheduler runqueues
+# @risk D | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo "${BCC_TOOLS:?Set verified BCC_TOOLS directory}/runqlat" 1 10
+dc show CMD-068
+
+# @entry CMD-069
+# @name biosnoop · Extended BPF (eBPF) Real-Time Kernel Instrumentation
+# @action Trace block-I/O events including OS queue time for a bounded interval.
+# @risk D | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo timeout --signal=INT --kill-after=5s 15s "${BCC_TOOLS:?Set verified BCC_TOOLS directory}/biosnoop" -Q
+dc show CMD-069
+
+# @entry CMD-070
+# @name tcpretrans · Extended BPF (eBPF) Real-Time Kernel Instrumentation
+# @action Count TCP retransmissions per flow during a bounded trace.
+# @risk D | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo timeout --signal=INT --kill-after=5s 15s "${BCC_TOOLS:?Set verified BCC_TOOLS directory}/tcpretrans" -c
+dc show CMD-070
+
+# @entry CMD-071
+# @name offcputime · Extended BPF (eBPF) Real-Time Kernel Instrumentation
+# @action Collect off-CPU stacks with user/kernel delimiters; does not filter D-state.
+# @risk D | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo "${BCC_TOOLS:?Set verified BCC_TOOLS directory}/offcputime" -d 5
+dc show CMD-071
+
+# @entry CMD-072
+# @name slabtop · Kernel Slab Allocation & Memory Leak Isolation
+# @action Take one bounded snapshot of slab-cache allocation.
+# @risk D | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax slabtop -o -s c
+dc show CMD-072
+
+# @entry CMD-073
+# @name cat · Kernel Slab Allocation & Memory Leak Isolation
+# @action Inspect virtual memory fragmentation and buddy allocator page allocations
+# @risk Q | Host only
+# @plane Selected Linux kernel and permitted tracing environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /proc/buddyinfo
+dc show CMD-073
+
+# @entry CMD-074
+# @name tpm2_pcrread · TPM 2.0 Platform Configuration Register (PCR) Attestation
+# @action Read Platform Configuration Registers (PCRs) across SHA-256 bank
+# @risk Q | Host only
+# @plane Selected Linux security/TPM environment with explicit authority
+# @source DC-TERM-OPS 1.1.0
+# @syntax tpm2_pcrread sha256
+dc show CMD-074
+
+# @entry CMD-075
+# @name tpm2_getcap · TPM 2.0 Platform Configuration Register (PCR) Attestation
+# @action Read TPM fixed properties; NV-index enumeration is a separate command.
+# @risk Q | Host only
+# @plane Selected Linux security/TPM environment with explicit authority
+# @source DC-TERM-OPS 1.1.0
+# @syntax tpm2_getcap properties-fixed
+dc show CMD-075
+
+# @entry CMD-076
+# @name auditctl · Linux Auditing Framework (auditd) & Syscall Monitoring
+# @action Install a reviewed audit rule with quoted login-UID comparisons.
+# @risk C | Blocked change
+# @plane Selected Linux security/TPM environment with explicit authority
+# @source DC-TERM-OPS 1.1.0
+# @syntax auditctl -a always,exit -F arch=b64 -S execve -S execveat -F 'auid>=1000' -F 'auid!=unset' -k user_commands
+dc show CMD-076
+
+# @entry CMD-077
+# @name aureport · Linux Auditing Framework (auditd) & Syscall Monitoring
+# @action Generate summary report of failed system calls, authentication failures, and alerts
+# @risk Q | Host only
+# @plane Selected Linux security/TPM environment with explicit authority
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo aureport --failed
+dc show CMD-077
+
+# @entry CMD-078
+# @name ausearch · Linux Auditing Framework (auditd) & Syscall Monitoring
+# @action Collect raw matching audit events since today.
+# @risk Q | Host only
+# @plane Selected Linux security/TPM environment with explicit authority
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ausearch -k user_commands -ts today --raw
+dc show CMD-078
+
+# @entry CMD-079
+# @name cryptsetup · Cryptographic Volume Administration & Self-Encrypting Drives (SED / LUKS)
+# @action Read the status of an active dm-crypt mapping; inspect the LUKS header separately for key-slot metadata.
+# @risk Q | Host only
+# @plane Selected Linux security/TPM environment with explicit authority
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo cryptsetup status "${DM_VOLUME:?Set verified active mapping name}"
+dc show CMD-079
+
+# @entry CMD-080
+# @name cryptsetup · Cryptographic Volume Administration & Self-Encrypting Drives (SED / LUKS)
+# @action Read metadata from a verified LUKS device without dumping volume keys.
+# @risk Q | Host only
+# @plane Selected Linux security/TPM environment with explicit authority
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo cryptsetup luksDump "${LUKS_DEVICE:?Set verified LUKS backing device}"
+dc show CMD-080
+
+# @entry CMD-081
+# @name systemctl · Kernel Crash Dump (`kdump` / `kexec`) Infrastructure Verification
+# @action Read the selected kdump service state; this alone proves neither memory reservation nor recoverable dumps.
+# @risk Q | Host only
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax systemctl status kdump.service --no-pager
+dc show CMD-081
+
+# @entry CMD-082
+# @name cat · Kernel Crash Dump (`kdump` / `kexec`) Infrastructure Verification
+# @action Keep crash-kernel loaded indicator as readiness evidence, not proof of a recoverable vmcore.
+# @risk Q | Host only
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /sys/kernel/kexec_crash_loaded
+dc show CMD-082
+
+# @entry CMD-083
+# @name dmesg · Kernel Crash Dump (`kdump` / `kexec`) Infrastructure Verification
+# @action Collect current-boot kernel journal evidence for crashkernel inspection.
+# @risk Q | Host only
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo journalctl -k -b --no-pager
+dc show CMD-083
+
+# @entry CMD-084
+# @name echo · 8.2
+# @action Emergency SysRq action removed from runnable examples; consult the disaster-recovery procedure.
+# @risk C | Removed
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-084
+
+# @entry CMD-085
+# @name echo · 8.2
+# @action Emergency SysRq action removed from runnable examples; consult the disaster-recovery procedure.
+# @risk X | Removed
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-085
+
+# @entry CMD-086
+# @name echo · 8.2
+# @action Emergency SysRq action removed from runnable examples; consult the disaster-recovery procedure.
+# @risk X | Removed
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-086
+
+# @entry CMD-087
+# @name echo · 8.2
+# @action Emergency SysRq action removed from runnable examples; consult the disaster-recovery procedure.
+# @risk D | Removed
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-087
+
+# @entry CMD-088
+# @name echo · 8.2
+# @action Emergency SysRq action removed from runnable examples; consult the disaster-recovery procedure.
+# @risk X | Removed
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-088
+
+# @entry CMD-089
+# @name echo · 8.2
+# @action Emergency SysRq action removed from runnable examples; consult the disaster-recovery procedure.
+# @risk X | Removed
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-089
+
+# @entry CMD-090
+# @name echo · 8.2
+# @action Emergency SysRq action removed from runnable examples; consult the disaster-recovery procedure.
+# @risk X | Removed
+# @plane Selected Linux host or guest recovery environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax REMOVED — no runnable command supplied
+dc show CMD-090
+
+# @entry REF-001
+# @name date · Mandatory preflight
+# @action Q: Linux identity and execution context; not a hardware health verdict.
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax date -u '+%Y-%m-%dT%H:%M:%SZ'
+dc show REF-001
+
+# @entry REF-002
+# @name hostname · Mandatory preflight
+# @action Mandatory preflight: hostname
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax hostname
+dc show REF-002
+
+# @entry REF-003
+# @name uname · Mandatory preflight
+# @action Mandatory preflight: uname -a
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax uname -a
+dc show REF-003
+
+# @entry REF-004
+# @name cat · Mandatory preflight
+# @action Mandatory preflight: cat /etc/os-release
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /etc/os-release
+dc show REF-004
+
+# @entry REF-005
+# @name id · Mandatory preflight
+# @action Mandatory preflight: id
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax id
+dc show REF-005
+
+# @entry REF-006
+# @name cat · Mandatory preflight
+# @action Mandatory preflight: cat /proc/sys/kernel/random/boot_id
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /proc/sys/kernel/random/boot_id
+dc show REF-006
+
+# @entry REF-007
+# @name cat · Mandatory preflight
+# @action Mandatory preflight: cat /proc/self/cgroup
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /proc/self/cgroup
+dc show REF-007
+
+# @entry REF-008
+# @name systemd-detect-virt · Mandatory preflight
+# @action Q: Optional systemd utility; nonzero can mean no virtualization detected.
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax systemd-detect-virt
+dc show REF-008
+
+# @entry REF-009
+# @name systemd-detect-virt · Mandatory preflight
+# @action Mandatory preflight: systemd-detect-virt --vm
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax systemd-detect-virt --vm
+dc show REF-009
+
+# @entry REF-010
+# @name systemd-detect-virt · Mandatory preflight
+# @action Mandatory preflight: systemd-detect-virt --container
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax systemd-detect-virt --container
+dc show REF-010
+
+# @entry REF-011
+# @name umask · Evidence handling and exit semantics
+# @action Evidence handling and exit semantics: umask 077
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax umask 077
+dc show REF-011
+
+# @entry REF-012
+# @name EVIDENCE_DIR=$(mktemp · Evidence handling and exit semantics
+# @action Evidence handling and exit semantics: EVIDENCE_DIR=$(mktemp -d -- "${HOME:?HOME is required}/dc-evidence.XXXXXXXX")
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax EVIDENCE_DIR=$(mktemp -d -- "${HOME:?HOME is required}/dc-evidence.XXXXXXXX")
+dc show REF-012
+
+# @entry REF-013
+# @name printf · Evidence handling and exit semantics
+# @action Evidence handling and exit semantics: printf 'Evidence directory: %s\n' "$EVIDENCE_DIR"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax printf 'Evidence directory: %s\n' "$EVIDENCE_DIR"
+dc show REF-013
+
+# @entry REF-014
+# @name sudo · Sensor Data Repository (SDR) & Real-Time Environmental Auditing
+# @action Sensor Data Repository (SDR) & Real-Time Environmental Auditing: sudo ipmitool -I open sensor list
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sensor list
+dc show REF-014
+
+# @entry REF-015
+# @name sudo · System Event Log (SEL) Deep Inspection & Forensic Extraction
+# @action System Event Log (SEL) Deep Inspection & Forensic Extraction: sudo ipmitool -I open sel time get
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ipmitool -I open sel time get
+dc show REF-015
+
+# @entry REF-016
+# @name ipmitool · Out-of-Band Power Management & Chassis Control
+# @action Cancel identification when appropriate:
+# @risk C | Blocked change
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax ipmitool -I open chassis identify 0
+dc show REF-016
+
+# @entry REF-017
+# @name busctl · OpenBMC D-Bus Interrogation via Terminal
+# @action OpenBMC D-Bus Interrogation via Terminal: busctl list --no-pager
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax busctl list --no-pager
+dc show REF-017
+
+# @entry REF-018
+# @name busctl · OpenBMC D-Bus Interrogation via Terminal
+# @action OpenBMC D-Bus Interrogation via Terminal: busctl tree xyz.openbmc_project.State.Chassis
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax busctl tree xyz.openbmc_project.State.Chassis
+dc show REF-018
+
+# @entry REF-019
+# @name lscpu · CPU Microarchitecture & Cache Topology
+# @action CPU Microarchitecture & Cache Topology: lscpu
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax lscpu
+dc show REF-019
+
+# @entry REF-020
+# @name sudo · MSR Telemetry & Turbostat Real-Time Auditing
+# @action MSR Telemetry & Turbostat Real-Time Auditing: sudo turbostat --list
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo turbostat --list
+dc show REF-020
+
+# @entry REF-021
+# @name numastat · Non-Uniform Memory Access (NUMA) Topology & Allocation Balance
+# @action Non-Uniform Memory Access (NUMA) Topology & Allocation Balance: numastat
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax numastat
+dc show REF-021
+
+# @entry REF-022
+# @name chrt · Process Affinity Pinning & NUMA Execution Scaffolding
+# @action Process Affinity Pinning & NUMA Execution Scaffolding: chrt -p "${TARGET_PID:?Set verified TARGET_PID}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax chrt -p "${TARGET_PID:?Set verified TARGET_PID}"
+dc show REF-022
+
+# @entry REF-023
+# @name cat · Process Affinity Pinning & NUMA Execution Scaffolding
+# @action Process Affinity Pinning & NUMA Execution Scaffolding: cat "/proc/${TARGET_PID:?Set verified TARGET_PID}/status"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat "/proc/${TARGET_PID:?Set verified TARGET_PID}/status"
+dc show REF-023
+
+# @entry REF-024
+# @name cpupower · Dynamic CPU Frequency & Energy Policy Control
+# @action Dynamic CPU Frequency & Energy Policy Control: cpupower frequency-info
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cpupower frequency-info
+dc show REF-024
+
+# @entry REF-025
+# @name sudo · Dynamic CPU Frequency & Energy Policy Control
+# @action Dynamic CPU Frequency & Energy Policy Control: sudo x86_energy_perf_policy
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo x86_energy_perf_policy
+dc show REF-025
+
+# @entry REF-026
+# @name grep · Kernel Memory Subsystem & HugePages Configuration
+# @action Kernel Memory Subsystem & HugePages Configuration: grep -E 'MemAvailable|Huge|AnonHuge' /proc/meminfo
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax grep -E 'MemAvailable|Huge|AnonHuge' /proc/meminfo
+dc show REF-026
+
+# @entry REF-027
+# @name cat · Kernel Memory Subsystem & HugePages Configuration
+# @action Kernel Memory Subsystem & HugePages Configuration: cat /sys/kernel/mm/transparent_hugepage/defrag
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /sys/kernel/mm/transparent_hugepage/defrag
+dc show REF-027
+
+# @entry REF-028
+# @name ls · Kernel Memory Subsystem & HugePages Configuration
+# @action Kernel Memory Subsystem & HugePages Configuration: ls -d /sys/devices/system/node/node*/hugepages/hugepages-*kB
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax ls -d /sys/devices/system/node/node*/hugepages/hugepages-*kB
+dc show REF-028
+
+# @entry REF-029
+# @name sudo · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action NVMe CLI Low-Level Controller & Endurance Telemetry: sudo nvme list-subsys
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo nvme list-subsys
+dc show REF-029
+
+# @entry REF-030
+# @name sudo · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action NVMe CLI Low-Level Controller & Endurance Telemetry: sudo nvme id-ctrl "${NVME_CTRL:?Set the verified NVMe controller device}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo nvme id-ctrl "${NVME_CTRL:?Set the verified NVMe controller device}"
+dc show REF-030
+
+# @entry REF-031
+# @name sudo · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action NVMe CLI Low-Level Controller & Endurance Telemetry: sudo nvme id-ns "${NVME_NS:?Set the verified namespace block device}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo nvme id-ns "${NVME_NS:?Set the verified namespace block device}"
+dc show REF-031
+
+# @entry REF-032
+# @name lsblk · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action NVMe CLI Low-Level Controller & Endurance Telemetry: lsblk -o NAME,TYPE,SIZE,MODEL,SERIAL,WWN,FSTYPE,MOUNTPOINTS
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax lsblk -o NAME,TYPE,SIZE,MODEL,SERIAL,WWN,FSTYPE,MOUNTPOINTS
+dc show REF-032
+
+# @entry REF-033
+# @name findmnt · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action NVMe CLI Low-Level Controller & Endurance Telemetry: findmnt
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax findmnt
+dc show REF-033
+
+# @entry REF-034
+# @name swapon · NVMe CLI Low-Level Controller & Endurance Telemetry
+# @action NVMe CLI Low-Level Controller & Endurance Telemetry: swapon --show
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax swapon --show
+dc show REF-034
+
+# @entry REF-035
+# @name sudo · S.M.A.R.T. Telemetry & Hardware Self-Testing (SAS/SATA Subsystems)
+# @action S.M.A.R.T. Telemetry & Hardware Self-Testing (SAS/SATA Subsystems): sudo smartctl -c "${SMART_DEVICE:?Set verified SMART_DEVICE}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo smartctl -c "${SMART_DEVICE:?Set verified SMART_DEVICE}"
+dc show REF-035
+
+# @entry REF-036
+# @name sudo · Enterprise Hardware RAID Administration (StorCLI / MegaCLI)
+# @action Enterprise Hardware RAID Administration (StorCLI / MegaCLI): sudo storcli /c0 /vall show all
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo storcli /c0 /vall show all
+dc show REF-036
+
+# @entry REF-037
+# @name ip · Physical Layer & Optical Transceiver Diagnostics (DDM/DOM)
+# @action Physical Layer & Optical Transceiver Diagnostics (DDM/DOM): ip -br link
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax ip -br link
+dc show REF-037
+
+# @entry REF-038
+# @name sudo · Physical Layer & Optical Transceiver Diagnostics (DDM/DOM)
+# @action Physical Layer & Optical Transceiver Diagnostics (DDM/DOM): sudo ethtool -i "${IFACE:?Set verified physical interface}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -i "${IFACE:?Set verified physical interface}"
+dc show REF-038
+
+# @entry REF-039
+# @name sudo · Physical Layer & Optical Transceiver Diagnostics (DDM/DOM)
+# @action Physical Layer & Optical Transceiver Diagnostics (DDM/DOM): sudo ethtool --show-fec "${IFACE:?Set verified physical interface}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool --show-fec "${IFACE:?Set verified physical interface}"
+dc show REF-039
+
+# @entry REF-040
+# @name sudo · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Network Driver Ring Buffers, Offloads, and Interrupt Coalescing: sudo ethtool -l "${IFACE:?Set verified interface}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -l "${IFACE:?Set verified interface}"
+dc show REF-040
+
+# @entry REF-041
+# @name sudo · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Network Driver Ring Buffers, Offloads, and Interrupt Coalescing: sudo ethtool -S "${IFACE:?Set verified interface}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -S "${IFACE:?Set verified interface}"
+dc show REF-041
+
+# @entry REF-042
+# @name ip · Network Driver Ring Buffers, Offloads, and Interrupt Coalescing
+# @action Network Driver Ring Buffers, Offloads, and Interrupt Coalescing: ip -s link show dev "${IFACE:?Set verified interface}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax ip -s link show dev "${IFACE:?Set verified interface}"
+dc show REF-042
+
+# @entry REF-043
+# @name ss · Low-Level Socket Telemetry & TCP Buffer Inspection
+# @action Low-Level Socket Telemetry & TCP Buffer Inspection: ss -lnt
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax ss -lnt
+dc show REF-043
+
+# @entry REF-044
+# @name sudo · Remote Direct Memory Access (RDMA) & InfiniBand Subsystem Administration
+# @action RoCE/Ethernet-side evidence, names depend on the actual driver.
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo ethtool -S "${IFACE:?Set verified RoCE physical interface}"
+dc show REF-044
+
+# @entry REF-045
+# @name ip · Remote Direct Memory Access (RDMA) & InfiniBand Subsystem Administration
+# @action Remote Direct Memory Access (RDMA) & InfiniBand Subsystem Administration: ip -s link show dev "${IFACE:?Set verified RoCE physical interface}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax ip -s link show dev "${IFACE:?Set verified RoCE physical interface}"
+dc show REF-045
+
+# @entry REF-046
+# @name perf · Hardware Performance Monitoring Units & Instruction Profiling (`perf`)
+# @action Hardware Performance Monitoring Units & Instruction Profiling (`perf`): perf list
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax perf list
+dc show REF-046
+
+# @entry REF-047
+# @name grep · Kernel Slab Allocation & Memory Leak Isolation
+# @action Kernel Slab Allocation & Memory Leak Isolation: grep -E 'MemAvailable|Slab|SReclaimable|SUnreclaim|Dirty|Writeback' /proc/meminfo
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax grep -E 'MemAvailable|Slab|SReclaimable|SUnreclaim|Dirty|Writeback' /proc/meminfo
+dc show REF-047
+
+# @entry REF-048
+# @name tpm2_getcap · TPM 2.0 Platform Configuration Register (PCR) Attestation
+# @action TPM 2.0 Platform Configuration Register (PCR) Attestation: tpm2_getcap handles-nv-index
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax tpm2_getcap handles-nv-index
+dc show REF-048
+
+# @entry REF-049
+# @name tpm2_quote · TPM 2.0 Platform Configuration Register (PCR) Attestation
+# @action On the prover, with a fresh challenge issued by the verifier:
+# @risk C | Blocked change
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax tpm2_quote -c "$ENROLLED_AK_CONTEXT" -l sha256:0,4,7    -q "$VERIFIER_NONCE_HEX" -m "$QUOTE_MESSAGE" -s "$QUOTE_SIGNATURE"    -o "$QUOTED_PCRS" -g sha256
+dc show REF-049
+
+# @entry REF-050
+# @name tpm2_checkquote · TPM 2.0 Platform Configuration Register (PCR) Attestation
+# @action On the verifier, with its trusted enrolled AK public key and retained challenge:
+# @risk C | Blocked change
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax tpm2_checkquote -u "$TRUSTED_AK_PUBLIC" -m "$QUOTE_MESSAGE"    -s "$QUOTE_SIGNATURE" -f "$QUOTED_PCRS" -g sha256 -q "$VERIFIER_NONCE_HEX"
+dc show REF-050
+
+# @entry REF-051
+# @name sudo · Linux Auditing Framework (auditd) & Syscall Monitoring
+# @action Linux Auditing Framework (auditd) & Syscall Monitoring: sudo auditctl -s
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo auditctl -s
+dc show REF-051
+
+# @entry REF-052
+# @name sudo · Linux Auditing Framework (auditd) & Syscall Monitoring
+# @action Linux Auditing Framework (auditd) & Syscall Monitoring: sudo auditctl -l
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax sudo auditctl -l
+dc show REF-052
+
+# @entry REF-053
+# @name cat · Kernel Crash Dump (`kdump` / `kexec`) Infrastructure Verification
+# @action Kernel Crash Dump (`kdump` / `kexec`) Infrastructure Verification: cat /proc/cmdline
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat /proc/cmdline
+dc show REF-053
+
+# @entry REF-054
+# @name virsh · Hypervisor and VM inventory — libvirt example
+# @action Hypervisor and VM inventory — libvirt example: virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}" list --all
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}" list --all
+dc show REF-054
+
+# @entry REF-055
+# @name virsh · Hypervisor and VM inventory — libvirt example
+# @action Hypervisor and VM inventory — libvirt example: virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}" dominfo "${VM_ID:?Set verified VM UUID or name}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}"    dominfo "${VM_ID:?Set verified VM UUID or name}"
+dc show REF-055
+
+# @entry REF-056
+# @name virsh · Hypervisor and VM inventory — libvirt example
+# @action Hypervisor and VM inventory — libvirt example: virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}" domstats "${VM_ID:?Set verified VM UUID or name}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}"    domstats "${VM_ID:?Set verified VM UUID or name}"
+dc show REF-056
+
+# @entry REF-057
+# @name virsh · Hypervisor and VM inventory — libvirt example
+# @action Hypervisor and VM inventory — libvirt example: virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}" domblklist "${VM_ID:?Set verified VM UUID or name}" --details
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}"    domblklist "${VM_ID:?Set verified VM UUID or name}" --details
+dc show REF-057
+
+# @entry REF-058
+# @name virsh · Hypervisor and VM inventory — libvirt example
+# @action Hypervisor and VM inventory — libvirt example: virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}" domiflist "${VM_ID:?Set verified VM UUID or name}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}"    domiflist "${VM_ID:?Set verified VM UUID or name}"
+dc show REF-058
+
+# @entry REF-059
+# @name virsh · Hypervisor and VM inventory — libvirt example
+# @action Hypervisor and VM inventory — libvirt example: virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}" snapshot-list "${VM_ID:?Set verified VM UUID or name}" --tree
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax virsh --readonly --connect "${LIBVIRT_URI:?Set verified LIBVIRT_URI}"    snapshot-list "${VM_ID:?Set verified VM UUID or name}" --tree
+dc show REF-059
+
+# @entry REF-060
+# @name cat · Container and cgroup v2 resource diagnosis
+# @action Container and cgroup v2 resource diagnosis: cat "/proc/${TARGET_PID:?Set verified TARGET_PID}/cgroup"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax cat "/proc/${TARGET_PID:?Set verified TARGET_PID}/cgroup"
+dc show REF-060
+
+# @entry REF-061
+# @name for · Container and cgroup v2 resource diagnosis
+# @action CGROUP_DIR must be the verified directory for that workload in the visible hierarchy.
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax for name in cpu.max cpu.stat cpuset.cpus.effective cpuset.mems.effective              memory.current memory.max memory.events memory.pressure              io.stat pids.current pids.max; do
+# @syntax   f="${CGROUP_DIR:?Set verified cgroup v2 directory}/$name"
+# @syntax   if [ -r "$f" ]; then
+# @syntax     printf '\n%s\n' "$f"
+# @syntax     cat -- "$f"
+# @syntax   else
+# @syntax     printf 'UNAVAILABLE: %s\n' "$f" >&2
+# @syntax   fi
+# @syntax done
+dc show REF-061
+
+# @entry REF-062
+# @name kubectl · Explicit-context Kubernetes triage
+# @action Explicit-context Kubernetes triage: kubectl config current-context
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax kubectl config current-context
+dc show REF-062
+
+# @entry REF-063
+# @name kubectl · Explicit-context Kubernetes triage
+# @action Explicit-context Kubernetes triage: kubectl --context="${KUBE_CONTEXT:?Set verified KUBE_CONTEXT}" --request-timeout=15s get nodes -o wide
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax kubectl --context="${KUBE_CONTEXT:?Set verified KUBE_CONTEXT}" --request-timeout=15s    get nodes -o wide
+dc show REF-063
+
+# @entry REF-064
+# @name kubectl · Explicit-context Kubernetes triage
+# @action Explicit-context Kubernetes triage: kubectl --context="${KUBE_CONTEXT:?Set verified KUBE_CONTEXT}" --request-timeout=15s --namespace="${KUBE_NAMESPACE:?Set verified KUBE_NAMESPACE}" get pods -o wide
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax kubectl --context="${KUBE_CONTEXT:?Set verified KUBE_CONTEXT}" --request-timeout=15s    --namespace="${KUBE_NAMESPACE:?Set verified KUBE_NAMESPACE}" get pods -o wide
+dc show REF-064
+
+# @entry REF-065
+# @name kubectl · Explicit-context Kubernetes triage
+# @action Explicit-context Kubernetes triage: kubectl --context="${KUBE_CONTEXT:?Set verified KUBE_CONTEXT}" --request-timeout=15s --namespace="${KUBE_NAMESPACE:?Set verified KUBE_NAMESPACE}" get pdb
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax kubectl --context="${KUBE_CONTEXT:?Set verified KUBE_CONTEXT}" --request-timeout=15s    --namespace="${KUBE_NAMESPACE:?Set verified KUBE_NAMESPACE}" get pdb
+dc show REF-065
+
+# @entry REF-066
+# @name for · SR-IOV and passthrough evidence
+# @action SR-IOV and passthrough evidence: for name in sriov_totalvfs sriov_numvfs; do
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax for name in sriov_totalvfs sriov_numvfs; do
+# @syntax   f="/sys/bus/pci/devices/${PCI_BDF:?Set verified PF domain:bus:device.function}/$name"
+# @syntax   if [ -r "$f" ]; then
+# @syntax     printf '\n%s\n' "$f"
+# @syntax     cat -- "$f"
+# @syntax   else
+# @syntax     printf 'UNAVAILABLE: %s\n' "$f" >&2
+# @syntax   fi
+# @syntax done
+dc show REF-066
+
+# @entry REF-067
+# @name ip · SR-IOV and passthrough evidence
+# @action SR-IOV and passthrough evidence: ip -d link show dev "${IFACE:?Set verified physical function interface}"
+# @risk Q | Host only
+# @plane Linux management environment
+# @source DC-TERM-OPS 1.1.0
+# @syntax ip -d link show dev "${IFACE:?Set verified physical function interface}"
+dc show REF-067
+

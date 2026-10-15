@@ -1,0 +1,13 @@
+{
+  "schema": "VEC1/SECURITY_POLICY/1",
+  "filesystem": "package-runtime-only",
+  "network": "deny",
+  "plugins": "deny-unless-allowlisted",
+  "host_calls": "deny-unless-allowlisted",
+  "integrity_failure": "fail-closed",
+  "schema_failure": "fail-closed",
+  "node_disagreement": "fail-closed",
+  "unbound_required_node": "fail-closed",
+  "cross_machine_federation": "disabled",
+  "physical_qpu_claims": "forbidden"
+}

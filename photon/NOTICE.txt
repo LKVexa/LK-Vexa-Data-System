@@ -1,0 +1,721 @@
+# NOTICE
+
+VEC1 Photon WindowsSafe
+
+Design Photon v0.6.0 WindowsSafe-r1
+Generic Photon v0.2.0 WindowsSafe-r1
+
+Copyright 2026 RUSSELL PHILIP SMITHSON
+
+Licensed under the Apache License, Version 2.0.
+
+The WindowsSafe revisions contain modifications intended to improve compatibility with Microsoft Windows filesystem and archive environments, including path canonicalization, duplicate-directory reduction, case-collision remediation, Windows namespace validation, checksum regeneration, package-manifest resealing, node-pin regeneration, qualification-reference repair, and Windows path-preflight support.
+
+These modifications do not remove or supersede copyright, attribution, license, patent, trademark, or other notices belonging to third-party software incorporated into or distributed alongside the Work.
+
+Third-party software, libraries, runtimes, tools, source materials, or other components included with this distribution remain subject to their respective licenses and notices.
+
+The Apache Software Foundation does not sponsor, endorse, certify, or otherwise approve this project merely because the project is distributed under the Apache License, Version 2.0.
+
+---
+
+# VEC1 Photon WindowsSafe
+
+## README
+
+### Overview
+
+VEC1 Photon WindowsSafe is the Windows-hardened distribution of the VEC1 Photon project family.
+
+This release contains two sibling variants:
+
+```text
+VEC1_Design_Photon_v0.6.0_WindowsSafe-r1.zip
+VEC1_Generic_Photon_v0.2.0_WindowsSafe-r1.zip
+```
+
+The packages have been reconstructed to reduce the risk of Windows path-length failures while preserving the logical VM, fabric, qualification, audit, runtime, and evidence structure of the original projects.
+
+The WindowsSafe editions specifically target filesystem problems that commonly appear when large repositories are extracted into locations such as:
+
+```text
+C:\Users\<user>\Downloads\
+C:\Users\<user>\Desktop\
+C:\Users\<user>\OneDrive\
+```
+
+or other deeply nested project directories.
+
+---
+
+## Releases
+
+### Design Photon
+
+```text
+Product: VEC1 Design Photon
+Version: 0.6.0
+WindowsSafe revision: r1
+Package:
+VEC1_Design_Photon_v0.6.0_WindowsSafe-r1.zip
+```
+
+### Generic Photon
+
+```text
+Product: VEC1 Generic Photon
+Version: 0.2.0
+WindowsSafe revision: r1
+Package:
+VEC1_Generic_Photon_v0.2.0_WindowsSafe-r1.zip
+```
+
+---
+
+## Why WindowsSafe Exists
+
+Windows supports extended-length paths under modern configurations, but many applications, scripts, archive utilities, build systems, libraries, and legacy Win32 interfaces still behave as though paths are restricted to approximately 260 characters.
+
+A repository may therefore work correctly in one environment while failing after extraction into another.
+
+For example:
+
+```text
+C:\VEC1\project\...
+```
+
+may work while:
+
+```text
+C:\Users\<user>\OneDrive\Desktop\Development\Experiments\VEC1\project\...
+```
+
+may exceed the path budget available to a legacy application.
+
+VEC1 Photon WindowsSafe reduces this problem at the package level instead of requiring every program touching the project to understand extended-length Windows paths.
+
+---
+
+## Path Improvements
+
+The WindowsSafe rebuild reduced the maximum relative path lengths approximately as follows:
+
+```text
+Design Photon
+Original:      253 characters
+WindowsSafe:   156 characters
+
+Generic Photon
+Original:      267 characters
+WindowsSafe:   156 characters
+```
+
+This provides substantially more headroom for the extraction directory.
+
+---
+
+## Recommended Extraction Location
+
+For maximum compatibility, extract the archive into a short directory.
+
+Recommended:
+
+```text
+C:\VEC1\
+```
+
+or:
+
+```text
+D:\VEC1\
+```
+
+Other good examples include:
+
+```text
+C:\Photon\
+D:\Photon\
+C:\Work\VEC1\
+D:\Work\VEC1\
+```
+
+Avoid unnecessary nesting such as:
+
+```text
+C:\Users\<user>\OneDrive\Desktop\Projects\Experiments\VirtualMachines\Photon\Development\Current\
+```
+
+when a shorter location is available.
+
+---
+
+## Windows Path Safety
+
+The WindowsSafe packages are checked for common Windows namespace hazards.
+
+The repair process addresses:
+
+* Excessively long relative paths
+* Excessive directory nesting
+* Repeated adjacent directory components
+* Invalid Win32 filename characters
+* Windows reserved filenames
+* Trailing spaces
+* Trailing periods
+* Case-insensitive filename collisions
+* Ambiguous qualification filenames
+* Deep evidence-directory structures
+* Hard-coded references affected by renamed paths
+
+---
+
+## Case Sensitivity
+
+Windows generally treats filenames case-insensitively.
+
+For example:
+
+```text
+Evidence.md
+evidence.md
+```
+
+may represent two different files on some operating systems but collide on Windows.
+
+The WindowsSafe packaging process canonicalizes such conflicts so that distinct evidence files remain individually addressable on a normal Windows filesystem.
+
+---
+
+## Integrity Resealing
+
+Changing a path can invalidate more than a filename.
+
+VEC1 uses integrity and qualification information that may refer directly or indirectly to repository content.
+
+The WindowsSafe reconstruction therefore regenerates affected integrity information where applicable.
+
+This can include:
+
+```text
+SHA-256 inventories
+package manifests
+payload digests
+node registry pins
+fabric references
+qualification references
+attestation references
+path aliases
+verification metadata
+```
+
+This prevents a successful path repair from producing a package whose own verification system considers it modified or corrupted.
+
+---
+
+## Windows Path Preflight
+
+The packages include a Windows path preflight utility.
+
+Typical file:
+
+```text
+WINDOWS_PATH_PREFLIGHT.cmd
+```
+
+Run the preflight after extraction and before performing a major build or deployment.
+
+Example:
+
+```bat
+WINDOWS_PATH_PREFLIGHT.cmd
+```
+
+The package also includes Windows-safe reporting information such as:
+
+```text
+WINDOWS_SAFE_REPORT.json
+```
+
+Use this report to inspect canonicalization results and the Windows namespace audit.
+
+---
+
+## Suggested Startup Procedure
+
+### 1. Create a short installation directory
+
+Example:
+
+```bat
+mkdir C:\VEC1
+```
+
+### 2. Extract the desired archive
+
+Extract either:
+
+```text
+VEC1_Design_Photon_v0.6.0_WindowsSafe-r1.zip
+```
+
+or:
+
+```text
+VEC1_Generic_Photon_v0.2.0_WindowsSafe-r1.zip
+```
+
+into the short root.
+
+### 3. Enter the extracted repository
+
+For example:
+
+```bat
+cd /d C:\VEC1\<extracted-directory>
+```
+
+### 4. Run the path preflight
+
+```bat
+WINDOWS_PATH_PREFLIGHT.cmd
+```
+
+### 5. Review the report
+
+Inspect:
+
+```text
+WINDOWS_SAFE_REPORT.json
+```
+
+### 6. Run the project's normal verification or diagnostic command
+
+Use the verifier supplied with the selected Photon distribution.
+
+### 7. Build or bind runtime components where required
+
+Certain runtime nodes may require their normal VEC1 build/binding workflow before runtime use.
+
+---
+
+## Design Photon Verification
+
+The WindowsSafe Design Photon package has been reconstructed with synchronized package integrity information.
+
+The WindowsSafe verification path covers the package structure and the associated VEC1/fabric attestation relationships modified during canonicalization.
+
+Path normalization is therefore incorporated into the rebuilt release rather than existing as an untracked post-release filesystem modification.
+
+---
+
+## Generic Photon Verification
+
+The Generic Photon WindowsSafe package uses the same path-safety principles and resealed package structure.
+
+Package-level verification and VEC1 diagnostics can be used to confirm the reconstructed environment.
+
+Some Small, Medium, and Large runtime nodes may report that they require the standard:
+
+```text
+BUILD_VEC1
+```
+
+binding process.
+
+That state is separate from the Windows path repair and should be resolved using the normal VEC1 build workflow where those nodes are required.
+
+---
+
+## Architecture Preservation
+
+WindowsSafe does not indiscriminately flatten the repository.
+
+Flattening can break:
+
+* Import relationships
+* Relative path references
+* Qualification evidence
+* Runtime discovery
+* Module boundaries
+* VM organization
+* Node identification
+* Fabric topology
+* Manifest semantics
+* Developer expectations
+
+Instead, WindowsSafe prioritizes shortening the portions of the repository that consume path budget without unnecessarily changing runtime identity.
+
+The core VEC1, VM, node, Photon, and fabric structures remain recognizable.
+
+---
+
+## Path Aliases
+
+When a long location is replaced with a shorter canonical location, the WindowsSafe package may provide alias information describing the transformation.
+
+This provides traceability between:
+
+```text
+Original logical location
+        ↓
+Windows-safe canonical location
+```
+
+The alias information should be retained with the release because it can assist:
+
+* Auditing
+* Debugging
+* Qualification
+* Evidence reconstruction
+* Upgrade migration
+* Future package maintenance
+
+---
+
+## OneDrive Considerations
+
+VEC1 Photon WindowsSafe can be placed beneath OneDrive, but shorter extraction roots remain preferable.
+
+A OneDrive path such as:
+
+```text
+C:\Users\<user>\OneDrive\Desktop\VEC1\
+```
+
+already consumes a significant portion of the available path budget before any repository directories are added.
+
+Where practical, use:
+
+```text
+C:\VEC1\
+```
+
+for active execution and use synchronization, backup, or release archives separately.
+
+---
+
+## Long Paths in Windows
+
+Modern Windows versions can support extended-length paths when the operating system and application both support them.
+
+WindowsSafe does not require this capability as its primary solution.
+
+This is intentional.
+
+Applications interacting with VEC1 may include components that:
+
+* use legacy Win32 APIs;
+* internally impose smaller path limits;
+* invoke tools without long-path support;
+* generate temporary nested directories;
+* expand filenames during a build;
+* run through shell environments with additional quoting or path limitations.
+
+Reducing the repository's base path length provides protection across all of these cases.
+
+---
+
+## Archive Handling
+
+For best results, use a current ZIP utility.
+
+After downloading or copying an archive:
+
+1. Place it near the filesystem root.
+2. Extract it completely.
+3. Do not run the software directly from inside the ZIP.
+4. Run the Windows path preflight.
+5. Run package verification.
+6. Only then begin development or execution.
+
+---
+
+## Do Not Rename Arbitrarily
+
+Do not manually rename deeply integrated runtime files merely to shorten a path.
+
+A filename may be referenced by:
+
+* manifests;
+* checksums;
+* runtime configuration;
+* node registries;
+* scripts;
+* tests;
+* qualification evidence;
+* fabric metadata;
+* launchers.
+
+Manual changes can therefore invalidate the package even when Windows successfully accepts the resulting filename.
+
+Use controlled path canonicalization and update all corresponding references.
+
+---
+
+## Verification Philosophy
+
+A Windows-safe package should satisfy two separate requirements:
+
+### Filesystem Safety
+
+The archive can be extracted to Windows without:
+
+* path overflow;
+* invalid names;
+* collisions;
+* silent overwrite.
+
+### Internal Integrity
+
+The reconstructed repository still agrees with its own:
+
+* manifests;
+* hashes;
+* node pins;
+* runtime metadata;
+* qualification evidence;
+* verification procedures.
+
+VEC1 Photon WindowsSafe treats both requirements as part of release qualification.
+
+---
+
+## Development Guidance
+
+When developing additional modules, keep new paths concise.
+
+Prefer:
+
+```text
+src\render\
+tests\vm\
+docs\qual\
+evidence\node\
+```
+
+over unnecessarily verbose structures such as:
+
+```text
+source_code\rendering_runtime_implementation\
+qualification_testing\virtual_machine_runtime\
+documentation\qualification_and_verification\
+```
+
+Short, stable directory names provide significantly more room for downstream generated files.
+
+---
+
+## Generated Files
+
+Build systems should place temporary or generated files under concise repository-local directories such as:
+
+```text
+build\
+out\
+tmp\
+dist\
+logs\
+```
+
+Avoid repeating the complete project name inside multiple nested output directories.
+
+For example, prefer:
+
+```text
+build\win64\
+```
+
+instead of:
+
+```text
+build\VEC1_Generic_Photon_Windows_x64_Build_Output\
+```
+
+---
+
+## Portable Packaging Guidance
+
+Future VEC1 Photon releases should treat path-budget analysis as a release gate.
+
+Suggested target:
+
+```text
+Preferred maximum relative path: <= 160 characters
+Warning threshold:                > 180 characters
+High risk:                        > 220 characters
+Legacy MAX_PATH boundary:         approximately 260 characters
+```
+
+A conservative relative-path target provides headroom for:
+
+* user profile directories;
+* OneDrive;
+* temporary folders;
+* CI workspaces;
+* release staging;
+* nested build output.
+
+---
+
+## Troubleshooting
+
+### Error: Path Too Long
+
+Move the project closer to the drive root.
+
+Example:
+
+```text
+FROM:
+C:\Users\<user>\OneDrive\Desktop\Projects\VEC1\...
+
+TO:
+C:\VEC1\...
+```
+
+Then rerun:
+
+```bat
+WINDOWS_PATH_PREFLIGHT.cmd
+```
+
+---
+
+### Error: File Not Found Even Though the File Exists
+
+This can indicate that an application internally encountered a path-length limitation.
+
+Try relocating the repository to:
+
+```text
+C:\VEC1\
+```
+
+before changing any files.
+
+---
+
+### Error: Checksum Failure After Renaming Files
+
+Do not continue using manually renamed files as a qualified build.
+
+Restore the original WindowsSafe package or regenerate the affected integrity metadata through the project's controlled verification workflow.
+
+---
+
+### Error: Duplicate Filename During Extraction
+
+Confirm that you are using the WindowsSafe-r1 distribution rather than an earlier archive.
+
+WindowsSafe packages are specifically canonicalized to prevent known case-insensitive path collisions.
+
+---
+
+### Error: Node Requires BUILD_VEC1
+
+This is not necessarily a Windows path error.
+
+Run the normal VEC1 node build/binding process required by the package.
+
+---
+
+## Security
+
+Treat downloaded archives as untrusted until their hashes and package verification have been checked.
+
+Do not disable operating-system security controls merely to bypass an extraction, build, or launch error.
+
+A path-length error should be corrected through path management rather than by weakening system security.
+
+---
+
+## Release Files
+
+Recommended release layout:
+
+```text
+VEC1_Photon_WindowsSafe/
+│
+├── VEC1_Design_Photon_v0.6.0_WindowsSafe-r1.zip
+├── VEC1_Generic_Photon_v0.2.0_WindowsSafe-r1.zip
+├── README.md
+├── LICENSE
+└── NOTICE
+```
+
+Individual packages may additionally contain:
+
+```text
+WINDOWS_PATH_PREFLIGHT.cmd
+WINDOWS_SAFE_REPORT.json
+path alias information
+package manifests
+checksum inventories
+qualification evidence
+verification utilities
+```
+
+---
+
+## License
+
+Licensed under the:
+
+```text
+Apache License, Version 2.0
+```
+
+See:
+
+```text
+LICENSE
+```
+
+for the complete license terms.
+
+---
+
+## Attribution
+
+Copyright 2026 RUSSELL PHILIP SMITHSON
+
+Third-party components remain subject to their respective copyright, attribution, and licensing requirements.
+
+See:
+
+```text
+NOTICE
+THIRD-PARTY-NOTICES.md
+```
+
+where present.
+
+---
+
+## Warranty
+
+This software is provided on an **AS IS** basis, without warranties or conditions of any kind, as specified by the Apache License, Version 2.0.
+
+Users are responsible for verifying suitability for their intended environment and application.
+
+---
+
+## Release Summary
+
+VEC1 Photon WindowsSafe preserves the architecture of the Design Photon and Generic Photon distributions while treating Windows filesystem portability as a first-class release requirement.
+
+The release focuses on:
+
+```text
+SHORTER PATHS
+WINDOWS-SAFE FILENAMES
+CASE-COLLISION PROTECTION
+MANIFEST SYNCHRONIZATION
+CHECKSUM RESEALING
+FABRIC/NODE REFERENCE INTEGRITY
+PATH PREFLIGHT
+PORTABLE EXTRACTION
+TRACEABLE CANONICALIZATION
+```
+
+The resulting packages are intended to provide a substantially more reliable foundation for running, developing, auditing, qualifying, and distributing VEC1 Photon environments on Windows.

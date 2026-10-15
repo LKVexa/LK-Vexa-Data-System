@@ -1,0 +1,20 @@
+ja source 0.3
+module vb.dfmedium.webpolicy
+use Core
+policy no_network
+
+record FetchMeta { scheme: Text, mime: Text, bytes: Count, redirects: Count }
+record RenderPolicy { allow: Flag, scripts: Flag, reason: Text }
+
+function fetch_allowed(meta: FetchMeta) -> Flag effects { pure } {
+    return (meta.scheme == "https" or meta.scheme == "http") and meta.bytes <= 8388608 and meta.redirects <= 8
+}
+function document_policy(mime: Text) -> RenderPolicy effects { pure } {
+    if mime == "text/html" or mime == "application/xhtml+xml" or mime == "text/plain" or mime == "" {
+        return RenderPolicy { allow: true, scripts: false, reason: "document accepted by DF_Medium JA21 web profile; arbitrary site scripts isolated" }
+    }
+    return RenderPolicy { allow: false, scripts: false, reason: "content type outside DF_Medium JA21 document profile" }
+}
+function resource_allowed(kind: Text, scheme: Text) -> Flag effects { pure } {
+    return (kind == "document" or kind == "stylesheet" or kind == "image" or kind == "video" or kind == "audio") and (scheme == "https" or scheme == "http")
+}

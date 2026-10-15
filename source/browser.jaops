@@ -1,0 +1,21 @@
+ja source 0.3
+module vb.browser.operations
+use Operations
+policy no_network
+workspace JA21MirrorBrowser {
+    target windows-x64
+    compiler profile release
+    dependencies locked
+    environment offline
+    resource cpu 1 memory 768MB
+    network disabled
+    service ja21_mirror_host replicas 1
+    service df_small_helper replicas 1
+    health_check ja21_mirror_host every 30s
+    health_check df_small_helper every 60s
+    upgrade replace
+    rollback on health_failure
+    package portable
+}
+assert deployment.reproducible == true
+emit package "VB-JA21-Optical-Instrument-9.0.0.zip"

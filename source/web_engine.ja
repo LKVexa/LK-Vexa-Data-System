@@ -1,0 +1,17 @@
+ja source 0.3
+module vb.dfmedium.webengine
+use Core
+policy no_network
+
+record WebBudget { document: Count, stylesheet: Count, scene: Count, resources: Count }
+record MediaPolicy { image: Flag, video: Flag, audio: Flag, script: Flag }
+
+function budget() -> WebBudget effects { pure } {
+    return WebBudget { document: 8388608, stylesheet: 1048576, scene: 4096, resources: 1024 }
+}
+function media_policy() -> MediaPolicy effects { pure } {
+    return MediaPolicy { image: true, video: true, audio: true, script: false }
+}
+function resource_scheme_allowed(scheme: Text) -> Flag effects { pure } {
+    return scheme == "https" or scheme == "http"
+}

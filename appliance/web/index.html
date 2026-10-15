@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="dark"><link rel="icon" href="/favicon.svg"><title>JA21 Photon Virtual Server / Terminal / Console</title><link rel="stylesheet" href="/styles.css"><script type="module" src="/app.js"></script></head>
+<body>
+<div class="app">
+<header class="topbar">
+ <div class="brand"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M3 12V3h9M28 3h9v9M37 28v9h-9M12 37H3v-9"/><path d="m20 11 9 5v9l-9 5-9-5v-9Z"/><path d="m11 16 9 5 9-5M20 21v9"/></svg><div><strong>JA21 <span>/ PHOTON</span></strong><small>PHOTON · SPIRAL TERMINAL <span id="version">3.0.1</span></small></div></div>
+ <div class="connection"><span class="dot" id="dot"></span><span id="connection-status" role="status">Starting virtual server</span></div>
+ <button id="export" class="ghost">Export volume</button>
+</header>
+<nav class="main-tabs" role="tablist" aria-label="Console workspace">
+ <button id="tab-terminal" role="tab" aria-controls="panel-terminal" aria-selected="true">Terminal</button>
+ <button id="tab-commands" role="tab" aria-controls="panel-commands" aria-selected="false" tabindex="-1">Commands <span id="tab-count" class="count">—</span></button>
+ <button id="tab-scripts" role="tab" aria-controls="panel-scripts" aria-selected="false" tabindex="-1">Scripts .vcmd</button>
+ <button id="tab-system" role="tab" aria-controls="panel-system" aria-selected="false" tabindex="-1">System &amp; transport</button>
+ <span class="scope">BROWSER-BACKED SERVER <span>·</span> NO HOST SHELL</span>
+</nav>
+<div id="notice" class="notice" role="status" hidden></div>
+<section id="panel-terminal" role="tabpanel" aria-labelledby="tab-terminal">
+ <div class="terminal-tools"><div id="sessions" class="session-tabs" aria-label="Terminal sessions"></div><button id="new-session" class="ghost">＋ New session</button><button id="interrupt" class="ghost">Interrupt</button><button id="toggle-text" class="ghost">Text view</button></div>
+ <div class="terminal-layout">
+  <div class="terminal-shell"><div class="terminal-label"><span>SPIRAL / LIVE CONSOLE</span><span id="geometry">100 × 30</span></div>
+   <div id="terminal" class="terminal" tabindex="0" aria-label="Virtual terminal. Click to type; use the command field below for accessible input."><canvas id="canvas" aria-label="Virtual terminal output"></canvas><textarea id="direct-input" class="ime" aria-label="Direct terminal input" spellcheck="false" autocomplete="off" autocapitalize="off"></textarea></div>
+   <pre id="text-output" class="text-output" aria-label="Terminal text output" hidden></pre>
+   <form id="command-form" class="command-line"><label for="command">›</label><input id="command" autocomplete="off" spellcheck="false" maxlength="4096" placeholder="Enter a virtual command, or browse the Commands tab" aria-label="Command line"><button type="submit">Execute</button></form>
+  </div>
+  <aside class="quick-panel"><span class="eyebrow">SESSION OVERVIEW</span><h2>A clear view of<br>your virtual server.</h2><dl id="mini-status"><dt>Execution</dt><dd>SPIRAL virtual sandbox</dd><dt>Storage</dt><dd>Starting</dd></dl><div class="divider"></div><span class="eyebrow">QUICK COMMANDS</span><div id="quick-commands"></div><p class="muted small">Selecting a command only fills the input. Press Execute to run it.</p><button id="browse-commands" class="wide">Browse all commands →</button></aside>
+ </div>
+</section>
+<section id="panel-commands" role="tabpanel" aria-labelledby="tab-commands" hidden>
+ <div class="library-heading"><div><span class="eyebrow">COMMAND REFERENCE / 3.0.1</span><h1>Every command. One place.</h1><p>Terminal tools, aliases, and the hardened data-center reference—with the action explained.</p></div><div class="library-total"><strong id="catalog-total">—</strong><span>catalog entries</span></div></div>
+ <div class="library-stats" id="library-stats"></div>
+ <div class="filterbar"><label class="searchbox"><span aria-hidden="true">⌕</span><input id="search" type="search" placeholder="Search commands, actions, IDs, or subsystems…" aria-label="Search commands"></label><label><span class="sr-only">Command type</span><select id="kind"><option value="">All command types</option><option>Terminal</option><option>Alias</option><option>Data center</option></select></label><label><span class="sr-only">Risk class</span><select id="risk"><option value="">All risk classes</option><option value="Q">Q · Query</option><option value="D">D · Diagnostic</option><option value="C">C · Change</option><option value="X">X · Destructive</option></select></label><label><span class="sr-only">Availability</span><select id="availability"><option value="">All availability</option><option>Virtual executable</option><option>Host only</option><option>Blocked change</option><option>Removed</option></select></label><button id="reset-filters" class="ghost">Reset</button></div>
+ <div class="library-layout"><aside class="categories"><span class="eyebrow">CATEGORIES</span><div id="categories"></div><p class="legend"><b>Q</b> Query<br><b>D</b> Active diagnostic<br><b>C</b> Controlled change<br><b>X</b> Destructive / disruptive</p></aside><div class="results"><div class="results-meta"><span id="result-count" role="status"></span><span>Viewing never executes a command</span></div><div class="table-head"><span>COMMAND / SYNTAX</span><span>ACTION &amp; AVAILABILITY</span><span>DETAILS</span></div><div id="command-results"></div><p id="empty" hidden>No matching commands. Try another term or reset the filters.</p></div></div>
+</section>
+<section id="panel-scripts" role="tabpanel" aria-labelledby="tab-scripts" hidden>
+ <div class="library-heading"><div><span class="eyebrow">VCMD / COMMAND LANGUAGE 1</span><h1>Reference a file. Run a workflow.</h1><p>Check and run virtual commands by path. Includes are resolved before the first command executes.</p></div></div>
+ <div class="system-grid">
+  <article class="system-card"><h2>Run by file path</h2>
+   <label for="vcmd-path">.vcmd path</label><input id="vcmd-path" value="/scripts/examples/hello.vcmd" spellcheck="false" maxlength="2048">
+   <label class="check-label"><input id="vcmd-local" type="checkbox"> Server-local path (--local)</label>
+   <p class="muted small">Virtual paths work in either mode. Server-local paths refer to files on the machine running the native Photon host, within a granted <code>--vcmd-root</code> folder.</p>
+   <div class="script-actions"><button id="vcmd-check">Stage check</button><button id="vcmd-show" class="ghost">Stage source plan</button><button id="vcmd-run" class="ghost">Stage run</button></div>
+   <p class="small">These controls fill the Terminal input. Review it, then press Execute. A run can modify virtual files; it cannot execute a native host shell.</p>
+  </article>
+  <article class="system-card"><h2>Import from this computer</h2>
+   <label for="vcmd-files">Select .vcmd files</label><input id="vcmd-files" type="file" accept=".vcmd" multiple>
+   <label class="check-label"><input id="vcmd-upload-consent" type="checkbox"> I approve sending selected source files to the connected WebSocket server.</label>
+   <button id="vcmd-import">Import selected files</button><pre id="vcmd-import-status" role="status">Importing does not execute a script.</pre>
+   <p class="muted small">Up to 32 files, 512 KiB each, 1 MiB per selection. Sibling files share a new virtual directory for relative includes. Subdirectories are not imported by the file picker. Choose the root script from the paths below.</p>
+   <div id="vcmd-imported"></div>
+  </article>
+  <article class="system-card"><h2>Command-language corpus</h2><p><strong>281 documented entries.</strong> Every terminal command and alias, plus all audited data-center records, has an action description and syntax in one .vcmd corpus.</p><p>The executable lines show help and reference records only. They do not perform the operational examples.</p><button id="vcmd-use-corpus">Use corpus path</button><button id="vcmd-download-corpus" class="ghost">Save corpus .vcmd</button><pre>/corpus/command-language.vcmd</pre></article>
+  <article class="system-card"><h2>Included workflows</h2><div id="vcmd-examples"></div><h3>Language essentials</h3><pre>#!vcmd 1
+@name My virtual workflow
+@on-error stop
+@include "fragment.vcmd"
+echo "Ready"
+dc status</pre><p class="muted small">UTF-8; CRLF accepted. No loops, command substitution, JavaScript evaluation or automatic native command execution. Runs are bounded and interruptible.</p></article>
+ </div>
+</section>
+<section id="panel-system" role="tabpanel" aria-labelledby="tab-system" hidden>
+ <div class="library-heading"><div><span class="eyebrow">ENVIRONMENT &amp; BOUNDARIES</span><h1>Choose your connection.</h1><p>Both modes run the same virtual command engine. Browser Worker needs a secure browser context. Neither executes a host shell.</p></div></div>
+ <div class="system-grid"><article class="system-card"><h2>Transport</h2><label for="mode">Execution mode</label><select id="mode"><option value="worker">Browser Worker · MessagePort</option><option value="websocket">Network server · WebSocket / WSS</option></select><div id="token-group" hidden><label for="endpoint">WebSocket endpoint</label><input id="endpoint" placeholder="wss://console.example:8877/socket" spellcheck="false" maxlength="2048"><p class="small muted">Defaults to this page’s server. Other endpoints must be permitted by both servers’ origin/CSP configuration. Tokens never belong in the URL.</p><label for="token">Client token from the Network launcher</label><input id="token" type="password" autocomplete="off" spellcheck="false" maxlength="64" aria-describedby="token-help"><p id="token-help" class="muted small">Run <code>"BOOT.cmd --network" --show-token</code> to print the 64-character client token. It grants shared terminal access and is kept in page memory only.</p></div><button id="connect">Connect / restart</button><p class="muted">Switching modes closes the current terminal sessions. The two modes have separate virtual volumes.</p><p class="small">Browser Worker: origin-scoped IndexedDB, one writer per browser page. WebSocket: a shared server-side snapshot, up to eight authenticated sessions. Configurable network binding, exact allowed origins and token authentication. Use WSS for protected traffic; HTTP/WS requires explicit test-network opt-in.</p></article>
+ <article class="system-card"><h2>Storage &amp; evidence</h2><p>Browser storage is not a physical SSD and may be cleared or evicted. Server storage contains virtual files only. Export important work.</p><button id="persist" class="ghost">Request browser storage persistence</button><button id="export-system" class="ghost">Export virtual volume</button><p id="persistence-status" class="muted small"></p><h3>Operating boundaries</h3><p>Hardware, BMC, kernel, storage-array, and cluster commands are visible as references. They need a separately authorized execution environment.</p><p>DF nodes are metadata records, not running VMs. Image hashes detect content changes; they are not signatures or hardware attestation.</p></article>
+ <article class="system-card"><h2>Runtime ledger</h2><p class="muted small">Execution needs the native owner window. The broker is not a headless command engine or a hardware data center. Photon snapshots do not back up terminal files.</p><pre id="system-status">Waiting for a session.</pre></article>
+ <article class="system-card"><h2>Local information surface</h2><p>The original surface is retained as an informational panel, not a web engine.</p><form id="surface-form"><label for="surface-url">Address</label><input id="surface-url" value="ram://status" spellcheck="false"><button>Open surface</button></form><pre id="surface-output">Admitted: about:blank, ram://status</pre></article></div>
+</section>
+<footer><span id="footer-session">No session</span><span id="footer-scope">Browser Worker</span><span class="footer-right">Ctrl+C interrupts · Commands tab for quick reference</span></footer>
+</div>
+<dialog id="details"><div class="dialog-top"><span class="eyebrow" id="detail-id"></span><button id="close-details" class="ghost" aria-label="Close command details">✕</button></div><h2 id="detail-title"></h2><p id="detail-description"></p><pre id="detail-syntax"></pre><dl id="detail-meta"></dl><p id="detail-note"></p><div class="dialog-actions"><button id="copy-command">Copy syntax</button><button id="insert-command" class="ghost">Insert into terminal</button></div></dialog>
+</body></html>

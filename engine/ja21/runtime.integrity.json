@@ -1,0 +1,173 @@
+{
+  "format": "vb-ja21-runtime-seal/4",
+  "product": "JA21 Photon Console 3.0.1 compiled native presenter",
+  "version": "9.8.7",
+  "scope": "Retained presenter ABI and source/IR; compiled entry point; no historical bootstrap or runtime provisioning. Hashes are not signatures.",
+  "files": [
+    {
+      "path": "CONSOLE_VERSION",
+      "bytes": 6,
+      "sha256": "06e3fe4a7a1884d20d81cc7065ca8cfd4c394ec602c4d180ddc39bbd4f7da521"
+    },
+    {
+      "path": "VERSION",
+      "bytes": 6,
+      "sha256": "06e3fe4a7a1884d20d81cc7065ca8cfd4c394ec602c4d180ddc39bbd4f7da521"
+    },
+    {
+      "path": "console.json",
+      "bytes": 56,
+      "sha256": "313445a1ce7bcec8057f6fbafac95c9a8b24b3c8330efe599ed98fee7c14d4c3"
+    },
+    {
+      "path": "engine/ja21/browser.ir.json",
+      "bytes": 46797,
+      "sha256": "528f5a877be5d12c57c318355579402422a46f04e7bc95e932af00aa8e97f860"
+    },
+    {
+      "path": "engine/ja21/corpus.lock.json",
+      "bytes": 55412,
+      "sha256": "9238730509d7784b96dce3b89c5e75a2c0e72a0342fb924a18ce6b092328d64a"
+    },
+    {
+      "path": "engine/ja21/dfsmall.lock.json",
+      "bytes": 24634,
+      "sha256": "7551c14a99c0c9e4f3ff025517962cf442af3d8dfdff94ea79b16709a71bb472"
+    },
+    {
+      "path": "engine/ja21/portable.runtime.json",
+      "bytes": 1881,
+      "sha256": "fd5584e9262311c9b9ceb3ca1d95a58c76f452090cba20efc89635a0fcb94c99"
+    },
+    {
+      "path": "engine/ja21/profile.json",
+      "bytes": 9902,
+      "sha256": "27f469d34c1f40c97c91ceca763bcda6ab91e7dfa303706798b15115255e2d75"
+    },
+    {
+      "path": "engine/ja21/renderer.ir.json",
+      "bytes": 10601,
+      "sha256": "fbb20a43852168723387dd5ea4b2b3b396a429c5ce9a1df1398cc548b3b265fd"
+    },
+    {
+      "path": "engine/ja21/web_engine.ir.json",
+      "bytes": 4007,
+      "sha256": "612f4b8fbf9bdc28d5093b1762ae555b91b09f7b0c3427db7d71cc0c65c01d0f"
+    },
+    {
+      "path": "host/JA21VirtualBrowser.cs",
+      "bytes": 235663,
+      "sha256": "6a5c68e0306aec7f2008542f5b039e1ff168b50615efb09879dc6d308c9a7eb2"
+    },
+    {
+      "path": "host/LiveWebBridge.cs",
+      "bytes": 20596,
+      "sha256": "758afb5c42ccc7c6dae37032237c48f30ee9646a58224ad71d599484557bd0ae"
+    },
+    {
+      "path": "host/LiveWebContracts.cs",
+      "bytes": 6290,
+      "sha256": "bc34ea45ebcff8028e36f8686b029775dce6e54b30833ccb5498b999f2c8b134"
+    },
+    {
+      "path": "host/PortableDesktop.cs",
+      "bytes": 13295,
+      "sha256": "b4e921d922334301e674e2d1226a0748e5a333e8c0237ace0320afdb75546e7c"
+    },
+    {
+      "path": "host/Vec1Substrate.cs",
+      "bytes": 49058,
+      "sha256": "9b50f7f3bc918cb4f92dd3b6b93fca6bb830f2eccd222fc612c9ccc7846f6538"
+    },
+    {
+      "path": "runtime/webview2-sdk/1.0.4191.47/Microsoft.Web.WebView2.Core.dll",
+      "bytes": 698208,
+      "sha256": "e6f54c8ce208e3797c427d01ad671b47cb25abc85604753d6ec2546d0ffef550"
+    },
+    {
+      "path": "runtime/webview2-sdk/1.0.4191.47/Microsoft.Web.WebView2.Wpf.dll",
+      "bytes": 86368,
+      "sha256": "6942b85a3388ece45febde5584d2bfc035d84315f2dd5a4a47913f01a0193800"
+    },
+    {
+      "path": "runtime/webview2-sdk/1.0.4191.47/PROVISIONED.json",
+      "bytes": 979,
+      "sha256": "b384f49c776b3eaee58bbaff1da36d4a91bb6becb0dd92b0f3fcf18db0e58989"
+    },
+    {
+      "path": "runtime/webview2-sdk/1.0.4191.47/WebView2Loader.dll",
+      "bytes": 163680,
+      "sha256": "c66e4a92fdc7a216118e43b7a5024ea2200e8c43f9310bf20d96a0084f82c5bc"
+    },
+    {
+      "path": "source/browser.ja",
+      "bytes": 3760,
+      "sha256": "3b647d50066b9bd922e72169fe2c1de7af62d715a3837f24f5c7886d30c276b1"
+    },
+    {
+      "path": "source/browser.jaops",
+      "bytes": 590,
+      "sha256": "224dee918f5f62d18952deccaf87d315b0b58944f40406f86f1ca641a3658207"
+    },
+    {
+      "path": "source/browser.jasec",
+      "bytes": 1681,
+      "sha256": "591a0c038ff327ee3463e8dfc3fb2f97b27bb6222eed158264b44050ebd8b19f"
+    },
+    {
+      "path": "source/browser.jasp",
+      "bytes": 1734,
+      "sha256": "50c397896d6a01987d34ce9e1ecb30861341c1f3678e4750041ba7340e00a814"
+    },
+    {
+      "path": "source/browser.jaui",
+      "bytes": 2711,
+      "sha256": "7cd8f053b2ccc08f0240889d714755871a201060ad1608c335678c6da37c47a4"
+    },
+    {
+      "path": "source/browser.jxd",
+      "bytes": 6729,
+      "sha256": "1f14e2950b571c0c485ec13a503d0a274ad2ab8a21fbaa8edd22fa82d61179fc"
+    },
+    {
+      "path": "source/renderer.ja",
+      "bytes": 1088,
+      "sha256": "1962e038608858d41ac706afd8a0d34554025b52497ac578dd07401f4d674432"
+    },
+    {
+      "path": "source/web_engine.ja",
+      "bytes": 646,
+      "sha256": "d53a401457966113af9ce93e64b13d4a6f552e6a40a2e735fddc7956a8456614"
+    },
+    {
+      "path": "host/JPConsoleEntry.cs",
+      "bytes": 8647,
+      "sha256": "d27c048957de0636a4792ee0ef7196d61b27bb40ee99a34231af0b6921c140e7"
+    },
+    {
+      "path": "bin/JPConsole.exe",
+      "bytes": 205824,
+      "sha256": "3f3dab54fd49aac2dff793cb253f1a4297ffdc543e710fd2c2bf4b5813aa623c"
+    },
+    {
+      "path": "bin/Microsoft.Web.WebView2.Core.dll",
+      "bytes": 698208,
+      "sha256": "e6f54c8ce208e3797c427d01ad671b47cb25abc85604753d6ec2546d0ffef550"
+    },
+    {
+      "path": "bin/Microsoft.Web.WebView2.Wpf.dll",
+      "bytes": 86368,
+      "sha256": "6942b85a3388ece45febde5584d2bfc035d84315f2dd5a4a47913f01a0193800"
+    },
+    {
+      "path": "bin/WebView2Loader.dll",
+      "bytes": 163680,
+      "sha256": "c66e4a92fdc7a216118e43b7a5024ea2200e8c43f9310bf20d96a0084f82c5bc"
+    },
+    {
+      "path": "source/jp250-service.ja",
+      "bytes": 1666,
+      "sha256": "bd24494ddbb2d5164f58914238a83ac8102429c9aa442740d6a96aae5f4169b7"
+    }
+  ]
+}

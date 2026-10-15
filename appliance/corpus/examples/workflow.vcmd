@@ -1,0 +1,6 @@
+#!vcmd 1
+@name Relative include workflow
+@on-error stop
+@include "hello.vcmd"
+@include "fragment.vcmd"
+echo "Include workflow complete."

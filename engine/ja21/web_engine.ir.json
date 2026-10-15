@@ -1,0 +1,180 @@
+{
+  "module": "vb.dfmedium.webengine",
+  "imports": [
+    "Core"
+  ],
+  "policy": "no_network",
+  "records": {
+    "WebBudget": [
+      {
+        "name": "document",
+        "type": "Count"
+      },
+      {
+        "name": "stylesheet",
+        "type": "Count"
+      },
+      {
+        "name": "scene",
+        "type": "Count"
+      },
+      {
+        "name": "resources",
+        "type": "Count"
+      }
+    ],
+    "MediaPolicy": [
+      {
+        "name": "image",
+        "type": "Flag"
+      },
+      {
+        "name": "video",
+        "type": "Flag"
+      },
+      {
+        "name": "audio",
+        "type": "Flag"
+      },
+      {
+        "name": "script",
+        "type": "Flag"
+      }
+    ]
+  },
+  "functions": {
+    "budget": {
+      "params": [],
+      "returns": "WebBudget",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "record",
+            "name": "WebBudget",
+            "fields": [
+              {
+                "name": "document",
+                "value": {
+                  "op": "literal",
+                  "value": 8388608
+                }
+              },
+              {
+                "name": "stylesheet",
+                "value": {
+                  "op": "literal",
+                  "value": 1048576
+                }
+              },
+              {
+                "name": "scene",
+                "value": {
+                  "op": "literal",
+                  "value": 4096
+                }
+              },
+              {
+                "name": "resources",
+                "value": {
+                  "op": "literal",
+                  "value": 1024
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "line": 9
+    },
+    "media_policy": {
+      "params": [],
+      "returns": "MediaPolicy",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "record",
+            "name": "MediaPolicy",
+            "fields": [
+              {
+                "name": "image",
+                "value": {
+                  "op": "literal",
+                  "value": true
+                }
+              },
+              {
+                "name": "video",
+                "value": {
+                  "op": "literal",
+                  "value": true
+                }
+              },
+              {
+                "name": "audio",
+                "value": {
+                  "op": "literal",
+                  "value": true
+                }
+              },
+              {
+                "name": "script",
+                "value": {
+                  "op": "literal",
+                  "value": false
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "line": 12
+    },
+    "resource_scheme_allowed": {
+      "params": [
+        {
+          "name": "scheme",
+          "type": "Text"
+        }
+      ],
+      "returns": "Flag",
+      "body": [
+        {
+          "op": "return",
+          "value": {
+            "op": "binary",
+            "kind": "or",
+            "left": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "name",
+                "name": "scheme"
+              },
+              "right": {
+                "op": "literal",
+                "value": "https"
+              }
+            },
+            "right": {
+              "op": "binary",
+              "kind": "==",
+              "left": {
+                "op": "name",
+                "name": "scheme"
+              },
+              "right": {
+                "op": "literal",
+                "value": "http"
+              }
+            }
+          }
+        }
+      ],
+      "line": 15
+    }
+  },
+  "sourceHash": "d53a401457966113af9ce93e64b13d4a6f552e6a40a2e735fddc7956a8456614",
+  "profile": "vb-ja21-core/2"
+}

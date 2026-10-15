@@ -1,0 +1,53 @@
+JP300 - CLEAN WINDOWS 11 QUALIFICATION
+
+No genuine clean Windows installation has been qualified by the included host
+results. BOOT.cmd --qualify tests the computer on which it runs. Its native JSON
+report deliberately retains cleanMachineCertified=false: a passing run on an
+existing workstation does not establish a clean OS.
+
+RUN ON A CLEAN PC OR GUEST
+
+1. Use an already licensed, newly installed or reset Windows 11 x64 PC or VM
+   with an interactive desktop. Record the Windows edition/build and the clean
+   image or reset snapshot provenance. Do not add developer tools or runtimes
+   to make a failing test pass. OS-supplied .NET/WPF components may be present.
+
+2. Transfer the final JP300 ZIP and record its release identity. Extract the
+   complete ZIP into a new writable folder on a local or removable drive, such
+   as C:\JP300 Test. Use no previous application workspace. Preserve the ZIP
+   and any earlier installation unchanged.
+
+3. Disconnect external networking after transferring the package. No software
+   installation, runtime download or compilation is required during the test.
+
+4. From the extracted folder, run the package's single launcher:
+
+       BOOT.cmd --qualify
+
+5. Keep the interactive desktop available. Let every stage finish, including
+   native regressions, the managed-adapter/renderer probe, and real commands
+   in the WPF/WebView2 Worker. The test window should close gracefully; do not
+   close it early or substitute a browser, Node runner or source build.
+
+6. Record the exit status and report path printed by BOOT. Keep the JSON,
+   logs, command output and standalone result together under the dated
+   workspace\qualification run directory. Preserve failed results as failures.
+
+7. Copy GUEST-ATTESTATION.template.json into that result directory as
+   guest-attestation.json. Complete only the copy with the independent guest
+   provenance and observed results. Leave unknown fields null. Keep the shipped
+   template unchanged, and never edit the native JSON to force a pass or change
+   cleanMachineCertified into a certificate.
+
+WHAT THE RESULT MEANS
+
+Clean-guest acceptance needs both a successful native report for the final
+package and independently recorded clean OS/image provenance. A fresh folder,
+restricted PATH or fresh application state still shares the existing OS.
+Verify the report identifies the bundled Fixed Version WebView2 renderer;
+PATH restriction alone does not exclude installed-runtime discovery.
+
+One Windows 11 configuration does not qualify Windows 10, every edition, all
+GPUs/DPI settings or every GUI interaction. Keep host portability evidence and
+genuine clean-guest evidence separate. Until the latter is supplied, clean-
+machine qualification remains pending. See README.md and STATUS.md.

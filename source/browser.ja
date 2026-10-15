@@ -1,0 +1,63 @@
+ja source 0.3
+module vb.browser
+use Core
+policy no_network
+
+# JA21 is the browser authority. DF_Medium owns document/resource/layout/scene semantics; Windows exposes only bounded OS primitives.
+# DF_Medium is the web-engine VM. DF_Small remains an optional bounded offline auxiliary helper.
+record Model { active: Count, count: Count, can_back: Flag, can_forward: Flag, loading: Flag }
+record Event { kind: Text, id: Count, input: Text }
+record Action { kind: Text, id: Count, value: Text }
+record Address { text: Text, scheme: Text, explicit: Flag, local: Flag, host: Flag, valid: Flag }
+
+function action(kind: Text, id: Count, value: Text) -> Action effects { pure } {
+    return Action { kind: kind, id: id, value: value }
+}
+function page_allowed(scheme: Text, internal: Flag) -> Flag effects { pure } {
+    return internal or scheme == "https" or scheme == "http" or scheme == "about_blank"
+}
+function deletion_allowed(confirmed: Flag, installation: Flag) -> Flag effects { pure } {
+    return confirmed and installation
+}
+function normalize(input: Text) -> Text effects { pure } {
+    let address: Address = URL.analyze(input)
+    if address.text == "" or address.text == "vb://new-tab" { return "vb://new-tab" }
+    if address.text == "about:blank" { return "about:blank" }
+    if address.explicit {
+        if (address.scheme == "https" or address.scheme == "http") and address.valid { return address.text }
+        return ""
+    }
+    if address.local { return "http://" + address.text }
+    if address.host { return "https://" + address.text }
+    return "https://html.duckduckgo.com/html/?q=" + URL.encode(address.text)
+}
+function on_event(model: Model, event: Event) -> Action effects { pure } {
+    if event.kind == "new_tab" or event.kind == "private_tab" or event.kind == "popup" {
+        if model.count >= 32 { return action("status", 0, "The 32-tab limit has been reached.") }
+        let target: Text = normalize(event.input)
+        if target == "" { return action("status", 0, "This address type is blocked.") }
+        if event.kind == "private_tab" { return action("create_private", 0, target) }
+        return action("create", 0, target)
+    }
+    if event.kind == "navigate" {
+        let target: Text = normalize(event.input)
+        if target == "" { return action("status", 0, "This address type is blocked.") }
+        return action("load", model.active, target)
+    }
+    if event.kind == "home" { return action("load", model.active, "vb://new-tab") }
+    if event.kind == "select_tab" { return action("select", event.id, "") }
+    if event.kind == "close_tab" { return action("close", event.id, "") }
+    if event.kind == "close_active" { return action("close", model.active, "") }
+    if event.kind == "back" and model.can_back { return action("back", model.active, "") }
+    if event.kind == "forward" and model.can_forward { return action("forward", model.active, "") }
+    if event.kind == "refresh" {
+        if model.loading { return action("stop", model.active, "") }
+        return action("reload", model.active, "")
+    }
+    if event.kind == "reload" or event.kind == "stop" { return action(event.kind, model.active, "") }
+    if event.kind == "downloads" or event.kind == "clear_data" or event.kind == "about" { return action(event.kind, 0, "") }
+    if event.kind == "drawer_toggle" or event.kind == "drawer_close" { return action(event.kind, 0, "") }
+    if event.kind == "helper_verify" or event.kind == "helper_pulse" or event.kind == "helper_status" { return action(event.kind, 0, "") }
+    if event.kind == "minimize" or event.kind == "maximize" or event.kind == "fullscreen" or event.kind == "close_window" or event.kind == "focus_address" { return action(event.kind, 0, "") }
+    return action("none", 0, "")
+}

@@ -1,0 +1,6 @@
+#!vcmd 1
+@name Explicit continuation example
+@on-error continue
+echo "The missing-file read is intentional."
+cat /does-not-exist
+echo "Continuation occurred; the script still returns a nonzero status."

@@ -1,0 +1,1256 @@
+{
+  "format": "ja21-corpus-lock/1",
+  "generated_from": "20 user-supplied JA21 language suite archives",
+  "suite_count": 20,
+  "suites": [
+    {
+      "archive": "JA21-DeepML-Animation-VFX-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "DeepML-Animation-VFX",
+      "language_title": "JA21 DeepML Animation VFX Language Suite 1.0.0",
+      "archive_sha256": "b9d0b6bc49e4099a97899c786d38ff0060fc621a4afb18e16e58ecfe8552429e",
+      "archive_bytes": 17163318,
+      "inner_root": "JA21_DMLV_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 1,
+        ".deepml": 1024,
+        ".ebnf": 2,
+        ".gz": 22,
+        ".json": 41,
+        ".jsonl": 44,
+        ".md": 17,
+        ".py": 2,
+        ".sha256": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "grammar/deepml_vfx.ebnf",
+          "bundled": "corpora/contracts/DeepML-Animation-VFX/grammar__deepml_vfx.ebnf",
+          "sha256": "fcebe7a226643d859b728003667595b5dd849060510d12de49d6ed16486cb94a"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/DeepML-Animation-VFX/README.md",
+          "sha256": "d64d78effed5be81a869e26cd07237075edef10c38d420a9826084824e5a1c4d"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-DeepML-Core-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "DeepML-Core",
+      "language_title": "DeepML Core Runtime Contract",
+      "archive_sha256": "46caa6096ab70f14931353ca56c04ee2469022fb3eed626ee01b8662dbc44cc9",
+      "archive_bytes": 19943205,
+      "inner_root": "JA21_DMLC_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".deepml": 1024,
+        ".ebnf": 2,
+        ".gz": 22,
+        ".json": 41,
+        ".jsonl": 44,
+        ".md": 24,
+        ".py": 2,
+        ".sha256": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "specifications/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/DeepML-Core/specifications__LANGUAGE_SPECIFICATION.md",
+          "sha256": "61bdfc8c51e338ac5c42904e7f1f2b42cdf3f3f49acd0e6293ea448fc42d1931"
+        },
+        {
+          "source": "specifications/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Core/specifications__RUNTIME_CONTRACT.md",
+          "sha256": "f5198531911fbea67b1389efc9e15bc45924ce0101ecdd76ccc2224eb1f1bfde"
+        },
+        {
+          "source": "specifications/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Core/specifications__COMPILER_CONTRACT.md",
+          "sha256": "51b3f4875d744d6a086e327acfd21caab08fb98dfc6f6fc4d1da12f28de253df"
+        },
+        {
+          "source": "specifications/DEEPML_CORE_LANGUAGE.ebnf",
+          "bundled": "corpora/contracts/DeepML-Core/specifications__DEEPML_CORE_LANGUAGE.ebnf",
+          "sha256": "c4180787a3d8d2dbc47d1bdd82713f8f2568c25b9bfb90ebf17f5ef098372765"
+        },
+        {
+          "source": "specifications/SEMANTIC_OPERATORS.md",
+          "bundled": "corpora/contracts/DeepML-Core/specifications__SEMANTIC_OPERATORS.md",
+          "sha256": "98dea09ad73bf5b041ce02b6577d5b58aadd2c7fdf24af8fc8a17bdadee3d18d"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/DeepML-Core/README.md",
+          "sha256": "bf29121c4adcfd3ec00b1894717e16ccff15ffc2b453a62261ac5a40ae1165a2"
+        },
+        {
+          "source": "script_pack_1000/README.md",
+          "bundled": "corpora/contracts/DeepML-Core/script_pack_1000__README.md",
+          "sha256": "210e0ba1a97dc3a2898c21ed4b210511d760902c57adb17e7717162befb016c0"
+        },
+        {
+          "source": "starter_project/README.md",
+          "bundled": "corpora/contracts/DeepML-Core/starter_project__README.md",
+          "sha256": "159585539fad524280bb6133f464a79f6062dcd9bedc942b638804cdf6dafcf4"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-DeepML-Kernel-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "DeepML-Kernel",
+      "language_title": "DeepML Kernel Language Specification 1.0.0",
+      "archive_sha256": "a6e7b0e2418e4dbc7ca66514f5df8e83a16935aff02ce4a0a3f557db8f3ff1c1",
+      "archive_bytes": 17741863,
+      "inner_root": "JA21_DMK_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 5,
+        ".dmk": 1001,
+        ".ebnf": 1,
+        ".gz": 2,
+        ".json": 8,
+        ".jsonl": 2,
+        ".md": 18,
+        ".py": 2,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specifications/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/DeepML-Kernel/specifications__LANGUAGE_SPECIFICATION.md",
+          "sha256": "81e12bdb7beae60220a988cd1a711331ac3eb9763229447236eb1d3f9505707d"
+        },
+        {
+          "source": "specifications/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Kernel/specifications__RUNTIME_CONTRACT.md",
+          "sha256": "35102340abc6955b26fdef5e1cc72d2153983cd374f508cfbad5b7bf9307cfe1"
+        },
+        {
+          "source": "specifications/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Kernel/specifications__COMPILER_CONTRACT.md",
+          "sha256": "05f2d101d053442326dac989638fc0a5569406e3ce2f37de6b9aebc9e344615c"
+        },
+        {
+          "source": "specifications/DEEPML_KERNEL_LANGUAGE.ebnf",
+          "bundled": "corpora/contracts/DeepML-Kernel/specifications__DEEPML_KERNEL_LANGUAGE.ebnf",
+          "sha256": "8e8d06bcfaf0db1deca9b9f751e82d70fe33e8c98162aebfd3d5d2cd0bf802b5"
+        },
+        {
+          "source": "specifications/SEMANTIC_OPERATORS.md",
+          "bundled": "corpora/contracts/DeepML-Kernel/specifications__SEMANTIC_OPERATORS.md",
+          "sha256": "ab6972999ac859a7b21e2a0b1f0b3825afb6a142566a87167a86fe2c198e70d2"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/DeepML-Kernel/README.md",
+          "sha256": "ec85dc9fcc7aba5a4e56d2163416d8949180912966153b9713ea421b07df56fc"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/DeepML-Kernel/starter__README.md",
+          "sha256": "6c1c800ea5d7f594720f69e0e1ce0148a378e2455bb50850112eda2e04954038"
+        },
+        {
+          "source": "scripts/README.md",
+          "bundled": "corpora/contracts/DeepML-Kernel/scripts__README.md",
+          "sha256": "1a40589bb4ce7dd66e7003195ee2277d4b98873017eb0fe9542fd0a1b97912dc"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-DeepML-Logic-Functional-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "DeepML-Logic-Functional",
+      "language_title": "JA21 DeepML Logic/Functional Language Suite 1.0.0",
+      "archive_sha256": "ae85b50928e2942dc88bcac1932ac20525af5e4f7013ab6e78ec9a0c22312f9d",
+      "archive_bytes": 19200074,
+      "inner_root": "JA21_DMLL_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".deepml": 1024,
+        ".ebnf": 2,
+        ".gz": 22,
+        ".json": 40,
+        ".jsonl": 44,
+        ".md": 30,
+        ".py": 2,
+        ".sha256": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/DeepML-Logic-Functional/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "507dbcc54710b86b037854c9a0e73535a2382fd843b5d07635eaf83484dc7b4d"
+        },
+        {
+          "source": "specification/deepml_logic_functional.ebnf",
+          "bundled": "corpora/contracts/DeepML-Logic-Functional/specification__deepml_logic_functional.ebnf",
+          "sha256": "62c5d7167c2bfe180115ae8f6db3afe119eca39a8827e71b8a59a057018502e0"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/DeepML-Logic-Functional/README.md",
+          "sha256": "13d8863076a06593d61cf2bd844000565fe072e5446da0c88fcaf20d942f2cb8"
+        },
+        {
+          "source": "tools/README.md",
+          "bundled": "corpora/contracts/DeepML-Logic-Functional/tools__README.md",
+          "sha256": "7ae2953b9a0a02fdcb5c7f33a228aec92604adcb8cd76dd28651fe73026c765d"
+        },
+        {
+          "source": "source_original/README.md",
+          "bundled": "corpora/contracts/DeepML-Logic-Functional/source_original__README.md",
+          "sha256": "aa7d1054a25b4a8c3c159418090e3c0f906eeb20334a0cf671cd91747f0bd9f0"
+        },
+        {
+          "source": "starter_project/README.md",
+          "bundled": "corpora/contracts/DeepML-Logic-Functional/starter_project__README.md",
+          "sha256": "fe3c03915eb1c97e130f88333967adb3044820d9c0c6737c68cfb003e68ac109"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-DeepML-Motion-Animation-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "DeepML-Motion-Animation",
+      "language_title": "DeepML Motion/Animation Runtime Contract",
+      "archive_sha256": "a14639c4c87b81e1174c4205ad6435a6e6a95f7e79254e8b6997b10c2122f517",
+      "archive_bytes": 19870842,
+      "inner_root": "JA21_DMLM_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".deepml": 1024,
+        ".ebnf": 2,
+        ".gz": 22,
+        ".json": 41,
+        ".jsonl": 44,
+        ".md": 25,
+        ".py": 2,
+        ".sha256": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "specifications/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/specifications__LANGUAGE_SPECIFICATION.md",
+          "sha256": "ef755c6534f9eb659369d609ca0c9684fca0628024253d02588808f6f5976744"
+        },
+        {
+          "source": "specifications/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/specifications__RUNTIME_CONTRACT.md",
+          "sha256": "9a9fa20c0d5d2e67d9c494ef070317cf9812d80871bf1df441f050ed60f9bd5a"
+        },
+        {
+          "source": "specifications/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/specifications__COMPILER_CONTRACT.md",
+          "sha256": "f40be8cfa168cfa8d35b1bcbff529bb3cd9c9fe008ccefff72afb582e60cabf5"
+        },
+        {
+          "source": "specifications/DEEPML_MOTION_LANGUAGE.ebnf",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/specifications__DEEPML_MOTION_LANGUAGE.ebnf",
+          "sha256": "98e0309e4d7d922a367d4064acada3ae537652397bf3d9748171b1fc6e782590"
+        },
+        {
+          "source": "specifications/SEMANTIC_OPERATORS.md",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/specifications__SEMANTIC_OPERATORS.md",
+          "sha256": "4606121e7faeaa2a3b8be8a8a5f2d935bcd9c650483dac94a301636e3876ac44"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/README.md",
+          "sha256": "68fbcb3dd9238f4bff52d77796d7dba723316c8454e8a2718d98fbe7356f303a"
+        },
+        {
+          "source": "script_pack_1000/README.md",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/script_pack_1000__README.md",
+          "sha256": "1575ef1289712d6ca39f3ac05b5d426a8d588ce17e758eb0ce3b9b3370e79fba"
+        },
+        {
+          "source": "starter_project/README.md",
+          "bundled": "corpora/contracts/DeepML-Motion-Animation/starter_project__README.md",
+          "sha256": "42688f2c81d41ac81134ed736fa73e2707ee189d7247ea74464ab98a2dd780f5"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-DeepML-Specialized-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "DeepML-Specialized",
+      "language_title": "Runtime Contract",
+      "archive_sha256": "6d32c3c72dff37def3e0c7fd359a23e2e230d36f2b615809f7e89bc94bec5fcc",
+      "archive_bytes": 19743630,
+      "inner_root": "JA21_DMLS_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".deepml": 1024,
+        ".ebnf": 2,
+        ".gz": 22,
+        ".json": 41,
+        ".jsonl": 44,
+        ".md": 30,
+        ".py": 2,
+        ".sha256": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "specifications/LANGUAGE_SPECIFICATION_SOURCE.md",
+          "bundled": "corpora/contracts/DeepML-Specialized/specifications__LANGUAGE_SPECIFICATION_SOURCE.md",
+          "sha256": "07564dda38606e644e657a074a2214e657dbfd30bd929bb396fb4c9c2039927d"
+        },
+        {
+          "source": "specifications/runtime/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Specialized/specifications__runtime__RUNTIME_CONTRACT.md",
+          "sha256": "3f9d7ee4d73845ad706cf801efe9edb11f761260618a65990f7048cc2c27bb9e"
+        },
+        {
+          "source": "specifications/compiler/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/DeepML-Specialized/specifications__compiler__COMPILER_CONTRACT.md",
+          "sha256": "3436b6dddb174fdf1f1f46854ef4fe682106d259f1a7421a39f50b93a56824de"
+        },
+        {
+          "source": "specifications/DEEPML_SPECIALIZED_GRAMMAR.ebnf",
+          "bundled": "corpora/contracts/DeepML-Specialized/specifications__DEEPML_SPECIALIZED_GRAMMAR.ebnf",
+          "sha256": "4bf77b3946dc17f3695eafba4b352ee07330b83828521b3e533032d98eea0964"
+        },
+        {
+          "source": "specifications/semantic/SEMANTIC_OPERATOR_REFERENCE.md",
+          "bundled": "corpora/contracts/DeepML-Specialized/specifications__semantic__SEMANTIC_OPERATOR_REFERENCE.md",
+          "sha256": "a81abaa8fcb4e9a1f44545470ea5b6567aa1bc3153732b62028ef8739c3ecacc"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/DeepML-Specialized/README.md",
+          "sha256": "59892f1487d9fda7f46c03ef9488490c70ff6fc064201b31cbf5df638818a22e"
+        },
+        {
+          "source": "script_pack_1000/README.md",
+          "bundled": "corpora/contracts/DeepML-Specialized/script_pack_1000__README.md",
+          "sha256": "6bb7962be2e45088d8a7d8cdfed981670853abe4f89fc8bd71c4fdb56aa46a91"
+        },
+        {
+          "source": "starter_project/README.md",
+          "bundled": "corpora/contracts/DeepML-Specialized/starter_project__README.md",
+          "sha256": "b9917a53bf83b434976d9725d92d87fa5bb09eaa17a20be1fec57d687bd90e7c"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Agent-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Agent",
+      "language_title": "JA Agent Language Specification",
+      "archive_sha256": "b6941a03799d6509db2a37b36d74de461e98d83f359fa74670b188be2f96b7f2",
+      "archive_bytes": 22888310,
+      "inner_root": "JA21_JAA_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 5,
+        ".ebnf": 1,
+        ".gz": 22,
+        ".jaa": 1001,
+        ".json": 8,
+        ".jsonl": 2,
+        ".md": 24,
+        ".py": 2,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specifications/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Agent/specifications__LANGUAGE_SPECIFICATION.md",
+          "sha256": "6b69badcdf8307f3a67793e51138a63e109b16de5b56facf6128f065a8b6c319"
+        },
+        {
+          "source": "specifications/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Agent/specifications__RUNTIME_CONTRACT.md",
+          "sha256": "97614574d9b2924efb2c326c31a838cc9ecf7adfff4e0ae79b1bfed9574ad606"
+        },
+        {
+          "source": "specifications/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Agent/specifications__COMPILER_CONTRACT.md",
+          "sha256": "2b1140a525047d118c48df748d4b8daa4a6477a9f2ccfcb24fc74028673af7f9"
+        },
+        {
+          "source": "specifications/JA_AGENT_LANGUAGE.ebnf",
+          "bundled": "corpora/contracts/JA-Agent/specifications__JA_AGENT_LANGUAGE.ebnf",
+          "sha256": "5792bcb52adf6ff0b1be4886834efdf623e7b85a76f536365d6559fc9f37f9ea"
+        },
+        {
+          "source": "specifications/SEMANTIC_OPERATORS.md",
+          "bundled": "corpora/contracts/JA-Agent/specifications__SEMANTIC_OPERATORS.md",
+          "sha256": "91dc2bbdfcc2e9b07d042799a96a2e44d30b6f4ea31a0a7e02d9349a2dc32c0f"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Agent/catalogs__FEATURE_ATLAS.md",
+          "sha256": "f21f0b9c0eec9df2efe497e6ad5714884f8ce5b6e86b86e63e2b2b4a1f9e536e"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Agent/README.md",
+          "sha256": "db9fdce0b4668771e21c448bff86e873d8af74e0ee991e51d0117b45a1c0a027"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JA-Agent/starter__README.md",
+          "sha256": "6d0a2f2a99b1e6d7e056a060e6115902b52810b5152bc71bd01e0c840fd613e4"
+        },
+        {
+          "source": "scripts/README.md",
+          "bundled": "corpora/contracts/JA-Agent/scripts__README.md",
+          "sha256": "8336b1b815d4df61ca682245db4d82981e92fb457f000f8a2c6457ae7d753a59"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Certifier-Grammar-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Certifier-Grammar-Suite-1.0.0",
+      "language_title": "JA Certifier Grammar Language Specification",
+      "archive_sha256": "1e88a0fa8a93db91a5e936913012b3e9a29bcbff45c62e5f35696ed0052054ab",
+      "archive_bytes": 18851859,
+      "inner_root": "JA21_JCG_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".ebnf": 1026,
+        ".gz": 22,
+        ".json": 42,
+        ".jsonl": 44,
+        ".md": 29,
+        ".py": 2,
+        ".sha256": 1,
+        ".svg": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "specifications/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/specifications__LANGUAGE_SPECIFICATION.md",
+          "sha256": "7098c727d7c7bd154b86c46bc26cf7b63a19a8c0bc4eac9587166cbcf41ccc25"
+        },
+        {
+          "source": "specifications/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/specifications__RUNTIME_CONTRACT.md",
+          "sha256": "b5e8ed4346b88cb8e8ab5d20d0ca10a919c020f5846ed2ca8bd8c54689ae4214"
+        },
+        {
+          "source": "specifications/RUNTIME_CONTRACT.source.json",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/specifications__RUNTIME_CONTRACT.source.json",
+          "sha256": "2d90cd4e64cb9e630ca8e79075334f1384d01b8a03e98bdcd094b83b7a182341"
+        },
+        {
+          "source": "specifications/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/specifications__COMPILER_CONTRACT.md",
+          "sha256": "3a504984911fc01060f7dc536d8691d14a630b0b6d999fee6b5d984db5e7247d"
+        },
+        {
+          "source": "specifications/COMPILER_CONTRACT.source.json",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/specifications__COMPILER_CONTRACT.source.json",
+          "sha256": "d182cb164891278ff7109bc657362360cf6dcbba880e6184dc4ea34740d4eabe"
+        },
+        {
+          "source": "specifications/JA_CERTIFIER_GRAMMAR_SOURCE.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/specifications__JA_CERTIFIER_GRAMMAR_SOURCE.ebnf",
+          "sha256": "082858b14d866d891f167e15a50a7c01dacfb4e69bad74ad410cceca7a7b0007"
+        },
+        {
+          "source": "starter/hello_certifier.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/starter__hello_certifier.ebnf",
+          "sha256": "c7d32aeeab66d552b112729962a916f12a4acb0562f615d33962cad1c8afcdee"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0883_EX-JCG-07761_automaton.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0883_EX-JCG-07761_automaton.ebnf",
+          "sha256": "e7617d808cdf6c9e3b18821d6cdde5b91655c90a92cce2104feabc863dc8d0f2"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0866_EX-JCG-07642_left_recursion.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0866_EX-JCG-07642_left_recursion.ebnf",
+          "sha256": "489150531e37ab43b847dedaf7f3d5f22401ba760b2b2590cbb9e6e19c76b49d"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0893_EX-JCG-07834_left_recursion.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0893_EX-JCG-07834_left_recursion.ebnf",
+          "sha256": "2c79784e40a058227e0520a563a58dae9ddf5f125e3a7a547a9d8dbf2058eb2c"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0853_EX-JCG-07577_automaton.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0853_EX-JCG-07577_automaton.ebnf",
+          "sha256": "010dc33b327292ed8b61c86993fd53886c5b0731b8d8b8a9799cab022616bea6"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0870_EX-JCG-07661_validator_scheduling.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0870_EX-JCG-07661_validator_scheduling.ebnf",
+          "sha256": "8a9fd28ee383fa575b24a0141455a1586ed72e073da066c62cd303f0547f7010"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0874_EX-JCG-07680_first_follow.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0874_EX-JCG-07680_first_follow.ebnf",
+          "sha256": "a852b751147d7af8e4f0e50bf76082e7d5e09c2ba2e110a589ea122de8a810e1"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0849_EX-JCG-07563_ambiguity_analysis.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0849_EX-JCG-07563_ambiguity_analysis.ebnf",
+          "sha256": "b2d39629d787e7eb98e6b757cd903abbd84bc7b3504bf27b73a9cd4d9b3a7913"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0857_EX-JCG-07596_parser_table_compression.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0857_EX-JCG-07596_parser_table_compression.ebnf",
+          "sha256": "c95a584bc2eac0f997b70739e7dee43f1ea92666992ad5b1a2df74bb23dedd2b"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0858_EX-JCG-07599_grammar_normalization.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0858_EX-JCG-07599_grammar_normalization.ebnf",
+          "sha256": "32907b85b97ce18159ec11d822ad9cb61a94ca52e9f00413a6e77c33a3c43a02"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0891_EX-JCG-07815_grammar_normalization.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0891_EX-JCG-07815_grammar_normalization.ebnf",
+          "sha256": "8623b8bc9b5ea54b3146efc4b3f77cc60e74d2e9171f4b4a8df97d35d11e570f"
+        },
+        {
+          "source": "scripts/05_compiler_optimization/negative/0881_EX-JCG-07742_r12_mcrt_lowering.ebnf",
+          "bundled": "corpora/contracts/JA-Certifier-Grammar-Suite-1.0.0/scripts__05_compiler_optimization__negative__0881_EX-JCG-07742_r12_mcrt_lowering.ebnf",
+          "sha256": "617b7ff480b62d2347ea58ec2f82230648ad140b9aa841a8b90307bb56375e54"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Core-Application-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Core-Application",
+      "language_title": "JA Core Application Language \u2014 Standalone Specification",
+      "archive_sha256": "14e28b51ec3bf807be6ade400dea89e1a68b89679b55e53b3566afef11192cc2",
+      "archive_bytes": 22435375,
+      "inner_root": "JA21_JACORE_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 5,
+        ".gz": 22,
+        ".ja": 1001,
+        ".json": 7,
+        ".jsonl": 2,
+        ".md": 23,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "spec/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Core-Application/spec__LANGUAGE_SPECIFICATION.md",
+          "sha256": "9f5fbaf7d13ab84c87981029c47818718c0dc8aa09e42ea763d7dab96409904e"
+        },
+        {
+          "source": "spec/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Core-Application/spec__RUNTIME_CONTRACT.md",
+          "sha256": "46a2d3131055fc35a24ed48692a33d5bebc712c771a63c3260ff04dce67287b1"
+        },
+        {
+          "source": "spec/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Core-Application/spec__COMPILER_CONTRACT.md",
+          "sha256": "6c13c40f7c5fd19197a6b9ac260e59a9ea0570575943fcb9cc76e22930144a55"
+        },
+        {
+          "source": "spec/JA_CORE_EBNF.md",
+          "bundled": "corpora/contracts/JA-Core-Application/spec__JA_CORE_EBNF.md",
+          "sha256": "41adb920806945fc39b4ee00bcc8475dfaa80c3e66c86e43ec950130d74fde1f"
+        },
+        {
+          "source": "spec/SEMANTIC_OPERATOR_REGISTRY.json",
+          "bundled": "corpora/contracts/JA-Core-Application/spec__SEMANTIC_OPERATOR_REGISTRY.json",
+          "sha256": "d38768516ad481635f218676b401ffe46eb6892d12291ead8e0d3e23c9dda476"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Core-Application/catalogs__FEATURE_ATLAS.md",
+          "sha256": "cace903304356b988ac8ea2b0292b68d16c66ebad81885f2a51e7005bd9dc99b"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Core-Application/README.md",
+          "sha256": "42446dacc9c0fc6973597077c56d67f1f56f7c88c19e6bd487fafba1bb450309"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JA-Core-Application/starter__README.md",
+          "sha256": "78e8c14da8a43a40fd178da47f4b7d92205c77bf7b3ac117d5e793651390345d"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Data-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Data",
+      "language_title": "JA Data Language Specification",
+      "archive_sha256": "5e72fa078b9a0b230dc01efd2a59434e5aa429c8e9e0fb6b3b6c230fa87fa431",
+      "archive_bytes": 22599328,
+      "inner_root": "JA21_JAD_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 5,
+        ".gz": 22,
+        ".jad": 1011,
+        ".json": 7,
+        ".jsonl": 2,
+        ".md": 24,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Data/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "d6ddce81772e2e1b902f6d8da06fb65df71ea72494ba966fe9cf71a674598cb9"
+        },
+        {
+          "source": "specification/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Data/specification__RUNTIME_CONTRACT.md",
+          "sha256": "00815ccfd8daf8107e49aab87b675a09dc7d4b4a0f3f95468ca7e372b8143a8e"
+        },
+        {
+          "source": "specification/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Data/specification__COMPILER_CONTRACT.md",
+          "sha256": "eb5b2f6664bde8e85448a884b9edac3aebfd95807f7af036b11804d3ab71e5c5"
+        },
+        {
+          "source": "specification/JAD_EBNF.md",
+          "bundled": "corpora/contracts/JA-Data/specification__JAD_EBNF.md",
+          "sha256": "bd06c2229624d7282099898321a342147a762b6dc81cf8052e2ef6a01c237b86"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATOR_REGISTRY.md",
+          "bundled": "corpora/contracts/JA-Data/specification__SEMANTIC_OPERATOR_REGISTRY.md",
+          "sha256": "b7fc78310397696d5c39cad118e836ad270436fb117eae699fe4bb81a0ac18e1"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Data/catalogs__FEATURE_ATLAS.md",
+          "sha256": "d5a67e14568d1a05b74c5d64a686d28cf4fcf4412a5badaab321dbf05616d70a"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Data/README.md",
+          "sha256": "8a4bee81d267e547eaff88619f292583617c0c5d23b976090e2217db1222f413"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JA-Data/starter__README.md",
+          "sha256": "24e5facffadb3bba1045369853d750efb3da8545910115911b867b11ced16131"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Interface-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Interface",
+      "language_title": "JA Interface Language Specification 1.0.0",
+      "archive_sha256": "342fa3afb33b8b8e00045acb2c95811eec8496b2b0c70114de210c31522d978a",
+      "archive_bytes": 21916228,
+      "inner_root": "JA21_JAUI_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".gz": 23,
+        ".jaui": 1001,
+        ".json": 6,
+        ".jsonl": 2,
+        ".md": 27,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Interface/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "2ec33d40c61c23ad644004e70cb65738d77e01b00c15a2699f1d1feb70505eac"
+        },
+        {
+          "source": "contracts/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Interface/contracts__RUNTIME_CONTRACT.md",
+          "sha256": "b1cf952ac3359ab241a1c8853a0198639d60b9fea98c25a91d50e0dd20b66010"
+        },
+        {
+          "source": "contracts/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Interface/contracts__COMPILER_CONTRACT.md",
+          "sha256": "9746a9ed730793c550772e1ec52f6928c68dc4fa6ee041e0ae9dac00d6c8a01a"
+        },
+        {
+          "source": "specification/JA_INTERFACE_EBNF.md",
+          "bundled": "corpora/contracts/JA-Interface/specification__JA_INTERFACE_EBNF.md",
+          "sha256": "1fa0d376feac6c5f2b544718e284f1ee92b254d9260f4c5bc2932dda176ed8c0"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATORS.md",
+          "bundled": "corpora/contracts/JA-Interface/specification__SEMANTIC_OPERATORS.md",
+          "sha256": "bcd05f5dd552800ef003e1a518dd07381a03219b9418f1528f695c9d1c5058b9"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Interface/catalogs__FEATURE_ATLAS.md",
+          "sha256": "7b85c342d01b891fde6f0125e2877a6038b3e35c0a669ac99447e25673ee8802"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Interface/README.md",
+          "sha256": "17f7de650650296bb9aec8b2f0d1cf77632a395b766f82ae2792985d6f60710d"
+        },
+        {
+          "source": "starter_project/README.md",
+          "bundled": "corpora/contracts/JA-Interface/starter_project__README.md",
+          "sha256": "1ba5de58b21355d7ca4bbc3f691b28e8f67a38c810b3bc4a3d7e71c749e4cb66"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Operations-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Operations",
+      "language_title": "JA Operations Language Specification \u2014 Standalone Profile",
+      "archive_sha256": "1f103193b9141d44ba5b93032bbec49d7180b8372d8f4ac0f4e785c3ab7a591b",
+      "archive_bytes": 22710283,
+      "inner_root": "JA21_JAOPS_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".gz": 23,
+        ".jaops": 1001,
+        ".json": 6,
+        ".jsonl": 2,
+        ".lock": 1,
+        ".md": 28,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Operations/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "0bdb815f26bec239ee7a0025c7e2beab3ad1279e40477bf381f80c7f9162f138"
+        },
+        {
+          "source": "contracts/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Operations/contracts__RUNTIME_CONTRACT.md",
+          "sha256": "cd7ea4befefd0c6145b4fbabf76aa61101177088e19e93cf8ef4dca9a8be1f97"
+        },
+        {
+          "source": "contracts/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Operations/contracts__COMPILER_CONTRACT.md",
+          "sha256": "c34b92db0a3e7ac4d9efa51f77e8b5f789694c2b438cb117d9927ccec3721e0d"
+        },
+        {
+          "source": "specification/JA_OPERATIONS_EBNF.md",
+          "bundled": "corpora/contracts/JA-Operations/specification__JA_OPERATIONS_EBNF.md",
+          "sha256": "0bf847b676ed74a098f2555a041359cf8c677b9f4fd6561fa94d79772581cbee"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATORS.md",
+          "bundled": "corpora/contracts/JA-Operations/specification__SEMANTIC_OPERATORS.md",
+          "sha256": "37d364903cbce9c2e1dd5a1293f17dd87b217ca48d6a80ed6cd41e2e8d095b04"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Operations/catalogs__FEATURE_ATLAS.md",
+          "sha256": "e0c341b0beae4896f1dab6293d264c293ddc46cb9ed970d46abea3e757be587b"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Operations/README.md",
+          "sha256": "52acd17d4ba1a33a0e51f39cf823c7f78e8f7a0a789f8f9c4b76892c22ffe9b0"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JA-Operations/starter__README.md",
+          "sha256": "72f0bfec6eaa2359b57241d3e7a485f0ed49d3d2324f8ac4ba852f3b90a13db0"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Portal-Scene-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Portal-Scene",
+      "language_title": "Runtime Contract",
+      "archive_sha256": "cf3a399813b38d4c00ed9c5c643c8aae85228c74a4d1a0178ef75aebbf1b0212",
+      "archive_bytes": 21045861,
+      "inner_root": "JA21_JPSL_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 3,
+        ".ebnf": 3,
+        ".gz": 22,
+        ".ja": 1024,
+        ".json": 41,
+        ".jsonl": 44,
+        ".md": 30,
+        ".py": 2,
+        ".sha256": 1,
+        ".svg": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "spec/contracts/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__contracts__RUNTIME_CONTRACT.md",
+          "sha256": "2cfdf5e15cade76be11bc1653410105d1fbf2e4cf4bce3254f0c46cbf82605de"
+        },
+        {
+          "source": "spec/original/ORIGINAL_RUNTIME_CONTRACT.json",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__original__ORIGINAL_RUNTIME_CONTRACT.json",
+          "sha256": "d9df3ac3ccfaee681b9bfae1acddde2d7a56f83ca9d286fa570fc2409ebf6097"
+        },
+        {
+          "source": "spec/contracts/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__contracts__COMPILER_CONTRACT.md",
+          "sha256": "5c248fee1cbcea2d12921dbf842bddbd60c20cdb65db8f36d06c0ce62945429f"
+        },
+        {
+          "source": "spec/original/ORIGINAL_COMPILER_CONTRACT.json",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__original__ORIGINAL_COMPILER_CONTRACT.json",
+          "sha256": "0b4f1f974ab613ef186842da8065100a980b92f90f5a8da68ab08a57c8707cac"
+        },
+        {
+          "source": "spec/original/ORIGINAL_GRAMMAR.ebnf",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__original__ORIGINAL_GRAMMAR.ebnf",
+          "sha256": "e85521cf762d633d703111f18c6023038ad293031e391767c14318429c0c0e58"
+        },
+        {
+          "source": "spec/grammar/JA_PORTAL_SCENE_STANDALONE.ebnf",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__grammar__JA_PORTAL_SCENE_STANDALONE.ebnf",
+          "sha256": "af0eed4972d8c32c501dfd291f6a87d0cf34f375a43bf69b1548200928f89e73"
+        },
+        {
+          "source": "spec/original/ORIGINAL_SEMANTIC_OPERATORS.json",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__original__ORIGINAL_SEMANTIC_OPERATORS.json",
+          "sha256": "13d3d9b82e18a6b10166fbf1285d7a6d2dbde1f73228ecd23076aacd24f53e10"
+        },
+        {
+          "source": "spec/semantics/SEMANTIC_OPERATOR_REGISTRY.json",
+          "bundled": "corpora/contracts/JA-Portal-Scene/spec__semantics__SEMANTIC_OPERATOR_REGISTRY.json",
+          "sha256": "a46b599cfdfc227bdc9d10cba6d22cba3c71d41c2760f01293181d8054791609"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Portal-Scene/README.md",
+          "sha256": "5002ba252b7b9c34ff30fc121f94ca63974eba717939a2b4a145a1e6c95a2e56"
+        },
+        {
+          "source": "source/README.md",
+          "bundled": "corpora/contracts/JA-Portal-Scene/source__README.md",
+          "sha256": "4bae6ac481518f39beee80fd5b4febebdb84a5bcd39def723344ff9abd8f5a53"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JA-Portal-Scene/starter__README.md",
+          "sha256": "8cf5495fb7f7709141f3428b9270de5dcc666959241d503e03b866232055b548"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Programming-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Programming",
+      "language_title": null,
+      "archive_sha256": "aa1c780e4b1cd3f7fe856cc80fdbbb210529904de3258eb06edd64faaf346efa",
+      "archive_bytes": 8466133,
+      "inner_root": null,
+      "extension_counts": {},
+      "bundled_contracts": [
+        {
+          "source": "JA_Language_Coupling_Mechanics_Corpus.jsonl.gz",
+          "bundled": "corpora/contracts/JA-Programming/PROGRAMMING_CORPUS_POINTER.json",
+          "sha256": "5aa499ebd0f0dc2a4bdda8fef8d6ad56a50c2aff83b9d0feb7351c88e6ec850b",
+          "note": "compact pointer; full corpus identified by source archive SHA-256"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Security-Policy-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Security-Policy",
+      "language_title": "JA Security Policy Language Specification \u2014 Standalone Profile",
+      "archive_sha256": "8ccaccd58ee29681e860805c9ddbd476521be616b5863a5178019054dd242f30",
+      "archive_bytes": 22235945,
+      "inner_root": "JA21_JASEC_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".gz": 23,
+        ".jasec": 1001,
+        ".json": 6,
+        ".jsonl": 2,
+        ".md": 28,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "934b2ebfc9674ce5fa0409ee9e1800092678e6c6271fe948662b3262b77d903d"
+        },
+        {
+          "source": "contracts/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/contracts__RUNTIME_CONTRACT.md",
+          "sha256": "382d4cb9f0cc431dd15ccd80e28726f7a7b8693492c4ac537095bacfb8d982cd"
+        },
+        {
+          "source": "contracts/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/contracts__COMPILER_CONTRACT.md",
+          "sha256": "b372594d7ef57517e3cc21bb2d607660de216ae192e9289f2e923d3ab295f4f7"
+        },
+        {
+          "source": "specification/JA_SECURITY_EBNF.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/specification__JA_SECURITY_EBNF.md",
+          "sha256": "1eb960799502601034d1276b8e8edab81be4e46e94f408fe0cc44bef23e7add2"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATORS.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/specification__SEMANTIC_OPERATORS.md",
+          "sha256": "0ecd12f336aadaf9092fe8878c3224b0064586d6dcc375fbd8b106ebea21aebf"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/catalogs__FEATURE_ATLAS.md",
+          "sha256": "d32287e2f8b7a6839ff25c4b01daec660d49558d94d7378bd93b6fb2846d30f2"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/README.md",
+          "sha256": "83a33cadb6ff0a86cfc52acf709e8005faccd32ab2ae9a52171496585f3bde18"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JA-Security-Policy/starter__README.md",
+          "sha256": "f999c2870bb0cb8cfeb6519c9f2ad7929e724759fecf036ac1744d91da6b2bac"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Service-and-Protocol-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Service-and-Protocol",
+      "language_title": "JA Service and Protocol Language Specification",
+      "archive_sha256": "a29639245b9fd11639622abfe179f7b690093ff44aa4b102fb8e73de14a9f375",
+      "archive_bytes": 23304028,
+      "inner_root": "JA21_JASP_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 5,
+        ".ebnf": 1,
+        ".gz": 22,
+        ".jasp": 1001,
+        ".json": 9,
+        ".jsonl": 2,
+        ".md": 25,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "2cef8af0a80e847d24249af1c529b192b6f7ef8749dee999a7169de5b4b65da5"
+        },
+        {
+          "source": "specification/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/specification__RUNTIME_CONTRACT.md",
+          "sha256": "7421cc74275d0af8e31bc9e5d6159cc263418074daab3d0c5a525369f09a95e0"
+        },
+        {
+          "source": "specification/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/specification__COMPILER_CONTRACT.md",
+          "sha256": "1fc1a6ef3c0c68c617f3fc11180729a1cc152b8572dade3c03d9064a8a151777"
+        },
+        {
+          "source": "specification/JA_SERVICE_PROTOCOL.ebnf",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/specification__JA_SERVICE_PROTOCOL.ebnf",
+          "sha256": "d0564aac12f5d59fc33e51d56bcec96fa2e1afd86a9406ff146e614ed8df976f"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATOR_REGISTRY.json",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/specification__SEMANTIC_OPERATOR_REGISTRY.json",
+          "sha256": "46e94de0fa34db52e93e69eae347394252200dd72e7368a4d9be64e7381b894d"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/catalogs__FEATURE_ATLAS.md",
+          "sha256": "4ab70b4fd4709419a48100f7ecb372b22c9257c811e386740da7a4d031ae106f"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/README.md",
+          "sha256": "da0b059d64efff450abaa280a5fada2426c0ec0070e34e68dee7cf6cdfabbfab"
+        },
+        {
+          "source": "starter_project/README.md",
+          "bundled": "corpora/contracts/JA-Service-and-Protocol/starter_project__README.md",
+          "sha256": "c686c86707964632925473d90f333e2d7bffb0701144f48cac4a80bd1966cb33"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Test-Simulation-and-Proof-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Test-Simulation-and-Proof",
+      "language_title": "JA Test, Simulation, and Proof Language Specification",
+      "archive_sha256": "08b45edd34d9f125eb20d2600d6d39bcbaf81675bfa4fbab67f0d5ff155227c6",
+      "archive_bytes": 23810305,
+      "inner_root": "JA21_JATP_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 5,
+        ".ebnf": 1,
+        ".gz": 22,
+        ".jap": 1001,
+        ".json": 8,
+        ".jsonl": 2,
+        ".md": 26,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "b9feeecf7e9cc99f5b88914621097bc0004f5c9b1bce202c1c51f03e5fae2c41"
+        },
+        {
+          "source": "specification/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/specification__RUNTIME_CONTRACT.md",
+          "sha256": "357442a69c34e3ec13c65bbb9a76de74db738b2d29fd401071ecd67ed589541e"
+        },
+        {
+          "source": "specification/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/specification__COMPILER_CONTRACT.md",
+          "sha256": "dd955f72898630580a8abdcad9ee4de05af27cc536b9ef610b0953e2fe3726da"
+        },
+        {
+          "source": "specification/JA_TEST_PROOF.ebnf",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/specification__JA_TEST_PROOF.ebnf",
+          "sha256": "8b2fdfad1a1043a91fe95d07aee24589175cbe727e96b6c333d1e48b0c168c37"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATOR_REGISTRY.json",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/specification__SEMANTIC_OPERATOR_REGISTRY.json",
+          "sha256": "2c49c5a42238050070b89503bfc592c31b127ce24f3f36b4018f0f91ac397c04"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/catalogs__FEATURE_ATLAS.md",
+          "sha256": "549d5ac1b29e093855cfcf30cbbeeae026ba823e8733cdeb356f5171b4726db7"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/README.md",
+          "sha256": "5d76c3f79f191fa2b2c36ac1ab410c46a5817a91a29b4712041d8e165c54839d"
+        },
+        {
+          "source": "starter_project/README.md",
+          "bundled": "corpora/contracts/JA-Test-Simulation-and-Proof/starter_project__README.md",
+          "sha256": "c20aaaf71f44f7d3b653e48ff510c1f38a816844d441e6f20101b6d2d225c32b"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JA-Training-and-Evaluation-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JA-Training-and-Evaluation",
+      "language_title": "JA Training and Evaluation Language Specification",
+      "archive_sha256": "26f9f78ac3f44fb376157b9a3faf6cff0f31777151d455a9f8451b06ac599d2d",
+      "archive_bytes": 23847768,
+      "inner_root": "JA21_JATE_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 4,
+        ".gz": 22,
+        ".jate": 1001,
+        ".json": 7,
+        ".jsonl": 2,
+        ".md": 26,
+        ".py": 2,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION.md",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/specification__LANGUAGE_SPECIFICATION.md",
+          "sha256": "599ab5d6e00fc7c9356f92ee17fcdc6f5a6d9e8fb6519f1f0354b898af9ccc99"
+        },
+        {
+          "source": "specification/RUNTIME_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/specification__RUNTIME_CONTRACT.md",
+          "sha256": "f20c7157e1a8f5a715a454c0b0103d3c199ef171f8c5c7c5a0e9a208ced0f982"
+        },
+        {
+          "source": "specification/COMPILER_CONTRACT.md",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/specification__COMPILER_CONTRACT.md",
+          "sha256": "fc357db47a2b4fa0dc34713eef218c5844a2a89f72f9c8cd800e766885f5efa1"
+        },
+        {
+          "source": "specification/JA_TRAINING_EVALUATION_EBNF.md",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/specification__JA_TRAINING_EVALUATION_EBNF.md",
+          "sha256": "c3ac2672e09170d716fcae429e050463334b67ecd701ad190eb93d01689b26e5"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATORS.json",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/specification__SEMANTIC_OPERATORS.json",
+          "sha256": "0b39287260c42b6f3db10544160c66f02f964aa4f52838ba6bf5c956c0ce6054"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/catalogs__FEATURE_ATLAS.md",
+          "sha256": "17e07e9c30405616207f830a28cb0a1d042afcc19c09cfa13d2aedc3769477e6"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/README.md",
+          "sha256": "04616b411fa9e687bdca99e92ea86110ac479a81b7204a7826d20c03cb12f9ed"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JA-Training-and-Evaluation/starter__README.md",
+          "sha256": "9bdc1b48aae895e3feaa8876dc63b1d6a7ab7a39794db682d7008cb950e47123"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-JAXD-UI-UX-Experience-Design-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "JAXD-JAXD",
+      "language_title": "JA Experience Design Language \u2014 Language Specification 0.1.0",
+      "archive_sha256": "f308a1558be1e5c264093168885c918897d9accad514e1801bf9f554a0d2edbe",
+      "archive_bytes": 14990133,
+      "inner_root": "JA21_JAXD_Suite_1.0.0_COMPACT",
+      "extension_counts": {
+        ".cmd": 2,
+        ".csv": 4,
+        ".dmk": 5,
+        ".ebnf": 2,
+        ".gz": 22,
+        ".jaui": 5,
+        ".json": 33,
+        ".jsonl": 3,
+        ".jxd": 1006,
+        ".md": 28,
+        ".py": 5,
+        ".svg": 1,
+        ".txt": 2
+      },
+      "bundled_contracts": [
+        {
+          "source": "specification/LANGUAGE_SPECIFICATION_0.1.0.md",
+          "bundled": "corpora/contracts/JAXD-JAXD/specification__LANGUAGE_SPECIFICATION_0.1.0.md",
+          "sha256": "f06d607509ec7fb493539b45eee9512454d6bfbf3436ce5623e359496db73338"
+        },
+        {
+          "source": "specification/RUNTIME_CONTRACT.json",
+          "bundled": "corpora/contracts/JAXD-JAXD/specification__RUNTIME_CONTRACT.json",
+          "sha256": "6835d885a2ba2d2266dc043df1bcac04a4840f2d564c08968b63ae220969a734"
+        },
+        {
+          "source": "specification/COMPILER_CONTRACT.json",
+          "bundled": "corpora/contracts/JAXD-JAXD/specification__COMPILER_CONTRACT.json",
+          "sha256": "e7947cf0d5c8fab954240a562cc5d8b7edbd6933151484494c32d033dd3bd4a0"
+        },
+        {
+          "source": "specification/GRAMMAR.ebnf",
+          "bundled": "corpora/contracts/JAXD-JAXD/specification__GRAMMAR.ebnf",
+          "sha256": "2882dad72d9be6c35de302ff3cbf7ac327f9760a081c1814155cbec14f1be652"
+        },
+        {
+          "source": "specification/SEMANTIC_OPERATORS.json",
+          "bundled": "corpora/contracts/JAXD-JAXD/specification__SEMANTIC_OPERATORS.json",
+          "sha256": "2d214a7389ccc05a016710a3afa2aca55c742ce004c61c059bc67470ded8295d"
+        },
+        {
+          "source": "specification/STANDARD_LIBRARY.md",
+          "bundled": "corpora/contracts/JAXD-JAXD/specification__STANDARD_LIBRARY.md",
+          "sha256": "7c548b6fc7673344a97167988daad527dda94a171167c59a0f35331352389bad"
+        },
+        {
+          "source": "catalogs/FEATURE_ATLAS.md",
+          "bundled": "corpora/contracts/JAXD-JAXD/catalogs__FEATURE_ATLAS.md",
+          "sha256": "b44023149a8ce274300eda2488ff6b8b579f54793d76511cca156f0ba590a159"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/JAXD-JAXD/README.md",
+          "sha256": "9081ca04cca58582cda3b5f04589981fb7d8b0ecf53a6b64b39659a55c9c454e"
+        },
+        {
+          "source": "tools/README.md",
+          "bundled": "corpora/contracts/JAXD-JAXD/tools__README.md",
+          "sha256": "6b8c33a2f21b4f2419ebf4452d944c8bc424ce4818272da9d6357e2839b7bea4"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/JAXD-JAXD/starter__README.md",
+          "sha256": "b1e1564a95c18fe2db59451b21c344f6432c317e92d8e7066637c3b8767e4fea"
+        }
+      ]
+    },
+    {
+      "archive": "JA21-MCRT-Portal-Timeline-Language-Suite-1.0.0-main(1).zip",
+      "suite_key": "MCRT-MPTL",
+      "language_title": "Semantic Operator Registry",
+      "archive_sha256": "18397c5e458fc7b17a67025edec2d798395c62feef7de56635a2d6bdb18d186b",
+      "archive_bytes": 9258327,
+      "inner_root": "JA21_MPTL_Suite_1.0.0",
+      "extension_counts": {
+        ".csv": 2,
+        ".ebnf": 2,
+        ".gz": 21,
+        ".json": 39,
+        ".jsonl": 4,
+        ".mcrt": 1024,
+        ".md": 26,
+        ".py": 2,
+        ".sha256": 1,
+        ".svg": 1,
+        ".txt": 1
+      },
+      "bundled_contracts": [
+        {
+          "source": "specifications/CANONICAL_RUNTIME_CONTRACT.json",
+          "bundled": "corpora/contracts/MCRT-MPTL/specifications__CANONICAL_RUNTIME_CONTRACT.json",
+          "sha256": "8605ad856ef4804860b2b2666db6b2d2a27be6d1c8814f70786c2f60bb474140"
+        },
+        {
+          "source": "specifications/RUNTIME_CONTRACT.json",
+          "bundled": "corpora/contracts/MCRT-MPTL/specifications__RUNTIME_CONTRACT.json",
+          "sha256": "ba256d7a6a777df393b8fea9a8a296353972eb0dd40e61e6409f88e4b897a77e"
+        },
+        {
+          "source": "specifications/CANONICAL_COMPILER_CONTRACT.json",
+          "bundled": "corpora/contracts/MCRT-MPTL/specifications__CANONICAL_COMPILER_CONTRACT.json",
+          "sha256": "7ccce17de2cf010d513751aea996f7ff817fd06e5c6704c19b69142553b16cf0"
+        },
+        {
+          "source": "specifications/COMPILER_CONTRACT.json",
+          "bundled": "corpora/contracts/MCRT-MPTL/specifications__COMPILER_CONTRACT.json",
+          "sha256": "76c40d4a2372ac2f9c240aed9105f370375e65c2708ba994179acb1f73cc353c"
+        },
+        {
+          "source": "specifications/CANONICAL_GRAMMAR.ebnf",
+          "bundled": "corpora/contracts/MCRT-MPTL/specifications__CANONICAL_GRAMMAR.ebnf",
+          "sha256": "3a7cfde4aeef5e18dc77767a9832d7f79cc75369d650bcca85405526dd50f78b"
+        },
+        {
+          "source": "specifications/SEMANTIC_OPERATOR_REGISTRY.md",
+          "bundled": "corpora/contracts/MCRT-MPTL/specifications__SEMANTIC_OPERATOR_REGISTRY.md",
+          "sha256": "641faf7ad9ceb6b80a912d108e3c37a609ec790e7a0307c58be9574c8d7a8c73"
+        },
+        {
+          "source": "README.md",
+          "bundled": "corpora/contracts/MCRT-MPTL/README.md",
+          "sha256": "6bc8e71b69840cf6fb10a8c6b299e79ff5e41fa77a156d1f0eae3bfb468725ba"
+        },
+        {
+          "source": "starter/README.md",
+          "bundled": "corpora/contracts/MCRT-MPTL/starter__README.md",
+          "sha256": "cc965cb9515c1905cb075643db6692d0f9ffc61e1509cb7049c40be920f7e228"
+        }
+      ]
+    }
+  ],
+  "engine_contract": {
+    "application": "JA Core Application Language",
+    "interface": "JA Interface Language + JAXD",
+    "security": "JA Security Policy Language",
+    "transport": "JA Service and Protocol Language",
+    "operations": "JA Operations Language",
+    "evidence": "JA Test Simulation and Proof + MCRT Portal Timeline",
+    "deepml": [
+      "DeepML Core",
+      "DeepML Kernel",
+      "DeepML Logic/Functional",
+      "DeepML Motion/Animation",
+      "DeepML Animation/VFX",
+      "DeepML Specialized"
+    ]
+  }
+}

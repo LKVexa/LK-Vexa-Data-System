@@ -1,0 +1,25 @@
+ja source 0.3
+module vb.browser.transport
+use Service
+policy explicit_network
+
+service JAMirrorDocumentTransport {
+    message NavigationRequest { url: Text }
+    message NavigationResult { url: Text, success: Flag }
+    endpoint navigate(request: NavigationRequest) -> NavigationResult auth capability browser.navigation deadline 18s retry max 0 idempotency request.url
+    protocol BrowserSession { state Idle state Fetching state Parsing state Layout state Ready transition start: Idle -> Fetching transition fetched: Fetching -> Parsing transition parsed: Parsing -> Layout transition painted: Layout -> Ready transition reload: Ready -> Fetching }
+}
+service DFSmallHelperBridge {
+    message HelperRequest { operation: Text }
+    message HelperResult { operation: Text, success: Flag }
+    endpoint execute(request: HelperRequest) -> HelperResult auth capability helper.verify deadline 90s retry max 0 idempotency request.operation
+}
+assert protocol.transition.valid == true
+emit json JAMirrorDocumentTransport.compatibility_report
+
+service LiveWebCompositionBridge {
+    message LiveNavigationRequest { url: Text }
+    message LiveNavigationResult { url: Text, success: Flag }
+    endpoint navigate(request: LiveNavigationRequest) -> LiveNavigationResult auth capability browser.navigation deadline 30s retry max 0 idempotency request.url
+    protocol LiveRenderer { state Unavailable state Initializing state Ready state Navigating state Fullscreen transition provision: Unavailable -> Initializing transition initialized: Initializing -> Ready transition navigate: Ready -> Navigating transition settled: Navigating -> Ready transition fullscreen_enter: Ready -> Fullscreen transition fullscreen_exit: Fullscreen -> Ready }
+}
