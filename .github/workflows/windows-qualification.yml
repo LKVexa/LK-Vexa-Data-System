@@ -1,0 +1,182 @@
+name: Test a published Windows candidate
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_tag:
+        description: 'Published candidate tag, for example v3.0.1-candidate.3'
+        required: true
+        type: string
+      sha256:
+        description: 'SHA-256 of LKVS-3.0.1-Windows-x64-candidate.zip'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  qualify:
+    name: Exercise the downloaded application on a fresh hosted runner
+    runs-on: windows-2025
+    timeout-minutes: 35
+    env:
+      CANDIDATE_TAG: ${{ inputs.release_tag }}
+      CANDIDATE_SHA256: ${{ inputs.sha256 }}
+      SOURCE_REPOSITORY: LKVexa/LK-Vexa-Data-System
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Validate the release identity and initialize evidence
+        id: inputs
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = "$env:RUNNER_TEMP\lkvs-q-evidence"
+          New-Item -ItemType Directory -Force -Path $evidence | Out-Null
+          if ($env:CANDIDATE_TAG -cnotmatch '^v3\.0\.1-candidate\.\d+$') { throw 'release_tag must match v3.0.1-candidate.<number>.' }
+          if ($env:CANDIDATE_SHA256 -cnotmatch '^[a-fA-F0-9]{64}$') { throw 'sha256 must contain exactly 64 hexadecimal characters.' }
+          $metadata = [ordered]@{
+            format = 'lkvs-hosted-windows-qualification/1'
+            candidate_tag = $env:CANDIDATE_TAG
+            expected_archive_sha256 = $env:CANDIDATE_SHA256.ToLowerInvariant()
+            workflow_commit = $env:GITHUB_SHA
+            runner_image = "$env:ImageOS / $env:ImageVersion"
+            operating_system = [Environment]::OSVersion.VersionString
+            clean_windows_11_certified = $false
+            scope = 'A fresh GitHub-hosted Windows Server runner. No compiler or Node setup is performed. This is not an attested clean Windows 11 machine.'
+          }
+          $metadata | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$evidence\run-identity.json" -Encoding utf8
+          'Hosted Windows Server observations; clean Windows 11 acceptance remains outstanding.' >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Check out the candidate source for its read-only archive auditor
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ inputs.release_tag }}
+          persist-credentials: false
+
+      - name: Download, hash and audit the exact release archive before extraction
+        id: extract
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = "$env:RUNNER_TEMP\lkvs-q-evidence"
+          $archive = "$env:RUNNER_TEMP\lkvs-candidate.zip"
+          $installed = "$env:RUNNER_TEMP\lkvsq"
+          $asset = 'LKVS-3.0.1-Windows-x64-candidate.zip'
+          $url = 'https://github.com/' + $env:SOURCE_REPOSITORY + '/releases/download/' + $env:CANDIDATE_TAG + '/' + $asset
+          Invoke-WebRequest -Uri $url -OutFile $archive -MaximumRetryCount 3 -TimeoutSec 300
+          $actual = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $env:CANDIDATE_SHA256.ToLowerInvariant()) { throw 'The downloaded archive differs from the requested SHA-256.' }
+          & "$env:GITHUB_WORKSPACE\scripts\Test-WindowsPaths.ps1" -Archive $archive -InstallationRoot $installed -ReportPath "$evidence\archive-paths.json"
+          Expand-Archive -LiteralPath $archive -DestinationPath $installed
+          foreach ($required in 'BOOT.cmd', 'bin\JPBroker.exe', 'bin\JPConsole.exe', 'bin\JPTests.exe', 'SHA256SUMS.txt') {
+            if (-not (Test-Path -LiteralPath "$installed\$required" -PathType Leaf)) { throw ('Candidate archive is missing ' + $required) }
+          }
+          $candidateCommit = & git -C $env:GITHUB_WORKSPACE rev-parse HEAD
+          if ($LASTEXITCODE -ne 0) { throw 'The candidate source tag could not be resolved.' }
+          [ordered]@{ url = $url; bytes = (Get-Item -LiteralPath $archive).Length; sha256 = $actual; source_commit = $candidateCommit; installation_root = $installed } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$evidence\download.json" -Encoding utf8
+
+      - name: Verify the downloaded immutable package
+        id: verify
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & "$env:RUNNER_TEMP\lkvsq\bin\JPBroker.exe" --boot --verify *>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP\lkvs-q-evidence\verify-output.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The downloaded package failed its own immutable inventory verification.' }
+
+      - name: Probe the downloaded CLR, WPF and bundled browser adapter
+        id: probe
+        if: ${{ !cancelled() && steps.verify.outcome == 'success' }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $installed = "$env:RUNNER_TEMP\lkvsq"
+          $output = @(& "$installed\bin\JPConsole.exe" --probe 2>&1)
+          $exitCode = $LASTEXITCODE
+          $output | Set-Content -LiteralPath "$env:RUNNER_TEMP\lkvs-q-evidence\probe-output.txt" -Encoding utf8
+          if ($exitCode -ne 0) { throw ('The downloaded managed probe failed with exit code ' + $exitCode) }
+          $probe = ($output -join "`n") | ConvertFrom-Json
+          $expectedAdapter = [IO.Path]::GetFullPath("$installed\bin\Microsoft.Web.WebView2.Core.dll")
+          $expectedRenderer = [IO.Path]::GetFullPath("$installed\runtime\webview2-fixed")
+          if ($probe.schema -ne 'JP300-MANAGED-PROBE/1' -or $probe.ok -ne $true -or $probe.process64 -ne $true -or $probe.installedRendererFallback -ne $false -or
+              -not [string]::Equals($probe.adapterAssembly, $expectedAdapter, [StringComparison]::OrdinalIgnoreCase) -or
+              -not [string]::Equals($probe.rendererFolder, $expectedRenderer, [StringComparison]::OrdinalIgnoreCase) -or [string]::IsNullOrWhiteSpace($probe.rendererVersion)) {
+            throw 'The managed probe did not confirm the downloaded x64 adapter and bundled Fixed Version browser.'
+          }
+          $probe | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$env:RUNNER_TEMP\lkvs-q-evidence\managed-probe.json" -Encoding utf8
+
+      - name: Diagnose the downloaded installation offline
+        id: doctor
+        if: ${{ !cancelled() && steps.verify.outcome == 'success' }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & "$env:RUNNER_TEMP\lkvsq\bin\JPBroker.exe" --boot --doctor *>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP\lkvs-q-evidence\doctor-output.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The downloaded installation failed its offline readiness checks.' }
+
+      - name: Run packaged native regressions and the actual WPF and Worker smoke test
+        id: qualification
+        timeout-minutes: 15
+        if: ${{ !cancelled() && steps.verify.outcome == 'success' }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & "$env:RUNNER_TEMP\lkvsq\bin\JPBroker.exe" --boot --qualify *>&1 | Tee-Object -FilePath "$env:RUNNER_TEMP\lkvs-q-evidence\qualification-output.txt"
+          if ($LASTEXITCODE -ne 0) { throw ('The downloaded application failed installation qualification with exit code ' + $LASTEXITCODE + '. See the recorded reports; a hosted Windows Server result is not clean Windows 11 certification.') }
+
+      - name: Collect only the approved diagnostic reports and record every outcome
+        if: always()
+        env:
+          EXTRACT_OUTCOME: ${{ steps.extract.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          PROBE_OUTCOME: ${{ steps.probe.outcome }}
+          DOCTOR_OUTCOME: ${{ steps.doctor.outcome }}
+          QUALIFICATION_OUTCOME: ${{ steps.qualification.outcome }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = "$env:RUNNER_TEMP\lkvs-q-evidence"
+          $installed = "$env:RUNNER_TEMP\lkvsq"
+          New-Item -ItemType Directory -Force -Path $evidence | Out-Null
+          $copied = [Collections.Generic.List[string]]::new()
+          $doctor = "$installed\workspace\doctor.json"
+          if ([IO.File]::Exists($doctor)) {
+            Copy-Item -LiteralPath $doctor -Destination "$evidence\doctor.json"
+            $copied.Add('doctor.json')
+          }
+          $qualification = "$installed\workspace\qualification"
+          $approvedNames = @('result.json', 'native-tests.txt', 'managed-probe.json', 'native-command-output.txt', 'standalone-result.json')
+          if ([IO.Directory]::Exists($qualification)) {
+            foreach ($run in Get-ChildItem -LiteralPath $qualification -Directory) {
+              if ($run.Name -cnotmatch '^r-[a-f0-9]{8}$' -or ($run.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { continue }
+              foreach ($name in $approvedNames) {
+                $source = Join-Path $run.FullName $name
+                if ([IO.File]::Exists($source)) {
+                  if (([IO.File]::GetAttributes($source) -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw ('Refusing a linked diagnostic report: ' + $name) }
+                  $destination = "$evidence\qualification\$($run.Name)"
+                  New-Item -ItemType Directory -Force -Path $destination | Out-Null
+                  Copy-Item -LiteralPath $source -Destination (Join-Path $destination $name)
+                  $copied.Add('qualification/' + $run.Name + '/' + $name)
+                }
+              }
+            }
+          }
+          $outcomes = [ordered]@{
+            format = 'lkvs-hosted-windows-qualification-outcomes/1'
+            extract = $env:EXTRACT_OUTCOME
+            immutable_package = $env:VERIFY_OUTCOME
+            managed_probe = $env:PROBE_OUTCOME
+            offline_doctor = $env:DOCTOR_OUTCOME
+            application_qualification = $env:QUALIFICATION_OUTCOME
+            clean_windows_11_certified = $false
+            collected_reports = $copied.ToArray()
+            excluded = @('t/ native fixture state', 'a/ application state', 'TLS keys', 'renderer profiles', 'entire workspace directories')
+            scope = 'Fresh GitHub-hosted Windows Server observations. Any failed test remains a job failure. Interactive clean Windows 11 acceptance must be established separately.'
+          }
+          $outcomes | ConvertTo-Json -Depth 8 | Set-Content -LiteralPath "$evidence\outcomes.json" -Encoding utf8
+          "Package verification: $env:VERIFY_OUTCOME; managed probe: $env:PROBE_OUTCOME; doctor: $env:DOCTOR_OUTCOME; actual application qualification: $env:QUALIFICATION_OUTCOME." >> $env:GITHUB_STEP_SUMMARY
+          'This workflow publishes evidence only. It does not publish binaries or certify a clean Windows 11 installation.' >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Preserve the allowlisted qualification evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: windows-candidate-qualification
+          path: ${{ runner.temp }}/lkvs-q-evidence/
+          if-no-files-found: error
+          retention-days: 30
