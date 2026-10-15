@@ -1,0 +1,208 @@
+name: Preserve successful Windows qualification evidence
+
+on:
+  workflow_dispatch:
+    inputs:
+      qualification_run_id:
+        description: 'Successful Test a published Windows candidate workflow run ID'
+        required: true
+        type: string
+      release_tag:
+        description: 'Existing candidate tag, for example v3.0.1-candidate.3'
+        required: true
+        type: string
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  preserve:
+    name: Validate and preserve the existing reports without rerunning tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      QUALIFICATION_RUN_ID: ${{ inputs.qualification_run_id }}
+      CANDIDATE_TAG: ${{ inputs.release_tag }}
+    steps:
+      - name: Read and validate the qualification run, artifact and candidate identities
+        id: metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GH_REPO" == 'LKVexa/LK-Vexa-Data-System' ]]
+          [[ "$QUALIFICATION_RUN_ID" =~ ^[0-9]+$ ]]
+          [[ "$CANDIDATE_TAG" =~ ^v3\.0\.1-candidate\.[0-9]+$ ]]
+          mkdir evidence
+          gh api "repos/$GH_REPO/actions/runs/$QUALIFICATION_RUN_ID" > evidence/run.json
+          gh api --paginate --slurp "repos/$GH_REPO/actions/runs/$QUALIFICATION_RUN_ID/artifacts?per_page=100" > evidence/artifact-pages.json
+          gh api "repos/$GH_REPO/git/ref/tags/$CANDIDATE_TAG" > evidence/tag.json
+          gh api "repos/$GH_REPO/releases/tags/$CANDIDATE_TAG" > evidence/release.json
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          root = pathlib.Path('evidence')
+          run = json.loads((root / 'run.json').read_text())
+          tag = json.loads((root / 'tag.json').read_text())
+          release = json.loads((root / 'release.json').read_text())
+          pages = json.loads((root / 'artifact-pages.json').read_text())
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+          require(str(run.get('id')) == os.environ['QUALIFICATION_RUN_ID'], 'Unexpected workflow run ID.')
+          require(run.get('status') == 'completed' and run.get('conclusion') == 'success', 'Qualification run did not complete successfully.')
+          require(run.get('event') == 'workflow_dispatch', 'Only a manually dispatched qualification run can be preserved.')
+          require(run.get('path') == '.github/workflows/windows-qualification.yml', 'Unexpected qualification workflow path.')
+          require(run.get('repository', {}).get('full_name') == os.environ['GH_REPO'], 'Qualification run belongs to a different repository.')
+          require(run.get('repository', {}).get('id') is not None and run.get('head_repository', {}).get('id') == run['repository']['id'], 'Fork-origin qualification runs are forbidden.')
+          require(tag.get('ref') == 'refs/tags/' + os.environ['CANDIDATE_TAG'] and tag.get('object', {}).get('type') == 'commit', 'The candidate must have its original lightweight commit tag.')
+          source_commit = tag['object']['sha']
+          require(re.fullmatch(r'[0-9a-f]{40}', source_commit) is not None, 'Invalid candidate source commit.')
+          require(release.get('tag_name') == os.environ['CANDIDATE_TAG'] and release.get('draft') is False, 'The candidate release is not published.')
+          artifacts = [artifact for page in pages for artifact in page['artifacts'] if artifact.get('name') == 'windows-candidate-qualification']
+          require(len(artifacts) == 1, 'Expected exactly one qualification evidence artifact.')
+          artifact = artifacts[0]
+          require(artifact.get('expired') is False, 'Qualification artifact has expired.')
+          require(isinstance(artifact.get('id'), int) and artifact['id'] > 0, 'Invalid qualification artifact ID.')
+          require(re.fullmatch(r'sha256:[0-9a-f]{64}', artifact.get('digest') or '') is not None, 'The artifact API must provide a SHA-256 digest; no digest is inferred.')
+          if artifact.get('workflow_run') is not None:
+              require(artifact['workflow_run'].get('id') == run['id'], 'Artifact run identity does not match the selected run.')
+          candidate_assets = [asset for asset in release['assets'] if asset['name'] == 'LKVS-3.0.1-Windows-x64-candidate.zip']
+          require(len(candidate_assets) == 1, 'The release must contain exactly one complete candidate archive.')
+          output_names = {f"qualification-run-{run['id']}{suffix}" for suffix in ('.zip', '.summary.json', '.zip.sha256')}
+          require(not output_names.intersection(asset['name'] for asset in release['assets']), 'Qualification preservation assets already exist; no assets will be overwritten.')
+          metadata = {'run': run, 'artifact': artifact, 'candidate_tag': os.environ['CANDIDATE_TAG'], 'source_commit': source_commit, 'candidate_asset': candidate_assets[0]}
+          (root / 'validated-metadata.json').write_text(json.dumps(metadata, indent=2) + '\n')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f"artifact_id={artifact['id']}\n")
+          print(json.dumps({'qualification_run': run['id'], 'artifact_id': artifact['id'], 'artifact_digest': artifact['digest'], 'candidate_tag': metadata['candidate_tag'], 'source_commit': source_commit}, indent=2))
+          PY
+
+      - name: Download the original artifact ZIP without transforming its bytes
+        shell: bash
+        env:
+          ARTIFACT_ID: ${{ steps.metadata.outputs.artifact_id }}
+        run: |
+          set -euo pipefail
+          [[ "$ARTIFACT_ID" =~ ^[0-9]+$ ]]
+          gh api "repos/$GH_REPO/actions/artifacts/$ARTIFACT_ID/zip" > "qualification-run-$QUALIFICATION_RUN_ID.zip"
+
+      - name: Verify the raw digest and inspect only the curated reports
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib, json, ntpath, os, pathlib, re, zipfile
+          def require(condition, message):
+              if not condition:
+                  raise SystemExit(message)
+          metadata = json.loads(pathlib.Path('evidence/validated-metadata.json').read_text())
+          run = metadata['run']
+          artifact = metadata['artifact']
+          archive = pathlib.Path(f"qualification-run-{run['id']}.zip")
+          with archive.open('rb') as stream:
+              digest = hashlib.file_digest(stream, 'sha256').hexdigest()
+          require('sha256:' + digest == artifact['digest'], 'The raw downloaded artifact ZIP differs from the GitHub artifact SHA-256 digest.')
+          allowed_root = {'run-identity.json', 'download.json', 'archive-paths.json', 'verify-output.txt', 'probe-output.txt', 'managed-probe.json', 'doctor-output.txt', 'qualification-output.txt', 'doctor.json', 'outcomes.json'}
+          allowed_run = re.compile(r'qualification/r-[0-9a-f]{8}/(?:result\.json|native-tests\.txt|managed-probe\.json|native-command-output\.txt|standalone-result\.json)')
+          with zipfile.ZipFile(archive, 'r') as reports:
+              names = set()
+              total = 0
+              for entry in reports.infolist():
+                  name = entry.filename
+                  require(name not in names, 'Duplicate evidence ZIP member.')
+                  names.add(name)
+                  require('\\' not in name and not name.startswith('/') and all(part not in ('.', '..') for part in name.rstrip('/').split('/')), 'Unsafe evidence ZIP member path.')
+                  require((entry.external_attr >> 16) & 0xF000 != 0xA000 and not entry.flag_bits & 1, 'Linked or encrypted evidence members are forbidden.')
+                  if entry.is_dir():
+                      require(name == 'qualification/' or re.fullmatch(r'qualification/r-[0-9a-f]{8}/', name) is not None, 'Unexpected evidence ZIP directory.')
+                      continue
+                  require(name in allowed_root or allowed_run.fullmatch(name) is not None, 'Artifact includes an unapproved file or raw application state: ' + name)
+                  total += entry.file_size
+                  require(entry.file_size <= 4 * 1024 * 1024 and total <= 16 * 1024 * 1024, 'Evidence archive exceeds the bounded diagnostic report budget.')
+              def read_json(name):
+                  require(name in names, 'Missing qualification report: ' + name)
+                  value = reports.read(name)
+                  require(len(value) <= 1024 * 1024, 'Qualification JSON report is too large.')
+                  return json.loads(value.decode('utf-8-sig'))
+              identity = read_json('run-identity.json')
+              download = read_json('download.json')
+              outcomes = read_json('outcomes.json')
+              result_names = sorted(name for name in names if re.fullmatch(r'qualification/r-[0-9a-f]{8}/result\.json', name))
+              require(len(result_names) == 1, 'Expected exactly one application qualification result.')
+              result = read_json(result_names[0])
+              candidate_tag = metadata['candidate_tag']
+              require(identity.get('candidate_tag') == candidate_tag, 'Run identity does not match the requested candidate tag.')
+              require(identity.get('workflow_commit') == run['head_sha'], 'Run identity differs from the workflow source commit.')
+              require(identity.get('clean_windows_11_certified') is False and outcomes.get('clean_windows_11_certified') is False, 'Hosted runner reports must not claim clean Windows 11 certification.')
+              expected_url = 'https://github.com/' + os.environ['GH_REPO'] + '/releases/download/' + candidate_tag + '/LKVS-3.0.1-Windows-x64-candidate.zip'
+              require(download.get('url') == expected_url and download.get('source_commit') == metadata['source_commit'], 'Qualified download does not match the candidate release and source tag.')
+              candidate_digest = download.get('sha256') or ''
+              require(re.fullmatch(r'[0-9a-f]{64}', candidate_digest) is not None and candidate_digest == identity.get('expected_archive_sha256'), 'Qualified archive SHA-256 identity does not match.')
+              published_digest = metadata['candidate_asset'].get('digest')
+              if published_digest is not None:
+                  require(published_digest == 'sha256:' + candidate_digest, 'The published candidate archive differs from the qualified archive.')
+              for key in ('extract', 'immutable_package', 'managed_probe', 'offline_doctor', 'application_qualification'):
+                  require(outcomes.get(key) == 'success', 'Qualification stage did not succeed: ' + key)
+              require(result.get('schema') == 'JP300-INSTALLATION-QUALIFICATION/1' and result.get('version') == '3.0.1', 'Unexpected application qualification report schema or version.')
+              require(result.get('cleanMachineCertified') is False, 'Application report must preserve the clean-machine certification limitation.')
+              required_true = ('passed', 'pathRestricted', 'testFixturesRetained', 'actualNativeWindowAndWorkerPassed', 'actualCommandFileReadbackPassed', 'actualNativePhotonVerifyAndSnapshotPassed', 'gracefulPresenterExitAndPersistenceAcknowledgement', 'applicationDataIsolated')
+              for key in required_true:
+                  require(result.get(key) is True, 'Required application qualification result is not true: ' + key)
+              require(result.get('installedRendererFallback') is False and result.get('pythonRequired') is False and result.get('nodeRequired') is False and result.get('targetCompilationRequired') is False, 'Qualification report does not confirm the packaged runtime boundary.')
+              passed = result.get('nativeTopLevelPassed')
+              require(isinstance(passed, int) and not isinstance(passed, bool) and passed > 0, 'Qualification did not record passed native regressions.')
+              require(isinstance(result.get('nativeSkipped'), list) and all(isinstance(item, str) for item in result['nativeSkipped']), 'Native skip records are missing or invalid.')
+              managed = result.get('managedProbe') or {}
+              require(managed.get('ok') is True and managed.get('process64') is True and managed.get('installedRendererFallback') is False, 'The actual qualification did not confirm its bundled x64 managed renderer.')
+              installed = download.get('installation_root') or ''
+              require(installed and ntpath.normcase(result.get('packageRoot') or '') == ntpath.normcase(installed), 'The qualification package root differs from the downloaded installation.')
+              require(ntpath.normcase(managed.get('adapterAssembly') or '') == ntpath.normcase(ntpath.join(installed, 'bin', 'Microsoft.Web.WebView2.Core.dll')) and ntpath.normcase(managed.get('rendererFolder') or '') == ntpath.normcase(ntpath.join(installed, 'runtime', 'webview2-fixed')), 'The qualified adapter or renderer resolved outside the downloaded application.')
+              printed = {'run-identity.json': identity, 'download.json': download, 'outcomes.json': outcomes, result_names[0]: result}
+              for name in ('managed-probe.json', 'doctor.json', result_names[0].replace('result.json', 'standalone-result.json')):
+                  if name in names:
+                      printed[name] = read_json(name)
+              for name, value in printed.items():
+                  print('::group::Recorded report: ' + name)
+                  print(json.dumps(value, indent=2, ensure_ascii=True))
+                  print('::endgroup::')
+          summary = {
+              'format': 'lkvs-preserved-qualification-evidence/1',
+              'qualification_run_id': run['id'],
+              'qualification_run_url': f"https://github.com/{os.environ['GH_REPO']}/actions/runs/{run['id']}",
+              'candidate_tag': metadata['candidate_tag'],
+              'candidate_source_commit': metadata['source_commit'],
+              'candidate_archive_sha256': candidate_digest,
+              'candidate_release_asset_digest_compared': published_digest is not None,
+              'artifact_id': artifact['id'],
+              'artifact_name': artifact['name'],
+              'preserved_zip': archive.name,
+              'preserved_zip_bytes': archive.stat().st_size,
+              'preserved_zip_sha256': digest,
+              'application_qualification': result,
+              'workflow_outcomes': outcomes,
+              'reports_included': sorted(names),
+              'clean_windows_11_certified': False,
+              'scope': 'Original successful reports from a fresh GitHub-hosted Windows Server runner. No application tests were rerun and no new binary was built. Clean Windows 11 acceptance remains separate.'
+          }
+          summary_path = pathlib.Path(f"qualification-run-{run['id']}.summary.json")
+          summary_path.write_text(json.dumps(summary, indent=2, ensure_ascii=True) + '\n')
+          pathlib.Path(archive.name + '.sha256').write_text(digest + '  ' + archive.name + '\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write(f"Preserved the original qualification ZIP for {metadata['candidate_tag']}: `{digest}`.\n\n")
+              output.write(f"Actual native top-level passes: {passed}; recorded skips: {len(result['nativeSkipped'])}. Actual WPF/Worker, command file readback, native Photon verification/snapshot, and graceful shutdown flags were all true.\n\n")
+              output.write('These are hosted Windows Server observations, not clean Windows 11 certification.\n')
+          print('Preserved evidence summary:')
+          print(json.dumps(summary, indent=2, ensure_ascii=True))
+          PY
+
+      - name: Attach the original evidence and verified summary to the existing candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          # The default command refuses to overwrite existing release assets.
+          gh release upload "$CANDIDATE_TAG" --repo "$GH_REPO" \
+            "qualification-run-$QUALIFICATION_RUN_ID.zip" \
+            "qualification-run-$QUALIFICATION_RUN_ID.summary.json" \
+            "qualification-run-$QUALIFICATION_RUN_ID.zip.sha256"
