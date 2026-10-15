@@ -65,10 +65,31 @@ jobs:
           $expected = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
           foreach ($source in $currentSources) { [void]$expected.Add($source.Substring($root.Length + 1).Replace('\', '/')) }
           $recorded = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+          $sourceIdentities = [Collections.Generic.List[object]]::new()
+          $lineEndingRestorations = [Collections.Generic.List[object]]::new()
+          $strictUtf8 = [Text.UTF8Encoding]::new($false, $true)
           foreach ($record in $receipt.source_files) {
             if (-not $expected.Contains($record.path) -or -not $recorded.Add($record.path)) { throw ('Unexpected or duplicate compiled source: ' + $record.path) }
             $path = Join-Path $root $record.path
-            if ((Get-Item -LiteralPath $path).Length -ne $record.bytes -or (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $record.sha256) { throw ('Current source differs from the tested binaries: ' + $record.path + '. A new build and qualification are required.') }
+            $beforeDigest = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+            $restored = $false
+            if ((Get-Item -LiteralPath $path).Length -ne $record.bytes -or $beforeDigest -cne $record.sha256) {
+              $testedPath = Join-Path $candidate $record.path
+              if (-not [IO.File]::Exists($testedPath) -or (Get-Item -LiteralPath $testedPath).Length -ne $record.bytes -or (Get-FileHash -LiteralPath $testedPath -Algorithm SHA256).Hash.ToLowerInvariant() -cne $record.sha256) { throw ('Candidate source differs from its tested build receipt: ' + $record.path) }
+              $currentBytes = [IO.File]::ReadAllBytes($path)
+              $testedBytes = [IO.File]::ReadAllBytes($testedPath)
+              # Strict UTF-8 preserves a BOM as U+FEFF. Normalize CRLF only: no
+              # trimming, BOM removal, lone-CR rewriting, or other source edits.
+              $currentText = $strictUtf8.GetString($currentBytes).Replace("`r`n", "`n")
+              $testedText = $strictUtf8.GetString($testedBytes).Replace("`r`n", "`n")
+              if (-not [string]::Equals($currentText, $testedText, [StringComparison]::Ordinal)) { throw ('Current source has a code difference from the tested binaries: ' + $record.path + '. A new build and qualification are required.') }
+              [IO.File]::WriteAllBytes($path, $testedBytes)
+              $afterDigest = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant()
+              if ((Get-Item -LiteralPath $path).Length -ne $record.bytes -or $afterDigest -cne $record.sha256) { throw ('Exact tested source restoration failed: ' + $record.path) }
+              $lineEndingRestorations.Add([ordered]@{ path = $record.path; before_sha256 = $beforeDigest; after_sha256 = $afterDigest; reason = 'CRLF/LF-only transport normalization; exact tested source bytes restored.' })
+              $restored = $true
+            }
+            $sourceIdentities.Add([ordered]@{ path = $record.path; bytes = (Get-Item -LiteralPath $path).Length; sha256 = (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant(); receipt_sha256 = $record.sha256; line_endings_restored = $restored })
           }
           if ($recorded.Count -ne $expected.Count) { throw 'The candidate receipt does not cover the complete current Go/C# source set.' }
           foreach ($record in $receipt.artifact_files) {
@@ -86,7 +107,7 @@ jobs:
               try { $copyInput.CopyTo($copyOutput) } finally { $copyOutput.Dispose(); $copyInput.Dispose() }
             }
           }
-          [ordered]@{ format = 'lkvs-repository-payload-source/1'; candidate_tag = $env:CANDIDATE_TAG; candidate_archive_bytes = [long]$env:CANDIDATE_BYTES; candidate_archive_sha256 = $env:CANDIDATE_SHA256; source_base_commit = $env:PUBLICATION_BASE; compiled_sources_verified = $recorded.Count; note = 'Exact tested candidate binaries and Microsoft runtime; current source, documents, licensing and workflows retained.' } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$root\work\repository-evidence\receipt-check.json" -Encoding utf8
+          [ordered]@{ format = 'lkvs-repository-payload-source/1'; candidate_tag = $env:CANDIDATE_TAG; candidate_archive_bytes = [long]$env:CANDIDATE_BYTES; candidate_archive_sha256 = $env:CANDIDATE_SHA256; source_base_commit = $env:PUBLICATION_BASE; compiled_sources_verified = $recorded.Count; source_identities = $sourceIdentities.ToArray(); line_ending_restorations = $lineEndingRestorations.ToArray(); note = 'Exact tested candidate binaries, compiled source bytes and Microsoft runtime; current documents, licensing and workflows retained.' } | ConvertTo-Json -Depth 6 | Set-Content -LiteralPath "$root\work\repository-evidence\receipt-check.json" -Encoding utf8
 
       - name: Split only the oversized renderer member and write its offline restoration manifest
         run: |
@@ -273,7 +294,7 @@ jobs:
           $boundary = "$root\workspace\qualification"
           $allowed = @('result.json', 'native-tests.txt', 'managed-probe.json', 'native-command-output.txt', 'standalone-result.json')
           $jsonReports = [Collections.Generic.List[string]]::new()
-          foreach ($name in 'source.json', 'tree-statistics.json', 'actual-github-archive.json', 'outcomes.json') { $jsonReports.Add($name) }
+          foreach ($name in 'source.json', 'receipt-check.json', 'tree-statistics.json', 'actual-github-archive.json', 'outcomes.json') { $jsonReports.Add($name) }
           if ([IO.Directory]::Exists($boundary)) {
             foreach ($run in Get-ChildItem -LiteralPath $boundary -Directory) {
               if ($run.Name -cnotmatch '^r-[0-9a-f]{8}$' -or ($run.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { continue }
