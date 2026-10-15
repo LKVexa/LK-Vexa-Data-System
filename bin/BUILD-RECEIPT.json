@@ -1,0 +1,210 @@
+{
+  "format": "lkvs-build-receipt/1",
+  "product_version": "3.0.1",
+  "built_utc": "2026-10-15T03:40:27.6397315Z",
+  "source_files": [
+    {
+      "path": "host/JA21VirtualBrowser.cs",
+      "bytes": 235981,
+      "sha256": "5d900442446349250851e83de438f564adc394c7283a6a0e7530fbe2923855c4"
+    },
+    {
+      "path": "host/JPConsoleEntry.cs",
+      "bytes": 8722,
+      "sha256": "cf1f8883ec0ce90ec287c2625588c845965994d54f74131d0fda313e94aecb6e"
+    },
+    {
+      "path": "host/LiveWebBridge.cs",
+      "bytes": 20596,
+      "sha256": "758afb5c42ccc7c6dae37032237c48f30ee9646a58224ad71d599484557bd0ae"
+    },
+    {
+      "path": "host/LiveWebContracts.cs",
+      "bytes": 6290,
+      "sha256": "bc34ea45ebcff8028e36f8686b029775dce6e54b30833ccb5498b999f2c8b134"
+    },
+    {
+      "path": "host/PortableDesktop.cs",
+      "bytes": 16650,
+      "sha256": "4292dcb5540e1c6bb32b3040da4156aefbdae1886c46a9615ae56bb1cae72259"
+    },
+    {
+      "path": "host/Vec1Substrate.cs",
+      "bytes": 49288,
+      "sha256": "8a6b75f95c56bde570f450b82be914791e9eca17abf49afae92218fcb90d6141"
+    },
+    {
+      "path": "native/boot_test.go",
+      "bytes": 2355,
+      "sha256": "c486ab5a38d31fb7853f1682bb46cae3743905770921f77372d5efba6a3a0c63"
+    },
+    {
+      "path": "native/boot.go",
+      "bytes": 2623,
+      "sha256": "8b7302b233b759dc858f8563ae5532a050beff88bf309a8586572742ad88b9a7"
+    },
+    {
+      "path": "native/bootstrap_test.go",
+      "bytes": 2231,
+      "sha256": "81a52aeb5c0f4590c6d595927252a7ad317fd159fb46f284f579cacf77aa4a62"
+    },
+    {
+      "path": "native/doctor.go",
+      "bytes": 5153,
+      "sha256": "67be01cdf6ab8978b16217d8d5e7cc18cc67594037f0e7cb53b063a549faf3fa"
+    },
+    {
+      "path": "native/engine_integration_test.go",
+      "bytes": 16904,
+      "sha256": "9f067b326fde0a3a98abb5c6d687073b66d019bc547d7e1625b8c3af646c63c7"
+    },
+    {
+      "path": "native/go.mod",
+      "bytes": 33,
+      "sha256": "d0b5679bc49dc7372e7c13000aa8ec7209517f253c0d7a0f7ef690c77e3e8ced"
+    },
+    {
+      "path": "native/hash_test.go",
+      "bytes": 690,
+      "sha256": "6b7465dfdc32542ae8348404243a91a940f4d6a4a2fd694d01a6cd9e76fa71c8"
+    },
+    {
+      "path": "native/ja21_test.go",
+      "bytes": 8678,
+      "sha256": "c988f92bc45d353cb08d6a72d3f96cb16e52e19f3e35f922c5b6957f2c97d970"
+    },
+    {
+      "path": "native/ja21.go",
+      "bytes": 28030,
+      "sha256": "0705cf75269f0356f8f5727631e63841b65b0381eb93e704d99003c20579196a"
+    },
+    {
+      "path": "native/main.go",
+      "bytes": 15648,
+      "sha256": "434473a4a01dc81bd7f6b7a66a9cf3f9be5da2b5281bc13a0aa26a06c16d4774"
+    },
+    {
+      "path": "native/native_window_windows.go",
+      "bytes": 2447,
+      "sha256": "b2214e53d2ad7f75b13d6665dd15de409ff726e8196e43922846f65d66984768"
+    },
+    {
+      "path": "native/photon_test.go",
+      "bytes": 14390,
+      "sha256": "ae21c9186dc7d77608195f7d8ac1555a187fe3eed8788ffffa7d51db545451b9"
+    },
+    {
+      "path": "native/photon.go",
+      "bytes": 32687,
+      "sha256": "669b14bb2c2dee69530514800a5d4d22c152b32ca95c8462d23d79bb020b6b63"
+    },
+    {
+      "path": "native/platform_windows.go",
+      "bytes": 1785,
+      "sha256": "193e7e7034abf7a307f07240ef1cb37c75a1c967654ece107133d0717ec49a5f"
+    },
+    {
+      "path": "native/policy_test.go",
+      "bytes": 8800,
+      "sha256": "488adcc0b6a96a143bc4f815d9ddb63328600a37042d02d8deeb7937e7ae5b86"
+    },
+    {
+      "path": "native/policy.go",
+      "bytes": 14351,
+      "sha256": "de1fa0713ca505c8ef61528de9787a8e85c7eb1a66a6feede84061d4e5750dcc"
+    },
+    {
+      "path": "native/qualification_test.go",
+      "bytes": 1828,
+      "sha256": "269217a8b243671695bb6fb551642bba5bb49f752b1be5db8bd2bda20081d864"
+    },
+    {
+      "path": "native/qualification.go",
+      "bytes": 8228,
+      "sha256": "f180a08135d8d69a087faa0d53539928eb8f0018dd29ae56a69b819894a021a1"
+    },
+    {
+      "path": "native/server_test.go",
+      "bytes": 13953,
+      "sha256": "22a26582e921fc1bb17201d07c69f5c40063e317cb35baca5cc8b58b24962a73"
+    },
+    {
+      "path": "native/server.go",
+      "bytes": 23401,
+      "sha256": "19c262c5fd761a0ae4425d16e49d2df51e9173c0f0bdee00212b875c3a4d366a"
+    },
+    {
+      "path": "native/storage_test.go",
+      "bytes": 5357,
+      "sha256": "f77550ebb7e73719fd8794853bfb1618f81d9bd8bc564af76b2ac038942cf05e"
+    },
+    {
+      "path": "native/storage.go",
+      "bytes": 21974,
+      "sha256": "14640860d35f13ba1cda4075e4a7b9a7128843353965c8d10ff7471bca7bf1f7"
+    },
+    {
+      "path": "native/test_temp_test.go",
+      "bytes": 520,
+      "sha256": "9623d02cb8996213b2fe6322fe441583a2b37234f0f2788ed4c1be7a96ca9157"
+    },
+    {
+      "path": "native/websocket_test.go",
+      "bytes": 6615,
+      "sha256": "b2cec33860040a4edcea17d356be4adf417ee1a06c5d30df811594ad9ce4cb73"
+    },
+    {
+      "path": "native/websocket.go",
+      "bytes": 5996,
+      "sha256": "52d7acecbfa34ea64e2c4330662b068a0f137da32cb55e7f37936c9419c521b1"
+    },
+    {
+      "path": "native/windows_paths_test.go",
+      "bytes": 3324,
+      "sha256": "38cd653858d052dafe64e689525e3e893c0c14d1cdc183b18d8e43ff1970a48c"
+    },
+    {
+      "path": "native/windows_paths.go",
+      "bytes": 2022,
+      "sha256": "b0bf1d061bdb311576ff29ed7e8b72c247fc76f3c1fefe748377ecb2222353f6"
+    }
+  ],
+  "artifact_files": [
+    {
+      "path": "bin/JPBroker.exe",
+      "bytes": 7172608,
+      "sha256": "1693c1469e75db17f64c7e9f9e3e4268c64238c2b0403b90b713cf573923b76f"
+    },
+    {
+      "path": "bin/JPTests.exe",
+      "bytes": 11680256,
+      "sha256": "d1475063194336f2c9cc55b52b43922bd3babd5807f5a37d2abd4606f95fd722"
+    },
+    {
+      "path": "bin/JPConsole.exe",
+      "bytes": 207872,
+      "sha256": "0f773a4a10d5ccbf96f143a203a150ba76d4eb1cfbf119112aa17aa61e92ad80"
+    },
+    {
+      "path": "bin/Microsoft.Web.WebView2.Core.dll",
+      "bytes": 698208,
+      "sha256": "e6f54c8ce208e3797c427d01ad671b47cb25abc85604753d6ec2546d0ffef550"
+    },
+    {
+      "path": "bin/Microsoft.Web.WebView2.Wpf.dll",
+      "bytes": 86368,
+      "sha256": "6942b85a3388ece45febde5584d2bfc035d84315f2dd5a4a47913f01a0193800"
+    },
+    {
+      "path": "bin/WebView2Loader.dll",
+      "bytes": 163680,
+      "sha256": "c66e4a92fdc7a216118e43b7a5024ea2200e8c43f9310bf20d96a0084f82c5bc"
+    }
+  ],
+  "toolchain": {
+    "go": "go version go1.27.2 windows/amd64",
+    "csc": "4.8.9221.0 built by: NET481REL1LAST_25H2",
+    "webview2_sdk": "1.0.4191.47",
+    "fixed_runtime": "155.0.4283.45"
+  }
+}

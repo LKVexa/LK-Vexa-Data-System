@@ -56,8 +56,8 @@
     },
     {
       "path": "host/JA21VirtualBrowser.cs",
-      "bytes": 235663,
-      "sha256": "6a5c68e0306aec7f2008542f5b039e1ff168b50615efb09879dc6d308c9a7eb2"
+      "bytes": 235981,
+      "sha256": "5d900442446349250851e83de438f564adc394c7283a6a0e7530fbe2923855c4"
     },
     {
       "path": "host/LiveWebBridge.cs",
@@ -71,13 +71,13 @@
     },
     {
       "path": "host/PortableDesktop.cs",
-      "bytes": 13295,
-      "sha256": "b4e921d922334301e674e2d1226a0748e5a333e8c0237ace0320afdb75546e7c"
+      "bytes": 16650,
+      "sha256": "4292dcb5540e1c6bb32b3040da4156aefbdae1886c46a9615ae56bb1cae72259"
     },
     {
       "path": "host/Vec1Substrate.cs",
-      "bytes": 49058,
-      "sha256": "9b50f7f3bc918cb4f92dd3b6b93fca6bb830f2eccd222fc612c9ccc7846f6538"
+      "bytes": 49288,
+      "sha256": "8a6b75f95c56bde570f450b82be914791e9eca17abf49afae92218fcb90d6141"
     },
     {
       "path": "runtime/webview2-sdk/1.0.4191.47/Microsoft.Web.WebView2.Core.dll",
@@ -88,11 +88,6 @@
       "path": "runtime/webview2-sdk/1.0.4191.47/Microsoft.Web.WebView2.Wpf.dll",
       "bytes": 86368,
       "sha256": "6942b85a3388ece45febde5584d2bfc035d84315f2dd5a4a47913f01a0193800"
-    },
-    {
-      "path": "runtime/webview2-sdk/1.0.4191.47/PROVISIONED.json",
-      "bytes": 979,
-      "sha256": "b384f49c776b3eaee58bbaff1da36d4a91bb6becb0dd92b0f3fcf18db0e58989"
     },
     {
       "path": "runtime/webview2-sdk/1.0.4191.47/WebView2Loader.dll",
@@ -141,13 +136,13 @@
     },
     {
       "path": "host/JPConsoleEntry.cs",
-      "bytes": 8647,
-      "sha256": "d27c048957de0636a4792ee0ef7196d61b27bb40ee99a34231af0b6921c140e7"
+      "bytes": 8722,
+      "sha256": "cf1f8883ec0ce90ec287c2625588c845965994d54f74131d0fda313e94aecb6e"
     },
     {
       "path": "bin/JPConsole.exe",
-      "bytes": 205824,
-      "sha256": "3f3dab54fd49aac2dff793cb253f1a4297ffdc543e710fd2c2bf4b5813aa623c"
+      "bytes": 207872,
+      "sha256": "0f773a4a10d5ccbf96f143a203a150ba76d4eb1cfbf119112aa17aa61e92ad80"
     },
     {
       "path": "bin/Microsoft.Web.WebView2.Core.dll",

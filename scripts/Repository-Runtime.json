@@ -1,0 +1,48 @@
+{
+  "format": "lkvs-repository-runtime/1",
+  "target": "runtime/webview2-fixed/msedge.dll",
+  "bytes": 353144136,
+  "sha256": "ec287d2f9a668be3025f9913b1fe5b930c192ec48495b5fe31323ef487e4bfdb",
+  "parts": [
+    {
+      "path": "payload/webview2/msedge.dll.000",
+      "bytes": 50331648,
+      "sha256": "47e6d0f2ace208f60f34e6f0ea0f72ed6028b5630e564f72871e5847caf12058"
+    },
+    {
+      "path": "payload/webview2/msedge.dll.001",
+      "bytes": 50331648,
+      "sha256": "11139b2e56db23bbaf0025e430c00116b349b7893a1d1e46a92e74c49bf10746"
+    },
+    {
+      "path": "payload/webview2/msedge.dll.002",
+      "bytes": 50331648,
+      "sha256": "27600274578e4e12df1a25862df68b7403fafc9a7c40e97501aa675286a24067"
+    },
+    {
+      "path": "payload/webview2/msedge.dll.003",
+      "bytes": 50331648,
+      "sha256": "14b170556b86e1fc77f2b0a2fb0417bc0a667245dd5c952f96795518450ef5a5"
+    },
+    {
+      "path": "payload/webview2/msedge.dll.004",
+      "bytes": 50331648,
+      "sha256": "41f71e8abee480379f6e49c90e52bd931775c9ff0701e6c9c93bd63c088b9541"
+    },
+    {
+      "path": "payload/webview2/msedge.dll.005",
+      "bytes": 50331648,
+      "sha256": "314fe1bd9cac77d47b44bbacb54e76246ca3f992ad854828724afe88db7a5d19"
+    },
+    {
+      "path": "payload/webview2/msedge.dll.006",
+      "bytes": 50331648,
+      "sha256": "7ff573ad5593a63da1863651810d50c8330ccefdcd4d35bb31c28cb7aab94abd"
+    },
+    {
+      "path": "payload/webview2/msedge.dll.007",
+      "bytes": 822600,
+      "sha256": "b5ef5e6e3182881e2913b82ca441d0cfa3a731c48f86f3352237dee933230ed6"
+    }
+  ]
+}
