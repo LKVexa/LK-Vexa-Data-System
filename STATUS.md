@@ -39,7 +39,7 @@ The native report intentionally retains `cleanMachineCertified=false`. A fresh f
 
 ## Packaging and path policy
 
-The repository source ZIP excludes generated programs and Microsoft binary dependencies. The named Windows release ZIP includes the three compiled programs, WebView2 managed/native adapters, complete Fixed Version browser, application assets, matching source, GPL/vendor terms and verification inventories. Extract all files into `C:\LKVS` or `D:\LKVS`; `BOOT.cmd` is directly at the archive root. See [RELEASES.md](RELEASES.md).
+The main repository is being assembled as a full JP300 distribution: three compiled programs, both required SDK adapter locations, complete Fixed Version browser bytes, application assets, corresponding source and vendor/GPL notices. Its one oversized DLL is committed as verified binary parts and restored offline by BOOT.cmd before native checks. The native/managed source and compiled artifacts remain those of candidate.3; wrapper, packaging and documentation changes are separate. The full-repository publication workflow records its commit and tests the downloaded GitHub archive. Only a successful recorded result establishes that distribution check. The named candidate.3 Windows release remains the unchanged preassembled artifact above. See [RELEASES.md](RELEASES.md).
 
 Candidate.3 includes the 100 UTF-16-unit installation-root budget, matching Go/C# path guards, bounded qualification directories, short same-directory atomic temporary names, source/binary receipts and audited packaging. Traditional file/directory limits are enforced without changing machine registry, Group Policy or security settings. See [WINDOWS_PORTABILITY.md](WINDOWS_PORTABILITY.md).
 

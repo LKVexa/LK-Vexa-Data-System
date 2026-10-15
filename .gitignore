@@ -1,22 +1,11 @@
-# Mutable application state and environment-specific configuration
+# Generated mutable application state and private machine configuration
 /workspace/
 /certs/
 /server-config.json
-
-# Built executables, separately acquired vendor dependencies and archives
-/bin/
-/runtime/
 /history/
-/SHA256SUMS.txt
-/package.integrity.json
-*.exe
-*.dll
-*.pdb
-*.zip
-*.cab
-*.key
-*.pfx
-*.p12
+
+# msedge.dll is restored offline by BOOT.cmd from committed payload parts.
+/runtime/webview2-fixed/msedge.dll
 
 # Developer and editor scratch data
 /.vs/
@@ -24,5 +13,9 @@
 /work/
 *.tmp
 *.log
+*.pdb
+*.key
+*.pfx
+*.p12
 __pycache__/
 *.pyc

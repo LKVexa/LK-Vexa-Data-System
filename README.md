@@ -2,21 +2,21 @@
 
 **Copyright (C) 2026 RUSSELL PHILIP SMITHSON**
 
-**Source candidate: 3.0.1 · Platform: Windows 11 x64 · Project license: GPL-3.0-only**
+**Executable distribution candidate: 3.0.1 · Platform: Windows 11 x64 · Project license: GPL-3.0-only**
 
-LK/Vexa Data System is a Windows application source distribution combining a native transport broker, a WPF/WebView2 presenter, a browser Worker command engine, a bounded virtual filesystem, source-evaluated admission policy, and a compatible Photon identity/state adapter. The repository includes the application, HERMIT/SPIRAL command implementation, browser interface, VCMD support, native adapters, tests and supporting source material.
+LK/Vexa Data System is a Windows application and source distribution combining a native transport broker, a WPF/WebView2 presenter, a browser Worker command engine, a bounded virtual filesystem, source-evaluated admission policy, and a compatible Photon identity/state adapter. The repository includes the application, HERMIT/SPIRAL command implementation, browser interface, VCMD support, native adapters, tests and supporting source material.
 
 **A complete executable 3.0.1 candidate is available.** The exact-source Windows build passed 57 top-level native test groups, 83 JavaScript tests and 34 path/ZIP cases. A separate fresh Windows Server 2025 runner downloaded the published ZIP, verified its SHA-256 and immutable contents, and passed the actual WPF/WebView2 Worker command qualification. Clean Windows 11 desktop acceptance and the normal no-argument BOOT check on that guest remain outstanding. See [STATUS.md](STATUS.md) for evidence and scope.
 
-This is a **source repository**, not a complete executable appliance. Precompiled executables, Microsoft browser/runtime binaries, historical archives, user workspaces, credentials and private execution logs are excluded. A source checkout must be built and supplied with the documented Microsoft dependencies before `BOOT.cmd` can start the application.
+The **main repository contains the executable JP300 application and corresponding source**, including the compiled programs, SDK adapters and complete Microsoft browser payload. One browser DLL exceeds GitHub's individual-file limit, so its exact bytes are committed in verified parts. `BOOT.cmd` restores that DLL automatically and offline before starting the application. User workspaces, credentials, private execution logs and nested history archives remain excluded.
 
 ## Windows download
 
-**[Download the complete Windows x64 candidate (331,597,148 bytes)](https://github.com/LKVexa/LK-Vexa-Data-System/releases/download/v3.0.1-candidate.3/LKVS-3.0.1-Windows-x64-candidate.zip)** — extract all files into `C:\LKVS` or `D:\LKVS`, then run `BOOT.cmd`. The release is a prerelease while clean Windows 11 acceptance remains open.
+**[Download the entire repository as ZIP](https://github.com/LKVexa/LK-Vexa-Data-System/archive/refs/heads/main.zip)**, or use **Code → Download ZIP** on the main branch. Extract every file, place the folder containing `BOOT.cmd` at a short local path such as `C:\LKVS` or `D:\LKVS`, then run `BOOT.cmd`. No compiler, Node, Python, Git LFS or additional runtime download is required. Keep the `payload/` folder: first launch reconstructs the bundled browser DLL and verifies its full SHA-256. Allow at least 2 GB of free disk space for the downloaded ZIP, extracted files and restored DLL.
 
-For a runnable application, choose the named Windows x64 asset under [GitHub Releases](https://github.com/LKVexa/LK-Vexa-Data-System/releases). GitHub's automatic source ZIP contains source only. The complete Windows package also needs the compiled programs, WebView2 adapters, entire Fixed Version browser and matching inventories. See [RELEASES.md](RELEASES.md) for package contents and version boundaries.
+The [preassembled candidate.3 release ZIP](https://github.com/LKVexa/LK-Vexa-Data-System/releases/download/v3.0.1-candidate.3/LKVS-3.0.1-Windows-x64-candidate.zip) also remains available. It contains the browser DLL already assembled. Historical source-only tags and previously downloaded `-main.zip` files do not gain these new repository contents; download main again. See [RELEASES.md](RELEASES.md) for identities and version boundaries.
 
-Extract into a short local folder such as `C:\LKVS` or `D:\LKVS`. The current source enforces a 100 UTF-16-unit installation-root budget and traditional Windows file/directory limits. See [WINDOWS_PORTABILITY.md](WINDOWS_PORTABILITY.md). A legacy reference download does not include the new native path guards.
+The target is Windows 11 x64 with its Windows/.NET Framework/WPF components. Use a writable local folder. The installation-root budget is 100 UTF-16 units, and traditional file/directory limits are checked. Clean Windows 11 desktop acceptance remains pending; see [STATUS.md](STATUS.md) and [WINDOWS_PORTABILITY.md](WINDOWS_PORTABILITY.md).
 
 ## Contents
 
@@ -95,7 +95,8 @@ Transport authentication, policy decisions, virtual execution and persistence ar
 | `source/` | Deployed admission profile and retained language/service source |
 | `validation/` | Reviewed fixtures and explicitly identified validation material |
 | `scripts/Build-Windows.ps1` | Windows developer build and inventory-refresh workflow |
-| `runtime/` | Dependency staging location; excluded external binary payloads must be supplied locally |
+| `runtime/` | Bundled SDK adapters and complete Fixed Version browser, with the oversized DLL restored by BOOT |
+| `payload/` | Committed binary parts for the oversized browser DLL; retained after offline restoration |
 | `bin/` | Generated native executables and required app-local vendor adapters |
 | `workspace/` | Generated mutable application data; excluded from source publication |
 
@@ -114,7 +115,7 @@ Required operational components are:
 
 Go 1.27.2 and the Windows .NET Framework C# compiler are developer build tools. Production startup does not require Go, Python, Node.js or a PowerShell build process. Node is used only for appropriate developer tests, including an optional retained-engine/native-broker integration test.
 
-Normal presenter startup selects the package-local Fixed Version browser and fails if it is missing. It does not automatically download a browser or fall back to an installed Evergreen runtime. Obtain Microsoft components through their official distribution channels and retain their licenses. This repository does not supply those excluded binaries or relicense them under GPL.
+Normal presenter startup selects the package-local Fixed Version browser and fails if it is missing. It does not automatically download a browser or fall back to an installed Evergreen runtime. The repository supplies the recorded vendor payload under its separate Microsoft terms. The offline restoration step joins existing local bytes; it does not download or install vendor software, accept terms or relicense the runtime under GPL. Obtain replacement vendor versions through official channels and retain their licences.
 
 See [DEPENDENCIES.md](DEPENDENCIES.md) for official acquisition references, exact staging layout and the recorded reference runtime artifact identity.
 
@@ -122,7 +123,7 @@ Windows 10, ARM64, Windows Server, Windows N optional-media configurations and a
 
 ## 5. Build and installation
 
-Work from a local Windows checkout. Stage the complete SDK and Fixed Version runtime in the directories above; do not substitute a browser executable without its accompanying vendor files. Review the build script before running it.
+Ordinary users run `BOOT.cmd` from the complete main download; the steps below are for developers rebuilding the source. Work from a local Windows checkout and first run BOOT once to restore the bundled browser DLL, or invoke `scripts/Restore-RepositoryRuntime.ps1` in a permitted PowerShell session. Preserve the complete SDK and Fixed Version runtime; do not substitute a browser executable without its accompanying vendor files. Review the build script before running it.
 
 ```powershell
 powershell.exe -NoProfile -File .\scripts\Build-Windows.ps1
@@ -280,7 +281,9 @@ WebSocket writes are serialized with deadlines and pending-byte backpressure. HT
 
 ## 15. Integrity and qualification
 
-The outer SHA-256 inventory checks immutable bytes and exact coverage, rejecting duplicate aliases, traversal and unexpected executable caches. Mutable exclusions include `workspace/`, `work/`, `certs/` and `server-config.json`; Git metadata and inventory self-references are also excluded. Current source hashes large renderer files with a fixed 1 MiB streaming buffer. The published candidate was rebuilt from source commit `629d44dc5c975ee5cb9d49576201d1b9aa5b4464`; its receipt and package passed the hosted build and downloaded-package checks.
+The outer SHA-256 inventory checks immutable bytes and exact coverage, rejecting duplicate aliases, traversal and unexpected executable caches. Mutable exclusions include `workspace/`, `work/`, `certs/` and `server-config.json`; Git metadata and inventory self-references are also excluded. Current source hashes large renderer files with a fixed 1 MiB streaming buffer. The compiled application inherited by the full repository was rebuilt from source commit `629d44dc5c975ee5cb9d49576201d1b9aa5b4464`; its receipt and package passed the hosted build and downloaded-package checks.
+
+Before native integrity checks, the repository launcher restores the one oversized DLL from `payload/` if it is absent. The outer manifest describes the complete restored installation, including the retained parts. Before the first BOOT, a raw repository tree intentionally lacks that assembled DLL and is not yet an assembled-package verification target. Exact bytes are preserved by `.gitattributes` to prevent Git line-ending conversion from invalidating the inventory.
 
 `--qualify` is designed to run precompiled regressions without target compilation, restrict PATH to Windows directories, use package-local temporary data, probe the actual CLR/WPF/SDK/Fixed browser, and launch the real native presenter/Worker against an isolated VCMD smoke workflow. Output checks include file readback, Photon verification/snapshot, successful result and graceful persistence acknowledgment.
 
@@ -315,6 +318,6 @@ Project-owned source is offered under the **GNU General Public License, version 
 
 > LK/Vexa Data System — Copyright (C) 2026 RUSSELL PHILIP SMITHSON
 
-Read [LICENSE](LICENSE), [NOTICE](NOTICE), [COPYRIGHT](COPYRIGHT), [LICENSING.md](LICENSING.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Preserve applicable upstream notices and provenance. Independently licensed third-party material remains subject to its own terms. Microsoft WebView2/browser/SDK components are not relicensed by the project GPL and their excluded binary distributions must be acquired and handled under their applicable vendor terms.
+Read [LICENSE](LICENSE), [NOTICE](NOTICE), [COPYRIGHT](COPYRIGHT), [LICENSING.md](LICENSING.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Preserve applicable upstream notices and provenance. Independently licensed third-party material remains subject to its own terms. The bundled Microsoft WebView2/browser/SDK components are not relicensed by the project GPL and remain subject to their applicable vendor terms.
 
 The repository is provided with the warranty limitations stated in the license. A project name, copyright notice or detailed architecture document does not imply a registered legal institution, third-party endorsement or operational certification.

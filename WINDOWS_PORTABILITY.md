@@ -4,9 +4,9 @@ Copyright (C) 2026 RUSSELL PHILIP SMITHSON
 
 ## Installation
 
-Extract the **contents** of the Windows release ZIP into a short, writable local folder such as `C:\LKVS` or `D:\LKVS`. That folder should contain `BOOT.cmd`, `bin`, `runtime` and the application directories directly. Run the extracted `BOOT.cmd`; running a file inside an archive is unsupported.
+Extract the **contents** of the Windows release ZIP into a short, writable local folder such as `C:\LKVS` or `D:\LKVS`. That folder should contain `BOOT.cmd`, `bin`, `runtime` and the application directories directly. GitHub's main ZIP adds an outer repository folder; use the folder containing BOOT.cmd as the installation root. The main repository also includes `payload/`: BOOT restores the one oversized browser DLL from those local parts, with SHA-256 checks, before native startup. Keep every payload part after restoration. Run the extracted `BOOT.cmd`; running a file inside an archive is unsupported.
 
-The application targets Windows 11 x64 with the required OS CLR/WPF components. Its complete Fixed Version WebView2 distribution is app-local. Development tools are needed to build source, not to start an assembled package. Current acceptance limits are recorded in [STATUS.md](STATUS.md).
+The application targets Windows 11 x64 with the required OS CLR/WPF components. Its complete Fixed Version WebView2 distribution is app-local. Development tools are needed to rebuild source, not to start the complete main download or a preassembled release. Offline repository restoration uses Windows PowerShell/.NET facilities already supplied by Windows and does not change execution policy, registry or security settings. Enterprise application-control restrictions can still prevent script execution. Current acceptance limits are recorded in [STATUS.md](STATUS.md).
 
 ## Supported path envelope
 

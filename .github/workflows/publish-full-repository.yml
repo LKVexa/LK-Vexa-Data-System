@@ -1,0 +1,312 @@
+name: Publish and qualify the complete runnable repository
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: full-runnable-main-publication
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    name: Assemble the qualified binaries into main and test its actual Code ZIP
+    runs-on: windows-2025
+    timeout-minutes: 60
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      GH_PROMPT_DISABLED: '1'
+      GIT_TERMINAL_PROMPT: '0'
+      CANDIDATE_TAG: v3.0.1-candidate.3
+      CANDIDATE_SHA256: e63e1e0666ef99a79e5cbc6b785932f11c96abac7c39d6a5282fb4a4218f2981
+      CANDIDATE_BYTES: '331597148'
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out current main without storing credentials in its files
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+          persist-credentials: false
+          fetch-depth: 1
+
+      - name: Record the publication base and fetch the exact tested candidate
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:GH_REPO -cne 'LKVexa/LK-Vexa-Data-System' -or $env:GITHUB_REF -cne 'refs/heads/main') { throw 'This manual publication is restricted to the original repository main branch.' }
+          if ($env:GITHUB_WORKSPACE.Length -gt 100) { throw 'The source checkout exceeds the supported Windows root limit.' }
+          $evidence = "$env:GITHUB_WORKSPACE\work\repository-evidence"
+          New-Item -ItemType Directory -Force -Path $evidence | Out-Null
+          $base = (& git -C $env:GITHUB_WORKSPACE rev-parse HEAD).Trim()
+          if ($LASTEXITCODE -ne 0 -or $base -cnotmatch '^[a-f0-9]{40}$') { throw 'Could not determine the publication base commit.' }
+          "PUBLICATION_BASE=$base" >> $env:GITHUB_ENV
+          $archive = "$env:RUNNER_TEMP\lkvs-tested-candidate.zip"
+          $url = 'https://github.com/' + $env:GH_REPO + '/releases/download/' + $env:CANDIDATE_TAG + '/LKVS-3.0.1-Windows-x64-candidate.zip'
+          Invoke-WebRequest -Uri $url -OutFile $archive -MaximumRetryCount 3 -TimeoutSec 300
+          $sha = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ((Get-Item -LiteralPath $archive).Length -ne [long]$env:CANDIDATE_BYTES -or $sha -cne $env:CANDIDATE_SHA256) { throw 'The complete candidate does not match the previously tested archive bytes and SHA-256.' }
+          $candidate = "$env:RUNNER_TEMP\lkvc"
+          & "$env:GITHUB_WORKSPACE\scripts\Test-WindowsPaths.ps1" -Archive $archive -InstallationRoot $candidate -ReportPath "$evidence\candidate-paths.json"
+          Expand-Archive -LiteralPath $archive -DestinationPath $candidate
+          [ordered]@{ candidate_tag = $env:CANDIDATE_TAG; candidate_url = $url; candidate_bytes = [long]$env:CANDIDATE_BYTES; candidate_sha256 = $sha; publication_base = $base; runner = "$env:ImageOS / $env:ImageVersion"; operating_system = [Environment]::OSVersion.VersionString; clean_windows_11_certified = $false } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$evidence\source.json" -Encoding utf8
+
+      - name: Check current compiled source against the candidate build receipt and copy its binaries
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $candidate = "$env:RUNNER_TEMP\lkvc"
+          $root = $env:GITHUB_WORKSPACE
+          $receipt = [IO.File]::ReadAllText("$candidate\bin\BUILD-RECEIPT.json") | ConvertFrom-Json
+          if ($receipt.format -cne 'lkvs-build-receipt/1' -or $receipt.product_version -cne [IO.File]::ReadAllText("$root\VERSION").Trim()) { throw 'Candidate build receipt format or product version does not match current main.' }
+          $currentSources = @([IO.Directory]::GetFiles("$root\host", '*.cs', [IO.SearchOption]::AllDirectories)) + @([IO.Directory]::GetFiles("$root\native", '*.go', [IO.SearchOption]::AllDirectories)) + @("$root\native\go.mod")
+          $expected = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+          foreach ($source in $currentSources) { [void]$expected.Add($source.Substring($root.Length + 1).Replace('\', '/')) }
+          $recorded = [Collections.Generic.HashSet[string]]::new([StringComparer]::Ordinal)
+          foreach ($record in $receipt.source_files) {
+            if (-not $expected.Contains($record.path) -or -not $recorded.Add($record.path)) { throw ('Unexpected or duplicate compiled source: ' + $record.path) }
+            $path = Join-Path $root $record.path
+            if ((Get-Item -LiteralPath $path).Length -ne $record.bytes -or (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $record.sha256) { throw ('Current source differs from the tested binaries: ' + $record.path + '. A new build and qualification are required.') }
+          }
+          if ($recorded.Count -ne $expected.Count) { throw 'The candidate receipt does not cover the complete current Go/C# source set.' }
+          foreach ($record in $receipt.artifact_files) {
+            $path = Join-Path $candidate $record.path
+            if ((Get-Item -LiteralPath $path).Length -ne $record.bytes -or (Get-FileHash -LiteralPath $path -Algorithm SHA256).Hash.ToLowerInvariant() -cne $record.sha256) { throw ('Candidate binary differs from its build receipt: ' + $record.path) }
+          }
+          foreach ($tree in 'bin', 'runtime') {
+            $prefix = "$candidate\$tree\"
+            foreach ($file in Get-ChildItem -LiteralPath "$candidate\$tree" -File -Recurse) {
+              $relative = $file.FullName.Substring($prefix.Length)
+              $destination = "$root\$tree\$relative"
+              [void][IO.Directory]::CreateDirectory((Split-Path -Parent $destination))
+              $copyInput = [IO.File]::OpenRead($file.FullName)
+              $copyOutput = [IO.File]::Open($destination, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::None)
+              try { $copyInput.CopyTo($copyOutput) } finally { $copyOutput.Dispose(); $copyInput.Dispose() }
+            }
+          }
+          [ordered]@{ format = 'lkvs-repository-payload-source/1'; candidate_tag = $env:CANDIDATE_TAG; candidate_archive_bytes = [long]$env:CANDIDATE_BYTES; candidate_archive_sha256 = $env:CANDIDATE_SHA256; source_base_commit = $env:PUBLICATION_BASE; compiled_sources_verified = $recorded.Count; note = 'Exact tested candidate binaries and Microsoft runtime; current source, documents, licensing and workflows retained.' } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$root\work\repository-evidence\receipt-check.json" -Encoding utf8
+
+      - name: Split only the oversized renderer member and write its offline restoration manifest
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = $env:GITHUB_WORKSPACE
+          $target = "$root\runtime\webview2-fixed\msedge.dll"
+          if ((Get-Item -LiteralPath $target).Length -ne 353144136) { throw 'Unexpected renderer member size; do not publish a different runtime implicitly.' }
+          $wholeDigest = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant()
+          $partsDirectory = "$root\payload\webview2"
+          [void][IO.Directory]::CreateDirectory($partsDirectory)
+          $parts = [Collections.Generic.List[object]]::new()
+          $stream = [IO.File]::OpenRead($target)
+          $buffer = [byte[]]::new(1024 * 1024)
+          try {
+            $partIndex = 0
+            while ($stream.Position -lt $stream.Length) {
+              $relative = 'payload/webview2/msedge.dll.' + $partIndex.ToString('000')
+              $partPath = Join-Path $root $relative
+              $part = [IO.File]::Open($partPath, [IO.FileMode]::Create, [IO.FileAccess]::Write, [IO.FileShare]::None)
+              $partBytes = [long]0
+              try {
+                while ($partBytes -lt 48MB -and $stream.Position -lt $stream.Length) {
+                  $read = $stream.Read($buffer, 0, [int][Math]::Min($buffer.Length, 48MB - $partBytes))
+                  if ($read -eq 0) { throw 'Unexpected end of the renderer input stream.' }
+                  $part.Write($buffer, 0, $read)
+                  $partBytes += $read
+                }
+              } finally { $part.Dispose() }
+              $parts.Add([ordered]@{ path = $relative; bytes = $partBytes; sha256 = (Get-FileHash -LiteralPath $partPath -Algorithm SHA256).Hash.ToLowerInvariant() })
+              $partIndex++
+            }
+          } finally { $stream.Dispose() }
+          if ($parts.Count -ne 8 -or @($parts | Where-Object bytes -ge 50MB).Count -ne 0) { throw 'The renderer must occupy exactly eight normal Git blobs below 50 MiB.' }
+          $manifest = [ordered]@{ format = 'lkvs-repository-runtime/1'; target = 'runtime/webview2-fixed/msedge.dll'; bytes = 353144136; sha256 = $wholeDigest; parts = $parts.ToArray() }
+          [IO.File]::WriteAllText("$root\scripts\Repository-Runtime.json", (($manifest | ConvertTo-Json -Depth 6) + "`n"), [Text.UTF8Encoding]::new($false))
+          Copy-Item -LiteralPath "$root\work\repository-evidence\receipt-check.json" -Destination "$root\payload\Repository-Source.json"
+
+      - name: Exercise the offline restorer in Windows PowerShell 5.1 and PowerShell 7
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:LKVS_RESTORE_TEST_SCRIPT = "$env:GITHUB_WORKSPACE\scripts\Test-RepositoryRuntime.ps1"
+          $env:LKVS_RESTORE_TEST_SOURCE = $env:GITHUB_WORKSPACE
+          $inline = '& ([ScriptBlock]::Create([IO.File]::ReadAllText($env:LKVS_RESTORE_TEST_SCRIPT))) -SelfTest -RequireReparseTest -SourceDirectory $env:LKVS_RESTORE_TEST_SOURCE -EvidenceDirectory $env:LKVS_RESTORE_TEST_EVIDENCE'
+          $env:LKVS_RESTORE_TEST_EVIDENCE = "$env:RUNNER_TEMP\rr\ps5"
+          & "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -NoLogo -NoProfile -NonInteractive -Command $inline *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\repository-evidence\restorer-ps5.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'Windows PowerShell 5.1 restorer fixtures failed.' }
+          $pwsh = (Get-Command pwsh -CommandType Application -ErrorAction Stop | Select-Object -First 1).Source
+          $env:LKVS_RESTORE_TEST_EVIDENCE = "$env:RUNNER_TEMP\rr\ps7"
+          & $pwsh -NoLogo -NoProfile -NonInteractive -Command $inline *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\repository-evidence\restorer-ps7.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'PowerShell 7 restorer fixtures failed.' }
+
+      - name: Refresh the complete inventory and prove BOOT can restore the absent DLL offline
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = $env:GITHUB_WORKSPACE
+          $evidence = "$root\work\repository-evidence"
+          & "$root\native\refresh-manifests.ps1" *>&1 | Tee-Object -FilePath "$evidence\inventory-refresh.txt"
+          if (-not $?) { throw 'Repository inventory regeneration failed.' }
+          & "$root\bin\JPBroker.exe" --boot --verify *>&1 | Tee-Object -FilePath "$evidence\assembled-verify.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The assembled repository failed verification.' }
+          & "$root\bin\JPBroker.exe" --boot --doctor *>&1 | Tee-Object -FilePath "$evidence\assembled-doctor.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The assembled repository failed readiness checks.' }
+          & "$root\bin\JPConsole.exe" --probe *>&1 | Tee-Object -FilePath "$evidence\assembled-probe.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The assembled repository failed the managed renderer probe.' }
+          $target = [IO.Path]::GetFullPath("$root\runtime\webview2-fixed\msedge.dll")
+          if ($target -cne ([IO.Path]::GetFullPath($root).TrimEnd('\') + '\runtime\webview2-fixed\msedge.dll')) { throw 'Unsafe restoration test target.' }
+          Remove-Item -LiteralPath $target
+          & "$root\BOOT.cmd" --verify *>&1 | Tee-Object -FilePath "$evidence\boot-offline-restore.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'BOOT did not restore and verify the complete runtime offline.' }
+          $manifest = [IO.File]::ReadAllText("$root\scripts\Repository-Runtime.json") | ConvertFrom-Json
+          if ((Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash.ToLowerInvariant() -cne $manifest.sha256) { throw 'Restored DLL digest differs from the original tested candidate member.' }
+          & "$root\scripts\Test-WindowsPaths.ps1" -Directory $root -InstallationRoot $root -ReportPath "$evidence\assembled-paths.json"
+
+      - name: Stage exact bytes, reject oversized or private members, and publish a fast-forward commit
+        id: publish
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = $env:GITHUB_WORKSPACE
+          $evidence = "$root\work\repository-evidence"
+          & git -C $root config core.autocrlf false
+          & git -C $root add --all
+          if ($LASTEXITCODE -ne 0) { throw 'Could not stage the complete repository.' }
+          $staged = @(& git -C $root ls-files --stage)
+          if ($LASTEXITCODE -ne 0) { throw 'Could not read the staged tree.' }
+          $index = @{}
+          foreach ($line in $staged) {
+            if ($line -notmatch '^100644 ([a-f0-9]{40}) 0\t(.+)$') { throw ('Unexpected Git index mode or stage: ' + $line) }
+            $path = $Matches[2]
+            if ($path -match '^(workspace|work|certs|history)(/|$)' -or $path -eq 'server-config.json' -or $path -match '\.(key|pfx|p12)$' -or $path -eq 'runtime/webview2-fixed/msedge.dll') { throw ('Private, mutable, historical, or oversized member in the Git index: ' + $path) }
+            $index[$path] = $Matches[1]
+          }
+          $objectIds = @($index.Values | Sort-Object -Unique)
+          $objectInfo = @($objectIds | & git -C $root cat-file '--batch-check=%(objectname) %(objecttype) %(objectsize)')
+          if ($LASTEXITCODE -ne 0) { throw 'Could not inspect staged blob sizes.' }
+          $sizes = @{}
+          foreach ($line in $objectInfo) {
+            if ($line -notmatch '^([a-f0-9]{40}) blob (\d+)$') { throw ('Unexpected Git object: ' + $line) }
+            $sizes[$Matches[1]] = [long]$Matches[2]
+            if ([long]$Matches[2] -ge 50MB) { throw 'Every committed blob must remain below 50 MiB.' }
+          }
+          $receipt = [IO.File]::ReadAllText("$root\bin\BUILD-RECEIPT.json") | ConvertFrom-Json
+          foreach ($record in @($receipt.source_files) + @($receipt.artifact_files)) {
+            $rawId = (& git -C $root hash-object --no-filters -- (Join-Path $root $record.path)).Trim()
+            if ($LASTEXITCODE -ne 0 -or -not $index.ContainsKey($record.path) -or $rawId -cne $index[$record.path]) { throw ('Git filtering changed a compiled source or binary: ' + $record.path) }
+          }
+          $treeBytes = [long]0
+          foreach ($id in $index.Values) { $treeBytes += $sizes[$id] }
+          $largest = ($sizes.Values | Measure-Object -Maximum).Maximum
+          [ordered]@{ files = $index.Count; git_tree_unpacked_bytes = $treeBytes; largest_blob_bytes = $largest; restored_dll_bytes = 353144136; installed_bytes_after_offline_restoration = $treeBytes + 353144136; compiled_source_files = @($receipt.source_files).Count; candidate_sha256 = $env:CANDIDATE_SHA256; lfs_required = $false } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$evidence\tree-statistics.json" -Encoding utf8
+          & git -C $root config user.name 'github-actions[bot]'
+          & git -C $root config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          & git -C $root config --local credential.https://github.com.helper ''
+          & git -C $root config --local --add credential.https://github.com.helper '!gh auth git-credential'
+          $remote = @(& git -C $root ls-remote --exit-code origin refs/heads/main)
+          if ($LASTEXITCODE -ne 0 -or $remote.Count -ne 1 -or ($remote[0] -split '\s+')[0] -cne $env:PUBLICATION_BASE) { throw 'Remote main changed during assembly; no push was attempted. Rerun against the new main.' }
+          & git -C $root commit -m 'Bundle the complete qualified JP300 runtime for offline Code ZIP startup'
+          if ($LASTEXITCODE -ne 0) { throw 'The full repository commit could not be created.' }
+          $commit = (& git -C $root rev-parse HEAD).Trim()
+          & git -C $root push origin 'HEAD:refs/heads/main'
+          if ($LASTEXITCODE -ne 0) { throw 'The fast-forward push failed; no forced update was attempted.' }
+          "commit=$commit" >> $env:GITHUB_OUTPUT
+          "PUBLISHED_COMMIT=$commit" >> $env:GITHUB_ENV
+          [ordered]@{ commit = $commit; parent = $env:PUBLICATION_BASE; source_zip_url = 'https://github.com/' + $env:GH_REPO + '/archive/' + $commit + '.zip'; distribution_qualification = 'pending actual GitHub archive test below' } | ConvertTo-Json | Set-Content -LiteralPath "$evidence\publication.json" -Encoding utf8
+
+      - name: Download and audit the actual GitHub Code ZIP for the newly published main commit
+        id: archive
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = "$env:GITHUB_WORKSPACE\work\repository-evidence"
+          $archive = "$env:RUNNER_TEMP\lkvs-main.zip"
+          $container = "$env:RUNNER_TEMP\lkva"
+          $destination = "$env:RUNNER_TEMP\lkvsrepo"
+          $url = 'https://github.com/' + $env:GH_REPO + '/archive/' + $env:PUBLISHED_COMMIT + '.zip'
+          Invoke-WebRequest -Uri $url -OutFile $archive -MaximumRetryCount 3 -TimeoutSec 300
+          $sha = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          & "$env:GITHUB_WORKSPACE\scripts\Test-WindowsPaths.ps1" -Archive $archive -InstallationRoot $container -ReportPath "$evidence\github-archive-paths.json"
+          Add-Type -AssemblyName System.IO.Compression.FileSystem
+          $zip = [IO.Compression.ZipFile]::OpenRead($archive)
+          try {
+            $wrappers = @($zip.Entries | ForEach-Object { $_.FullName.Split('/')[0] } | Sort-Object -Unique)
+            if ($wrappers.Count -ne 1 -or $wrappers[0] -cne ('LK-Vexa-Data-System-' + $env:PUBLISHED_COMMIT)) { throw 'GitHub archive did not contain its single expected commit wrapper.' }
+          } finally { $zip.Dispose() }
+          Expand-Archive -LiteralPath $archive -DestinationPath $container
+          $wrapper = [IO.Path]::GetFullPath((Join-Path $container $wrappers[0]))
+          $containerFull = [IO.Path]::GetFullPath($container).TrimEnd('\')
+          $destinationFull = [IO.Path]::GetFullPath($destination)
+          if (-not $wrapper.StartsWith($containerFull + '\', [StringComparison]::OrdinalIgnoreCase) -or -not $destinationFull.StartsWith([IO.Path]::GetFullPath($env:RUNNER_TEMP).TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase) -or [IO.Directory]::Exists($destinationFull)) { throw 'Unsafe or occupied archive test destination.' }
+          Move-Item -LiteralPath $wrapper -Destination $destinationFull
+          if (-not [IO.File]::Exists("$destinationFull\BOOT.cmd") -or [IO.File]::Exists("$destinationFull\runtime\webview2-fixed\msedge.dll")) { throw 'Code ZIP must contain BOOT and stored renderer parts, with no preassembled oversized DLL.' }
+          & "$destinationFull\scripts\Test-WindowsPaths.ps1" -Directory $destinationFull -InstallationRoot $destinationFull -ReportPath "$evidence\extracted-main-paths.json"
+          [ordered]@{ commit = $env:PUBLISHED_COMMIT; url = $url; sha256 = $sha; bytes = (Get-Item -LiteralPath $archive).Length; github_wrapper = $wrappers[0]; final_test_root = $destinationFull; oversized_dll_initially_absent = $true; clean_windows_11_certified = $false } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$evidence\actual-github-archive.json" -Encoding utf8
+
+      - name: Verify offline restoration and readiness from the actual GitHub archive
+        id: verify
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $root = "$env:RUNNER_TEMP\lkvsrepo"
+          & "$root\BOOT.cmd" --verify *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\repository-evidence\github-boot-verify.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The actual GitHub archive did not restore and verify offline.' }
+          & "$root\BOOT.cmd" --doctor *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\repository-evidence\github-boot-doctor.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The actual GitHub archive did not pass offline readiness checks.' }
+
+      - name: Qualify the actual GitHub archive with the real WPF presenter and Worker
+        id: qualification
+        timeout-minutes: 15
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & "$env:RUNNER_TEMP\lkvsrepo\BOOT.cmd" --qualify *>&1 | Tee-Object -FilePath "$env:GITHUB_WORKSPACE\work\repository-evidence\github-boot-qualification.txt"
+          if ($LASTEXITCODE -ne 0) { throw 'The full repository Code ZIP failed application qualification. The published commit remains available for diagnosis; this job is not a pass.' }
+
+      - name: Collect only approved application reports and state the distribution result
+        if: always()
+        env:
+          PUBLICATION_OUTCOME: ${{ steps.publish.outcome }}
+          ARCHIVE_OUTCOME: ${{ steps.archive.outcome }}
+          VERIFY_OUTCOME: ${{ steps.verify.outcome }}
+          QUALIFICATION_OUTCOME: ${{ steps.qualification.outcome }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $evidence = "$env:GITHUB_WORKSPACE\work\repository-evidence"
+          [void][IO.Directory]::CreateDirectory($evidence)
+          $root = "$env:RUNNER_TEMP\lkvsrepo"
+          if ([IO.File]::Exists("$root\workspace\doctor.json")) { Copy-Item -LiteralPath "$root\workspace\doctor.json" -Destination "$evidence\doctor.json" }
+          $boundary = "$root\workspace\qualification"
+          $allowed = @('result.json', 'native-tests.txt', 'managed-probe.json', 'native-command-output.txt', 'standalone-result.json')
+          $jsonReports = [Collections.Generic.List[string]]::new()
+          foreach ($name in 'source.json', 'tree-statistics.json', 'actual-github-archive.json', 'outcomes.json') { $jsonReports.Add($name) }
+          if ([IO.Directory]::Exists($boundary)) {
+            foreach ($run in Get-ChildItem -LiteralPath $boundary -Directory) {
+              if ($run.Name -cnotmatch '^r-[0-9a-f]{8}$' -or ($run.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { continue }
+              foreach ($name in $allowed) {
+                $source = Join-Path $run.FullName $name
+                if ([IO.File]::Exists($source)) {
+                  if (([IO.File]::GetAttributes($source) -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw 'A qualification report is unexpectedly a reparse point.' }
+                  $destination = "$evidence\qualification\$($run.Name)"
+                  [void][IO.Directory]::CreateDirectory($destination)
+                  Copy-Item -LiteralPath $source -Destination (Join-Path $destination $name)
+                  if ($name -ceq 'result.json') { $jsonReports.Add('qualification/' + $run.Name + '/result.json') }
+                }
+              }
+            }
+          }
+          [ordered]@{ format = 'lkvs-full-repository-publication/1'; commit = $env:PUBLISHED_COMMIT; publication = $env:PUBLICATION_OUTCOME; actual_github_archive = $env:ARCHIVE_OUTCOME; offline_boot_verify_and_doctor = $env:VERIFY_OUTCOME; actual_wpf_worker_qualification = $env:QUALIFICATION_OUTCOME; clean_windows_11_certified = $false; scope = 'Actual Code ZIP tested on a fresh GitHub-hosted Windows Server runner. Failed tests remain failed; clean Windows 11 acceptance is separate.'; excluded = @('application state', 'native test fixtures', 'TLS keys', 'browser profiles', 'whole workspaces') } | ConvertTo-Json -Depth 5 | Set-Content -LiteralPath "$evidence\outcomes.json" -Encoding utf8
+          foreach ($relative in $jsonReports) {
+            $reportPath = Join-Path $evidence $relative
+            if ([IO.File]::Exists($reportPath)) {
+              if ((Get-Item -LiteralPath $reportPath).Length -gt 262144) { throw ('Curated JSON report exceeds the 256 KiB log budget: ' + $relative) }
+              Write-Output ('LKVS_REPOSITORY_REPORT_BEGIN ' + $relative)
+              Write-Output ([IO.File]::ReadAllText($reportPath))
+              Write-Output ('LKVS_REPOSITORY_REPORT_END ' + $relative)
+            }
+          }
+          "Published commit: $env:PUBLISHED_COMMIT; Code ZIP audit: $env:ARCHIVE_OUTCOME; offline BOOT: $env:VERIFY_OUTCOME; actual WPF/Worker qualification: $env:QUALIFICATION_OUTCOME." >> $env:GITHUB_STEP_SUMMARY
+          'GitHub-hosted Windows Server observations do not certify a clean Windows 11 machine.' >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Preserve only the curated repository publication evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: full-repository-publication
+          path: ${{ github.workspace }}/work/repository-evidence/
+          if-no-files-found: error
+          retention-days: 30

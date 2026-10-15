@@ -23,8 +23,12 @@ for the rights holder's included material. Historical HERMIT attribution
 is preserved in licenses/HERMIT-HISTORICAL-NOTICE.txt. Original JA21 and
 Photon attribution remains in the corresponding licenses and notices.
 
-This repository is a source distribution. It excludes Microsoft browser
-runtime/SDK binaries, compiled application and test executables, archived
-private packages, certificates, active configuration and user state.
-Separately acquired third-party software retains its own terms. See
+The current main branch distributes corresponding project source, compiled
+application/test executables, Microsoft SDK adapters and the complete Fixed
+Version browser payload. The oversized msedge.dll is stored as numbered raw
+parts under payload/webview2; BOOT.cmd restores the exact DLL offline.
+Earlier source-only tags retain their original source-only archive layout.
+Historical private packages, certificates, keys, active configuration and
+user state remain excluded. Microsoft and other third-party software retains
+its own terms and is not relicensed by the project GPL grant. See
 LICENSING.md and THIRD_PARTY_NOTICES.md for component boundaries.

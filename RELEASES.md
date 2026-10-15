@@ -2,11 +2,19 @@
 
 Copyright (C) 2026 RUSSELL PHILIP SMITHSON
 
-## Select the right download
+## Download the entire main repository
+
+The main branch now carries the JP300 executable application, corresponding source and all runtime bytes. [Code → Download ZIP](https://github.com/LKVexa/LK-Vexa-Data-System/archive/refs/heads/main.zip) is the complete repository distribution. Extract every file, move the folder containing BOOT.cmd to `C:\LKVS` or `D:\LKVS`, then run BOOT.cmd. GitHub adds an outer repository folder to its archive.
+
+GitHub cannot store the 353,144,136-byte `msedge.dll` as one ordinary Git file. The main branch therefore stores its exact bytes as eight parts, each at most 48 MiB, under `payload/webview2/`. BOOT restores the DLL offline using built-in Windows facilities, checks every part and the final SHA-256, and starts the existing native broker. Keep the parts after first launch because the immutable inventory includes them. No Git LFS, compiler, Node, Python or network access is needed. The restored DLL adds approximately 353 MB to the extracted footprint; allow at least 2 GB free including the ZIP and first-run assembly.
+
+The repository retains all source, licences, vendor notices, build receipts and regenerated inventories. User data, credentials, certificates and obsolete nested history remain excluded. The publication workflow validates the original candidate bytes and the downloaded GitHub archive. Inspect the actual workflow result before treating a particular main commit as qualified.
+
+## Preassembled release download
 
 **Current complete candidate:** [LKVS-3.0.1-Windows-x64-candidate.zip](https://github.com/LKVexa/LK-Vexa-Data-System/releases/download/v3.0.1-candidate.3/LKVS-3.0.1-Windows-x64-candidate.zip), **331,597,148 bytes**, SHA-256 `e63e1e0666ef99a79e5cbc6b785932f11c96abac7c39d6a5282fb4a4218f2981`. Its source is commit `629d44dc5c975ee5cb9d49576201d1b9aa5b4464`. Subsequent documentation or evidence-workflow commits on main do not change these published binary bytes.
 
-Use the named **Windows x64 ZIP** attached under [GitHub Releases](https://github.com/LKVexa/LK-Vexa-Data-System/releases) when you need the application. GitHub's automatic **Source code (zip)** and the repository's **Code → Download ZIP** contain the repository's source tree. They do not add ignored executables or browser dependencies.
+The named **Windows x64 ZIP** under [GitHub Releases](https://github.com/LKVexa/LK-Vexa-Data-System/releases) contains the preassembled browser DLL. Automatic source archives for older tags retain their historical source-only contents. The updated main archive contains the complete application bytes with offline DLL assembly through BOOT.cmd.
 
 A complete executable package contains:
 
