@@ -20,9 +20,19 @@ foreach($jpRel in @('host/JPConsoleEntry.cs','bin/JPConsole.exe','bin/Microsoft.
 $jpSeal=[ordered]@{format='vb-ja21-runtime-seal/4';product='JA21 Photon Console 3.0.1 compiled native presenter';version='9.8.7';scope='Retained presenter ABI and source/IR; compiled entry point; no historical bootstrap or runtime provisioning. Hashes are not signatures.';files=$jpEntries.ToArray()}
 [IO.File]::WriteAllText($jpSealPath,($jpSeal | ConvertTo-Json -Depth 10)+"`n",$jpUtf8)
 $jpLines=New-Object Collections.Generic.List[string]
-foreach($jpFile in Get-ChildItem -LiteralPath $jpRoot -Recurse -File -Force | Sort-Object FullName) {
+function Get-JPImmutableFiles([string]$Directory) {
+  foreach($jpItem in Get-ChildItem -LiteralPath $Directory -Force) {
+    $jpRelative=$jpItem.FullName.Substring($jpRoot.Length+1).Replace('\','/')
+    # Prune mutable trees before recursion: compiler caches and path fixtures can
+    # be large or intentionally contain paths outside the immutable budget.
+    if($jpRelative -match '^(workspace|work|certs)(/|$)' -or $jpRelative -match '(^|/)\.git(/|$)' -or $jpRelative -in @('server-config.json','SHA256SUMS.txt','package.integrity.json')) { continue }
+    if(($jpItem.Attributes -band [IO.FileAttributes]::ReparsePoint) -ne 0) { throw ('Reparse point in immutable package: '+$jpRelative) }
+    if($jpItem.PSIsContainer) { Get-JPImmutableFiles $jpItem.FullName }
+    else { $jpItem }
+  }
+}
+foreach($jpFile in Get-JPImmutableFiles $jpRoot | Sort-Object FullName) {
   $jpRel=$jpFile.FullName.Substring($jpRoot.Length+1).Replace('\','/')
-  if($jpRel -match '^(workspace/|certs/|\.git/)' -or $jpRel -in @('server-config.json','SHA256SUMS.txt','package.integrity.json')) { continue }
   $jpDigest=(Get-FileHash -LiteralPath $jpFile.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
   [void]$jpLines.Add($jpDigest+'  '+$jpRel)
 }

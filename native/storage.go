@@ -70,6 +70,9 @@ func plainPath(value string, allowMissing bool) (string, error) {
 		return "", e
 	}
 	p = filepath.Clean(p)
+	if e = windowsPathSafety(p); e != nil {
+		return "", e
+	}
 	if strings.HasPrefix(p, `\\`) {
 		return "", errors.New("use a local drive, not a UNC or device path")
 	}
@@ -87,6 +90,9 @@ func plainPath(value string, allowMissing bool) (string, error) {
 		}
 		if s.Mode()&os.ModeSymlink != 0 {
 			return "", errors.New("symbolic links and reparse points are refused")
+		}
+		if s.IsDir() && utf16len(cur) > windowsDirectoryPathLimit {
+			return "", errors.New("Windows directory exceeds 247 UTF-16 code units; use a shorter path")
 		}
 		data, ok := s.Sys().(*syscall.Win32FileAttributeData)
 		if ok && data.FileAttributes&0x400 != 0 {
@@ -343,6 +349,10 @@ func atomicWrite(path string, data []byte) error {
 		return e
 	}
 	dir := filepath.Dir(p)
+	// os.CreateTemp expands this pattern with at most ten decimal digits.
+	if e = windowsPathSafety(filepath.Join(dir, ".write-4294967295.tmp")); e != nil {
+		return fmt.Errorf("atomic-write temporary path: %w", e)
+	}
 	if e = os.MkdirAll(dir, 0700); e != nil {
 		return e
 	}
@@ -727,7 +737,7 @@ type sourceRoot struct {
 type LocalSources struct{ roots []sourceRoot }
 
 var sourceScheme = regexp.MustCompile(`^[A-Za-z][\w+.-]*://`)
-var sourceDevice = regexp.MustCompile(`(?i)^(?:CON|PRN|AUX|NUL|COM[0-9¹²³]|LPT[0-9¹²³])(?:\.|$)`)
+var sourceDevice = regexp.MustCompile(`(?i)^(?:CON|PRN|AUX|NUL|CONIN\$|CONOUT\$|COM[0-9¹²³]|LPT[0-9¹²³])(?:\.|$)`)
 
 func validateSourceSpelling(s string) error {
 	if s == "" || utf16len(s) > 4096 || hasControl(s) || strings.HasPrefix(s, `\\`) || strings.HasPrefix(s, "//") || sourceScheme.MatchString(s) {

@@ -336,7 +336,7 @@ namespace VBJA21
             string baseDir = System.IO.Path.GetFullPath(root);
             if (!baseDir.EndsWith(System.IO.Path.DirectorySeparatorChar.ToString(), StringComparison.Ordinal))
                 baseDir += System.IO.Path.DirectorySeparatorChar;
-            string full = System.IO.Path.GetFullPath(System.IO.Path.Combine(baseDir, rel.Replace('/', System.IO.Path.DirectorySeparatorChar)));
+            string full = PortablePaths.RequireWindowsPath(System.IO.Path.Combine(baseDir, rel.Replace('/', System.IO.Path.DirectorySeparatorChar)));
             if (!full.StartsWith(baseDir, StringComparison.OrdinalIgnoreCase))
                 throw new Exception("Sealed path escapes the package root: " + rel);
             RejectReparsePoints(baseDir, full);
@@ -347,8 +347,8 @@ namespace VBJA21
         // existing reparse points anywhere from the boundary through the target before I/O.
         public static void RejectReparsePoints(string boundary, string target)
         {
-            string root = System.IO.Path.GetFullPath(boundary).TrimEnd(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
-            string full = System.IO.Path.GetFullPath(target);
+            string root = PortablePaths.RequireWindowsPath(boundary).TrimEnd(System.IO.Path.DirectorySeparatorChar, System.IO.Path.AltDirectorySeparatorChar);
+            string full = PortablePaths.RequireWindowsPath(target);
             string prefix = root + System.IO.Path.DirectorySeparatorChar;
             if (!String.Equals(root, full.TrimEnd(System.IO.Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase) && !full.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
                 throw new Exception("Path escapes its filesystem boundary.");
@@ -357,7 +357,10 @@ namespace VBJA21
             {
                 try
                 {
-                    if ((File.GetAttributes(probe) & FileAttributes.ReparsePoint) != 0)
+                    FileAttributes attributes = File.GetAttributes(probe);
+                    if ((attributes & FileAttributes.Directory) != 0 && probe.Length > PortablePaths.DirectoryPathLimit)
+                        throw new IOException("Windows directory exceeds 247 UTF-16 code units; use a shorter path.");
+                    if ((attributes & FileAttributes.ReparsePoint) != 0)
                         throw new Exception("Reparse points are outside the JA21 filesystem boundary: " + probe);
                 }
                 catch (FileNotFoundException) { }

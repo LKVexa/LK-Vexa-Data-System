@@ -180,6 +180,20 @@ func TestVerifierDetectsTamperAndCoverage(t *testing.T) {
 	if _, e = verifyPackage(root); e != nil {
 		t.Fatal(e)
 	}
+	// Scratch state is mutable and absent from release archives. It must not
+	// invalidate the immutable inventory, including after a local change.
+	if e = os.MkdirAll(filepath.Join(root, "work", "path-fixtures"), 0700); e != nil {
+		t.Fatal(e)
+	}
+	scratch := filepath.Join(root, "work", "path-fixtures", "scratch.js")
+	for _, contents := range []string{"scratch before", "scratch after"} {
+		if e = os.WriteFile(scratch, []byte(contents), 0600); e != nil {
+			t.Fatal(e)
+		}
+		if _, e = verifyPackage(root); e != nil {
+			t.Fatalf("mutable work directory changed package verification: %v", e)
+		}
+	}
 	if e = os.WriteFile(filepath.Join(root, "asset.txt"), []byte("modified"), 0600); e != nil {
 		t.Fatal(e)
 	}

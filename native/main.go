@@ -401,11 +401,11 @@ func excludedImmutable(rel string) bool {
 			return true
 		}
 	}
-	if p[0] == "workspace" || p[0] == "certs" {
+	if strings.EqualFold(p[0], "workspace") || strings.EqualFold(p[0], "work") || strings.EqualFold(p[0], "certs") {
 		return true
 	}
-	switch rel {
-	case "server-config.json", "SHA256SUMS.txt", "package.integrity.json":
+	switch strings.ToLower(rel) {
+	case "server-config.json", "sha256sums.txt", "package.integrity.json":
 		return true
 	}
 	return false

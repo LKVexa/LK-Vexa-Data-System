@@ -6,6 +6,9 @@ param([string]$GoExe = 'go')
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $jpBuildRoot = [IO.Path]::GetFullPath((Split-Path -Parent $PSScriptRoot))
+if ($jpBuildRoot.TrimEnd('\', '/').Length -gt 100 -or $jpBuildRoot -notmatch '^[A-Za-z]:\\') {
+    throw 'Use a local source folder with a root of at most 100 UTF-16 code units, such as C:\LKVS. This build does not require enabling Windows long paths.'
+}
 $jpNativeDirectory = Join-Path $jpBuildRoot 'native'
 $jpBinDirectory = Join-Path $jpBuildRoot 'bin'
 $jpBuildDirectory = Join-Path $jpBuildRoot 'workspace\build'
@@ -36,6 +39,19 @@ function Assert-JPX64Image([string]$Path) {
         if ([BitConverter]::ToUInt16($jpPeHeader, 4) -ne 0x8664) { throw ('A native Windows x64 component is required: ' + $Path) }
     }
     finally { $jpImageStream.Dispose() }
+}
+function Get-JPBuildFileRecord([string]$Path) {
+    $jpRecordBytes = [IO.File]::ReadAllBytes($Path)
+    $jpHasher = [Security.Cryptography.SHA256]::Create()
+    try { $jpRecordHash = ([BitConverter]::ToString($jpHasher.ComputeHash($jpRecordBytes))).Replace('-', '').ToLowerInvariant() }
+    finally { $jpHasher.Dispose() }
+    [pscustomobject][ordered]@{ path = $Path.Substring($jpBuildRoot.Length + 1).Replace('\', '/'); bytes = $jpRecordBytes.LongLength; sha256 = $jpRecordHash }
+}
+function Get-JPBuildSourceRecords {
+    $jpCompiledSources = @([IO.Directory]::GetFiles((Join-Path $jpBuildRoot 'host'), '*.cs', [IO.SearchOption]::AllDirectories)) +
+        @([IO.Directory]::GetFiles($jpNativeDirectory, '*.go', [IO.SearchOption]::AllDirectories)) +
+        @(Join-Path $jpNativeDirectory 'go.mod')
+    $jpCompiledSources | Sort-Object | ForEach-Object { Get-JPBuildFileRecord $_ }
 }
 if ($env:OS -ne 'Windows_NT' -or -not [Environment]::Is64BitOperatingSystem -or -not [Environment]::Is64BitProcess) {
     throw 'Run this script in 64-bit PowerShell on Windows x64. The application target is Windows 11 x64.'
@@ -139,6 +155,8 @@ try {
         Write-Warning ('Reference builds use Go 1.27.2. This toolchain is unqualified for the snapshot: ' + $jpGoVersionOutput)
     }
     Write-Output ('Selected toolchain: ' + $jpGoVersionOutput)
+    $jpSourceRecordsBefore = @(Get-JPBuildSourceRecords)
+    $jpProductVersionBefore = [IO.File]::ReadAllText((Join-Path $jpBuildRoot 'VERSION')).Trim()
     & $jpGoPath build '-work' '-buildvcs=false' '-trimpath' '-ldflags=-s -w' '-o' (Join-Path $jpBinDirectory 'JPBroker.exe') '.'
     if ($LASTEXITCODE -ne 0) { throw 'Native broker compilation failed.' }
     & $jpGoPath test '-c' '-work' '-buildvcs=false' '-trimpath' '-o' (Join-Path $jpBinDirectory 'JPTests.exe') '.'
@@ -149,6 +167,25 @@ try {
         $jpSdkBytes = [IO.File]::ReadAllBytes((Join-Path $jpSdkDirectory $jpSdkFile))
         [IO.File]::WriteAllBytes((Join-Path $jpBinDirectory $jpSdkFile), $jpSdkBytes)
     }
+    # Bind the binaries to the complete compiled source set before packaging.
+    # Write this before inventory regeneration so the receipt is sealed too.
+    $jpSourceRecords = @(Get-JPBuildSourceRecords)
+    if ($jpSourceRecords.Count -ne $jpSourceRecordsBefore.Count -or
+        @(Compare-Object -ReferenceObject $jpSourceRecordsBefore -DifferenceObject $jpSourceRecords -Property path, bytes, sha256 -CaseSensitive).Count -ne 0 -or
+        [IO.File]::ReadAllText((Join-Path $jpBuildRoot 'VERSION')).Trim() -ne $jpProductVersionBefore) {
+        throw 'Source files or VERSION changed during compilation. No build receipt was issued. Rebuild from an unchanged source folder.'
+    }
+    $jpArtifactRecords = @(@('JPBroker.exe', 'JPTests.exe', 'JPConsole.exe') + $jpSdkFiles | ForEach-Object { Get-JPBuildFileRecord (Join-Path $jpBinDirectory $_) })
+    $jpReceipt = [ordered]@{
+        format = 'lkvs-build-receipt/1'
+        product_version = $jpProductVersionBefore
+        built_utc = [DateTime]::UtcNow.ToString('o')
+        source_files = $jpSourceRecords
+        artifact_files = $jpArtifactRecords
+        toolchain = [ordered]@{ go = $jpGoVersionOutput; csc = [Diagnostics.FileVersionInfo]::GetVersionInfo($jpCompilerPath).FileVersion; webview2_sdk = $jpSdkVersion; fixed_runtime = $jpRendererVersion }
+    }
+    $jpReceiptUtf8 = New-Object Text.UTF8Encoding($false)
+    [IO.File]::WriteAllText((Join-Path $jpBinDirectory 'BUILD-RECEIPT.json'), (($jpReceipt | ConvertTo-Json -Depth 8) + "`n"), $jpReceiptUtf8)
     & (Join-Path $jpNativeDirectory 'refresh-manifests.ps1')
     if (-not $?) { throw 'Package manifest regeneration failed.' }
     Write-Output 'Local build complete. Build artifacts and integrity inventories do not certify portability or a clean Windows installation.'

@@ -11,11 +11,13 @@ namespace VBJA21
         [STAThread]
         public static int Main(string[] args)
         {
-            string root = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."));
-            string workspace = Path.Combine(root, "workspace");
+            string root = "";
+            string workspace = "";
             bool probe = args.Length == 1 && args[0] == "--probe";
             try
             {
+                root = PortablePaths.RequirePackageRoot(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, ".."));
+                workspace = Path.Combine(root, "workspace");
                 Console.InputEncoding = new UTF8Encoding(false);
                 Console.OutputEncoding = new UTF8Encoding(false);
                 bool developmentRenderer = args.Length == 1 && args[0] == "--development-installed-renderer";

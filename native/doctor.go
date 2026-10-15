@@ -31,6 +31,7 @@ func doctorReport(root string, verbose bool) int {
 		platformErr = errors.New("this release requires Windows x64")
 	}
 	add("windows-x64", runtime.GOOS+"/"+runtime.GOARCH, platformErr)
+	add("windows-path-budget", map[string]any{"packageRootUtf16": utf16len(root), "packageRootLimit": portableRootLimit, "filePathLimit": windowsFilePathLimit, "directoryPathLimit": windowsDirectoryPathLimit}, portableRootSafety(root))
 	platform, platformCheck := portableWindowsPlatform(root)
 	add("windows-11-local-deployment", platform, platformCheck)
 	verification, e := verifyPackage(root)

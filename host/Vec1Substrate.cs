@@ -333,7 +333,9 @@ namespace VBJA21
             string dir = System.IO.Path.GetDirectoryName(path);
             RuntimeSeal.RejectReparsePoints(dir, path);
             if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
-            string tmp = path + ".tmp-" + Guid.NewGuid().ToString("N");
+            // Do not append a GUID to a 64-character snapshot basename. A short
+            // independent name in the same directory retains atomic replacement.
+            string tmp = PortablePaths.RequireWindowsPath(System.IO.Path.Combine(dir, ".write-" + Guid.NewGuid().ToString("N") + ".tmp"));
             try
             {
                 using (FileStream fs = new FileStream(tmp, FileMode.CreateNew, FileAccess.Write, FileShare.None))

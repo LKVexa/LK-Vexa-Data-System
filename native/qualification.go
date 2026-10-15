@@ -3,6 +3,8 @@ package main
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -21,8 +23,14 @@ func runQualification(root string) int {
 	if code := runDoctorQuiet(root); code != 0 {
 		return code
 	}
-	runDir := filepath.Join(root, "workspace", "qualification", time.Now().UTC().Format("20060102T150405.000000000Z"))
-	if e := os.MkdirAll(filepath.Join(runDir, "temp"), 0700); e != nil {
+	// Compact on-disk names leave room for 64-character snapshot hashes and the
+	// renderer profile while the report retains its full UTC timestamps.
+	runDir, e := newQualificationRunDirectory(root)
+	if e != nil {
+		fmt.Fprintln(os.Stderr, e)
+		return 1
+	}
+	if e := os.MkdirAll(filepath.Join(runDir, "t"), 0700); e != nil {
 		fmt.Fprintln(os.Stderr, e)
 		return 1
 	}
@@ -33,7 +41,7 @@ func runQualification(root string) int {
 		"scope":          "Actual installation tests on the executing Windows OS. Clean-machine provenance must be established separately.",
 		"pythonRequired": false, "nodeRequired": false, "targetCompilationRequired": false,
 		"installedRendererFallback": false, "pathRestricted": true,
-		"testFixturesRetained": true, "testFixtureDirectory": filepath.Join(runDir, "temp"),
+		"testFixturesRetained": true, "testFixtureDirectory": filepath.Join(runDir, "t"),
 	}
 	resultPath := filepath.Join(runDir, "result.json")
 	finish := func(e error) int {
@@ -75,7 +83,7 @@ func runQualification(root string) int {
 	ctx, cancel := context.WithTimeout(context.Background(), 630*time.Second)
 	cmd := exec.CommandContext(ctx, filepath.Join(root, "bin", "JPTests.exe"), "-test.v", "-test.timeout=600s")
 	cmd.Dir = filepath.Join(root, "native")
-	cmd.Env = append(qualificationEnvironment(filepath.Join(runDir, "temp")), "JP300_RETAIN_QUALIFICATION_FIXTURES=1")
+	cmd.Env = append(qualificationEnvironment(filepath.Join(runDir, "t")), "JP300_RETAIN_QUALIFICATION_FIXTURES=1")
 	var tests bytes.Buffer
 	cmd.Stdout = io.MultiWriter(testLog, &tests)
 	cmd.Stderr = cmd.Stdout
@@ -100,7 +108,7 @@ func runQualification(root string) int {
 	ctx, cancel = context.WithTimeout(context.Background(), 30*time.Second)
 	probe := exec.CommandContext(ctx, filepath.Join(root, "bin", "JPConsole.exe"), "--probe")
 	probe.Dir = root
-	probe.Env = qualificationEnvironment(filepath.Join(runDir, "temp"))
+	probe.Env = qualificationEnvironment(filepath.Join(runDir, "t"))
 	probeData, e := probe.CombinedOutput()
 	cancel()
 	if e != nil {
@@ -125,7 +133,7 @@ func runQualification(root string) int {
 
 	// This starts the actual WPF presenter and its Worker, then uses the actual
 	// native granted-file/Photon paths. It cannot be satisfied by a Node fixture.
-	o := &Options{VCMD: filepath.Join(root, "validation", "portable-smoke.vcmd"), Report: filepath.Join(runDir, "standalone-result.json"), CloseAfterJob: true, QualificationWorkspace: filepath.Join(runDir, "application")}
+	o := &Options{VCMD: filepath.Join(root, "validation", "portable-smoke.vcmd"), Report: filepath.Join(runDir, "standalone-result.json"), CloseAfterJob: true, QualificationWorkspace: filepath.Join(runDir, "a")}
 	if e = os.MkdirAll(filepath.Join(o.QualificationWorkspace, "temp"), 0700); e != nil {
 		return finish(e)
 	}
@@ -156,6 +164,33 @@ func runQualification(root string) int {
 	report["gracefulPresenterExitAndPersistenceAcknowledgement"] = true
 	report["applicationDataIsolated"] = true
 	return finish(nil)
+}
+
+func newQualificationRunDirectory(root string) (string, error) {
+	boundary, e := plainPath(filepath.Join(root, "workspace", "qualification"), true)
+	if e != nil {
+		return "", e
+	}
+	if e = os.MkdirAll(boundary, 0700); e != nil {
+		return "", e
+	}
+	if _, e = plainPath(boundary, false); e != nil {
+		return "", e
+	}
+	for attempt := 0; attempt < 8; attempt++ {
+		var nonce [4]byte
+		if _, e = rand.Read(nonce[:]); e != nil {
+			return "", e
+		}
+		directory := filepath.Join(boundary, "r-"+hex.EncodeToString(nonce[:]))
+		if e = os.Mkdir(directory, 0700); e == nil {
+			return directory, nil
+		}
+		if !os.IsExist(e) {
+			return "", e
+		}
+	}
+	return "", errors.New("could not reserve a unique qualification directory")
 }
 
 func qualificationEnvironment(temp string) []string {

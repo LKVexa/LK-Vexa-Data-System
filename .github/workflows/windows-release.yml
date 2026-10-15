@@ -1,0 +1,207 @@
+name: Build full Windows candidate
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: full-windows-candidate
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build and test the complete candidate
+    runs-on: windows-2025
+    timeout-minutes: 45
+    permissions:
+      contents: read
+    env:
+      REFERENCE_URL: https://github.com/LKVexa/LK-Vexa-Data-System/releases/download/jp300-3.0.0-reference.1/LK-Vexa-JP300-3.0.0-reference-Windows-x64.zip
+      REFERENCE_SHA256: 24ddceb9842a1f95dd2837dd0ca1e7a4abeb27138643ee5fd1f39eedab313816
+      GOTOOLCHAIN: local
+      GOPROXY: 'off'
+      GOSUMDB: 'off'
+      CGO_ENABLED: '0'
+    defaults:
+      run:
+        shell: pwsh
+    steps:
+      - name: Check out the requested source commit
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+
+      - name: Install the reference Go compiler
+        uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7
+        with:
+          go-version: '1.27.2'
+          check-latest: false
+          cache: false
+
+      - name: Install the appliance test runner
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '24'
+          check-latest: false
+
+      - name: Prepare evidence and local temporary directories
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:GITHUB_WORKSPACE.Length -gt 100) { throw 'The checkout exceeds the supported Windows installation-root limit.' }
+          New-Item -ItemType Directory -Force -Path work\ci-evidence, work\ci-temp | Out-Null
+          "Source commit: $env:GITHUB_SHA" | Set-Content work\ci-evidence\source-commit.txt
+          "Runner image: $env:ImageOS / $env:ImageVersion" | Set-Content work\ci-evidence\runner.txt
+          [Environment]::OSVersion.VersionString | Add-Content work\ci-evidence\runner.txt
+          go version | Tee-Object -FilePath work\ci-evidence\go-version.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Go could not report its version.' }
+          node --version | Tee-Object -FilePath work\ci-evidence\node-version.txt
+          if ($LASTEXITCODE -ne 0) { throw 'Node could not report its version.' }
+
+      - name: Test Windows filename and ZIP defenses
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & .\scripts\Test-WindowsPaths.ps1 -SelfTest -FixtureDirectory "$env:RUNNER_TEMP\lkvs-path-fixtures" -ReportPath work\ci-evidence\path-self-tests.json
+
+      - name: Verify and unpack the reference dependency archive
+        run: |
+          $ErrorActionPreference = 'Stop'
+          if ($env:REFERENCE_SHA256 -notmatch '^[a-f0-9]{64}$') { throw 'The verified reference archive digest has not been configured.' }
+          if ($env:REFERENCE_URL -notlike 'https://github.com/LKVexa/LK-Vexa-Data-System/releases/download/jp300-3.0.0-reference.1/*') { throw 'Unexpected dependency archive origin.' }
+          $archive = "$env:RUNNER_TEMP\lkvs-reference.zip"
+          Invoke-WebRequest -Uri $env:REFERENCE_URL -OutFile $archive -MaximumRetryCount 3 -TimeoutSec 300
+          $digest = (Get-FileHash -LiteralPath $archive -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($digest -ne $env:REFERENCE_SHA256) { throw 'The dependency archive SHA-256 does not match the reviewed release asset.' }
+          $reference = "$env:RUNNER_TEMP\lkvs-reference"
+          & .\scripts\Test-WindowsPaths.ps1 -Archive $archive -InstallationRoot $reference -ReportPath work\ci-evidence\reference-paths.json
+          Expand-Archive -LiteralPath $archive -DestinationPath $reference
+          $launchers = @(Get-ChildItem -LiteralPath $reference -Filter BOOT.cmd -File -Recurse)
+          if ($launchers.Count -ne 1) { throw 'The reference archive must contain exactly one BOOT.cmd.' }
+          $referenceRoot = $launchers[0].DirectoryName
+          # Reuse the previously authorized Microsoft dependencies only. Never copy old application binaries or application source.
+          New-Item -ItemType Directory -Force -Path runtime | Out-Null
+          Copy-Item -LiteralPath "$referenceRoot\runtime\webview2-fixed" -Destination runtime\webview2-fixed -Recurse
+          $sdk = 'runtime\webview2-sdk\1.0.4191.47'
+          New-Item -ItemType Directory -Force -Path $sdk | Out-Null
+          foreach ($name in 'Microsoft.Web.WebView2.Core.dll', 'Microsoft.Web.WebView2.Wpf.dll', 'WebView2Loader.dll') {
+            Copy-Item -LiteralPath "$referenceRoot\$sdk\$name" -Destination "$sdk\$name"
+          }
+          if (Test-Path -LiteralPath "$referenceRoot\runtime\renderer.provenance.json" -PathType Leaf) {
+            Copy-Item -LiteralPath "$referenceRoot\runtime\renderer.provenance.json" -Destination runtime\renderer.provenance.json
+            Copy-Item -LiteralPath "$referenceRoot\runtime\renderer.provenance.json" -Destination work\ci-evidence\renderer.provenance.json
+          } else {
+            'The reference archive contains no runtime/renderer.provenance.json; no vendor provenance record was fabricated.' | Set-Content work\ci-evidence\renderer-provenance-absence.txt
+          }
+          "Reference: $env:REFERENCE_URL`nSHA256: $digest" | Set-Content work\ci-evidence\dependency-reference.txt
+
+      - name: Build current native executables and source receipt
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & .\scripts\Build-Windows.ps1 -GoExe (Get-Command go -CommandType Application).Source *>&1 | Tee-Object -FilePath work\ci-evidence\build.txt
+          if (-not $?) { throw 'The Windows build failed.' }
+          Copy-Item -LiteralPath bin\BUILD-RECEIPT.json -Destination work\ci-evidence\BUILD-RECEIPT.json
+
+      - name: Run every native regression from the compiled test executable
+        working-directory: native
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $env:JP300_RETAIN_QUALIFICATION_FIXTURES = '1'
+          $env:JA21_ENGINE_NODE = (Get-Command node -CommandType Application).Source
+          $env:JA21_ENGINE_WEB = "$env:GITHUB_WORKSPACE\appliance\web"
+          $env:JA21_ENGINE_SOURCE_ROOT = $env:GITHUB_WORKSPACE
+          $env:TEMP = "$env:RUNNER_TEMP\lk-t"
+          $env:TMP = $env:TEMP
+          New-Item -ItemType Directory -Force -Path $env:TEMP | Out-Null
+          & ..\bin\JPTests.exe '-test.v' '-test.timeout=10m' *>&1 | Tee-Object -FilePath ..\work\ci-evidence\native-tests.txt
+          if ($LASTEXITCODE -ne 0) { throw 'The native regression suite failed.' }
+
+      - name: Run every appliance regression
+        run: |
+          $ErrorActionPreference = 'Stop'
+          node --test appliance/tests/client-flow.test.mjs appliance/tests/core.test.mjs *>&1 | Tee-Object -FilePath work\ci-evidence\appliance-tests.txt
+          if ($LASTEXITCODE -ne 0) { throw 'The appliance regression suite failed.' }
+
+      - name: Verify the built package inventory
+        run: |
+          $ErrorActionPreference = 'Stop'
+          & .\bin\JPBroker.exe --boot --verify *>&1 | Tee-Object -FilePath work\ci-evidence\package-verify.txt
+          if ($LASTEXITCODE -ne 0) { throw 'The compiled broker rejected the built package inventory.' }
+
+      - name: Assemble and audit the full portable candidate
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $output = "$env:RUNNER_TEMP\lkvs-release"
+          & .\scripts\Package-Windows.ps1 -OutputDirectory $output
+          $notes = @"
+          LK/Vexa Data System Windows x64 candidate
+
+          Source commit: $env:GITHUB_SHA
+
+          This full application archive includes the freshly compiled broker, presenter and regression executable, the complete bundled Fixed Version WebView2 runtime, its required SDK assemblies, corresponding source, GPL-3.0 license, NOTICE and COPYRIGHT.
+
+          This workflow requires the synthetic Windows filename/ZIP tests, native regression suite, appliance regression suite, build-source receipt, package integrity verification, and full archive path audits to pass before publication.
+
+          This is a prerelease candidate. A GitHub-hosted Windows Server runner does not establish clean Windows 11 acceptance. Interactive WPF/WebView2 desktop qualification and an independently attested clean-machine test remain outstanding. Consult STATUS.md and CLEAN_MACHINE_TEST.txt inside the archive.
+
+          Extract the archive contents directly into C:\LKVS or D:\LKVS and start BOOT.cmd. The supported installation-root limit is 100 UTF-16 code units; no registry setting or system security change is required.
+
+          Copyright (C) 2026 RUSSELL PHILIP SMITHSON. Third-party Microsoft, Go and Apache notices retain their original terms.
+          "@
+          $notes | Set-Content -LiteralPath "$output\RELEASE-NOTES.txt" -Encoding utf8
+          "Full candidate archive: $output" >> $env:GITHUB_STEP_SUMMARY
+          "Clean Windows 11 and interactive desktop acceptance: pending." >> $env:GITHUB_STEP_SUMMARY
+
+      - name: Preserve test evidence, including failures
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: windows-build-evidence
+          path: work/ci-evidence/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Transfer the tested full candidate for publication
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: full-windows-candidate
+          path: |
+            ${{ runner.temp }}/lkvs-release/*.zip
+            ${{ runner.temp }}/lkvs-release/*.zip.sha256
+            ${{ runner.temp }}/lkvs-release/*.paths.json
+            ${{ runner.temp }}/lkvs-release/RELEASE-NOTES.txt
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 0
+
+  publish:
+    name: Publish the tested candidate prerelease
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+      RELEASE_TAG: v3.0.1-candidate.${{ github.run_number }}
+    steps:
+      - name: Retrieve and verify the exact successful build artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh run download "$GITHUB_RUN_ID" --repo "$GH_REPO" --name full-windows-candidate --dir release
+          cd release
+          sha256sum --check ./*.zip.sha256
+
+      - name: Publish the full archive at the tested source commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Ref creation fails if the tag already exists; never publish against a different source commit or overwrite a tag.
+          gh api --method POST "repos/$GH_REPO/git/refs" -f "ref=refs/tags/$RELEASE_TAG" -f "sha=$GITHUB_SHA" >/dev/null
+          gh release create "$RELEASE_TAG" --repo "$GH_REPO" --verify-tag --prerelease \
+            --title "LK/Vexa Data System 3.0.1 candidate (build $GITHUB_RUN_NUMBER)" \
+            --notes-file release/RELEASE-NOTES.txt \
+            release/*.zip release/*.zip.sha256 release/*.paths.json

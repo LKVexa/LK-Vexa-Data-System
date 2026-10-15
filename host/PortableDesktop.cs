@@ -15,10 +15,61 @@ namespace VBJA21
         private static string _root;
         private static readonly object Gate = new object();
 
+        // The presenter deliberately stays compatible with default Windows path
+        // handling. These are UTF-16 String.Length counts, excluding the NUL.
+        internal const int PackageRootLimit = 100;
+        internal const int FilePathLimit = 259;
+        internal const int DirectoryPathLimit = 247;
+
+        internal static string RequireWindowsPath(string value)
+        {
+            if (String.IsNullOrWhiteSpace(value) || value.Length > FilePathLimit)
+                throw new IOException("Windows file path exceeds 259 UTF-16 code units or is empty; use a shorter path.");
+            // Legacy Framework normalization can trim trailing dots/spaces, so
+            // reject those aliases before asking it for the canonical path.
+            CheckWindowsPathComponents(value);
+            string full = System.IO.Path.GetFullPath(value);
+            string volume = System.IO.Path.GetPathRoot(full);
+            if (full.Length > FilePathLimit || volume == null || volume.Length != 3 || volume[1] != ':')
+                throw new IOException("Use a local absolute Windows drive path of at most 259 UTF-16 code units.");
+            string parent = System.IO.Path.GetDirectoryName(full);
+            if (parent != null && parent.Length > DirectoryPathLimit)
+                throw new IOException("Windows parent directory exceeds 247 UTF-16 code units; use a shorter path.");
+            CheckWindowsPathComponents(full.Substring(volume.Length));
+            return full;
+        }
+
+        private static void CheckWindowsPathComponents(string value)
+        {
+            string[] parts = value.Split(new char[] { '\\', '/' }, StringSplitOptions.RemoveEmptyEntries);
+            for (int index = 0; index < parts.Length; index++)
+            {
+                string part = parts[index];
+                if (part == "." || part == "..") continue;
+                if (index == 0 && part.Length == 2 && part[1] == ':' && Char.IsLetter(part[0])) continue;
+                string device = part.Split('.')[0].TrimEnd(' ').ToUpperInvariant();
+                bool reserved = device == "CON" || device == "PRN" || device == "AUX" || device == "NUL" || device == "CONIN$" || device == "CONOUT$" ||
+                    (device.Length == 4 && (device.StartsWith("COM", StringComparison.Ordinal) || device.StartsWith("LPT", StringComparison.Ordinal)) &&
+                    ((device[3] >= '0' && device[3] <= '9') || device[3] == '\u00b9' || device[3] == '\u00b2' || device[3] == '\u00b3'));
+                if (part.Length > 255 || part.EndsWith(".", StringComparison.Ordinal) || part.EndsWith(" ", StringComparison.Ordinal) ||
+                    part.IndexOfAny(System.IO.Path.GetInvalidFileNameChars()) >= 0 || reserved)
+                    throw new IOException("Invalid, reserved, or aliased Windows path component.");
+            }
+        }
+
+        internal static string RequirePackageRoot(string value)
+        {
+            string full = RequireWindowsPath(value);
+            if (full.TrimEnd('\\', '/').Length > PackageRootLimit)
+                throw new IOException("Package root exceeds 100 UTF-16 code units; extract the complete package to a short local folder such as C:\\LKVS.");
+            return full;
+        }
+
         public static string Workspace(string packageRoot)
         {
             lock (Gate)
             {
+                packageRoot = RequirePackageRoot(packageRoot);
                 if (!String.IsNullOrWhiteSpace(_root))
                 {
                     RuntimeSeal.RejectReparsePoints(_root, _root);
@@ -105,7 +156,7 @@ namespace VBJA21
             if (name.Length > 180) name = name.Substring(0, 180).TrimEnd(' ', '.');
             string stem = System.IO.Path.GetFileNameWithoutExtension(name); string ext = System.IO.Path.GetExtension(name);
             string device = name.Split('.')[0].TrimEnd(' ').ToUpperInvariant();
-            if (device == "CON" || device == "PRN" || device == "AUX" || device == "NUL" ||
+            if (device == "CON" || device == "PRN" || device == "AUX" || device == "NUL" || device == "CONIN$" || device == "CONOUT$" ||
                 (device.Length == 4 && (device.StartsWith("COM", StringComparison.Ordinal) || device.StartsWith("LPT", StringComparison.Ordinal)) &&
                 ((device[3] >= '0' && device[3] <= '9') || device[3] == '\u00b9' || device[3] == '\u00b2' || device[3] == '\u00b3')))
             { stem = "_" + stem; name = stem + ext; }

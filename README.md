@@ -10,6 +10,12 @@ LK/Vexa Data System is a Windows application source distribution combining a nat
 
 This is a **source repository**, not a complete executable appliance. Precompiled executables, Microsoft browser/runtime binaries, historical archives, user workspaces, credentials and private execution logs are excluded. A source checkout must be built and supplied with the documented Microsoft dependencies before `BOOT.cmd` can start the application.
 
+## Windows download
+
+For a runnable application, choose the named Windows x64 asset under [GitHub Releases](https://github.com/LKVexa/LK-Vexa-Data-System/releases). GitHub's automatic source ZIP contains source only. The complete Windows package also needs the compiled programs, WebView2 adapters, entire Fixed Version browser and matching inventories. See [RELEASES.md](RELEASES.md) for package contents and version boundaries.
+
+Extract into a short local folder such as `C:\LKVS` or `D:\LKVS`. The current source enforces a 100 UTF-16-unit installation-root budget and traditional Windows file/directory limits. See [WINDOWS_PORTABILITY.md](WINDOWS_PORTABILITY.md). A legacy reference download does not include the new native path guards.
+
 ## Contents
 
 - [1. System scope](#1-system-scope)
@@ -95,7 +101,7 @@ The authoritative current-state record is [STATUS.md](STATUS.md). [CONTRIBUTING.
 
 ## 4. Platform and dependency contract
 
-The application targets Windows 11 x64 on a writable local drive. The native prerequisite gate requires an x64 process and a Windows build of at least 22000, using the actual OS-version API. UNC/device paths, reparse-point installation paths and network-drive deployment are rejected. Use a reasonably short local extraction/build path; arbitrary deep paths have not been qualified.
+The application targets Windows 11 x64 on a writable local drive. The native prerequisite gate requires an x64 process and a Windows build of at least 22000, using the actual OS-version API. UNC/device paths, reparse-point installation paths and network-drive deployment are rejected. The current source limits the installation root to 100 UTF-16 code units and checks ordinary file/directory paths against a conservative Windows envelope. Extract into a short folder such as `C:\LKVS`; see WINDOWS_PORTABILITY.md. Arbitrary deep paths have not been qualified.
 
 Required operational components are:
 
@@ -272,7 +278,7 @@ WebSocket writes are serialized with deadlines and pending-byte backpressure. HT
 
 ## 15. Integrity and qualification
 
-The outer SHA-256 inventory checks immutable bytes and exact coverage, rejecting duplicate aliases, traversal and unexpected executable caches. Mutable exclusions include `workspace/`, `certs/` and `server-config.json`; Git metadata and inventory self-references are also excluded. Current source hashes large renderer files with a fixed 1 MiB streaming buffer. The corresponding candidate rebuild remains part of pending acceptance.
+The outer SHA-256 inventory checks immutable bytes and exact coverage, rejecting duplicate aliases, traversal and unexpected executable caches. Mutable exclusions include `workspace/`, `work/`, `certs/` and `server-config.json`; Git metadata and inventory self-references are also excluded. Current source hashes large renderer files with a fixed 1 MiB streaming buffer. The corresponding candidate rebuild remains part of pending acceptance.
 
 `--qualify` is designed to run precompiled regressions without target compilation, restrict PATH to Windows directories, use package-local temporary data, probe the actual CLR/WPF/SDK/Fixed browser, and launch the real native presenter/Worker against an isolated VCMD smoke workflow. Output checks include file readback, Photon verification/snapshot, successful result and graceful persistence acknowledgment.
 

@@ -20,6 +20,14 @@ Subsequent native tool/probe processes stalled and separate filesystem operation
 
 Earlier **3.0.0** evidence recorded 44 passed native top-level groups, 83 passed retained JavaScript tests, actual WPF/Worker startup and standalone command execution. Those are historical baseline results and are not a current 3.0.1 suite pass. Skipped optional developer integrations or denied hard-link fixtures are not passed tests.
 
+## Windows packaging and path correction
+
+The repository source ZIP excludes compiled programs and Microsoft runtime binaries. Named Windows release assets contain those components; see RELEASES.md. The older 372,186,648-byte ZIP passed all 409 member CRC/length checks and its recorded SHA-256. Its size primarily comes from runtime dependencies and an unnecessary nested history archive.
+
+The current source adds a 100 UTF-16-unit root budget, native/managed path guards, bounded qualification paths, short same-directory atomic temporary names, source/binary build receipts and audited packaging. The PowerShell ZIP/path checker passed 34 synthetic cases on this Windows host; the scripts parsed without errors. The source/binary receipt comparison also rejected an intentionally changed source hash. These checks do not validate rebuilt Go/C# executables or an actual browser workload. See WINDOWS_PORTABILITY.md.
+
+Local Go/native process starts remained unreliable during this work. A manual hosted Windows workflow is provided for fresh compilation and regression evidence; an unexecuted workflow is not a test result. The legacy reference package preserves 3.0.0 binaries and corresponding source and does not contain the new native 3.0.1 guards.
+
 ## Acceptance gates for a binary release
 
 1. Rebuild executables from the exact reviewed source and record toolchain/dependency identities.

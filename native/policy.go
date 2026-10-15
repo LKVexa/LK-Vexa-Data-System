@@ -488,5 +488,8 @@ func rootPath() (string, error) {
 	if strings.EqualFold(filepath.Base(d), "bin") {
 		d = filepath.Dir(d)
 	}
+	if e = portableRootSafety(d); e != nil {
+		return "", e
+	}
 	return plainPath(d, false)
 }
