@@ -4,7 +4,6 @@ package main
 // contracts. In particular, lock files are never unlinked on shutdown.
 import (
 	"bytes"
-	"crypto/sha256"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -149,64 +148,6 @@ func readRegular(path string, limit int64, missing bool) ([]byte, error) {
 		return nil, errors.New("named file identity changed")
 	}
 	return b, nil
-}
-
-// Hash the large packaged renderer without allocating a renderer-sized buffer.
-// Keep the same pinned-handle, no-writer/no-replacement and identity checks as
-// bounded record reads. The fixed buffer is independent of the file's size.
-func hashRegular(path string, limit int64) ([32]byte, error) {
-	var result [32]byte
-	p, e := plainPath(path, false)
-	if e != nil {
-		return result, e
-	}
-	before, e := namedIdentity(p)
-	if e != nil {
-		return result, e
-	}
-	if before.attrs&(0x10|0x400) != 0 || before.links != 1 || before.size > uint64(limit) {
-		return result, errors.New("expected a bounded single-link regular file")
-	}
-	h, e := openHandle(p, syscall.GENERIC_READ, syscall.FILE_SHARE_READ, syscall.OPEN_EXISTING, 0x00200000)
-	if e != nil {
-		return result, e
-	}
-	f := os.NewFile(uintptr(h), p)
-	defer f.Close()
-	opened, e := handleIdentity(h)
-	if e != nil {
-		return result, e
-	}
-	if opened != before {
-		return result, errors.New("file identity changed")
-	}
-	digest := sha256.New()
-	n, e := io.CopyBuffer(digest, io.LimitReader(f, limit+1), make([]byte, 1<<20))
-	if e != nil {
-		return result, e
-	}
-	if n > limit || uint64(n) != opened.size {
-		return result, errors.New("file changed or exceeded its hash limit")
-	}
-	after, e := handleIdentity(h)
-	if e != nil {
-		return result, e
-	}
-	if after != opened {
-		return result, errors.New("file changed during hashing")
-	}
-	if _, e = plainPath(p, false); e != nil {
-		return result, e
-	}
-	named, e := namedIdentity(p)
-	if e != nil {
-		return result, e
-	}
-	if named != after {
-		return result, errors.New("named file identity changed")
-	}
-	copy(result[:], digest.Sum(nil))
-	return result, nil
 }
 
 func strictJSON(data []byte) (any, error) {

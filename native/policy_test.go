@@ -10,7 +10,7 @@ import (
 )
 
 func TestConfigurationRejectsAmbiguityAndRequiresTLSChoice(t *testing.T) {
-	root := testTempDir(t)
+	root := t.TempDir()
 	good := []string{"--allow-insecure-network", "--host", "127.0.0.1", "--public-origin", "http://127.0.0.1:8877"}
 	if _, cfg, e := parseOptions(good, root); e != nil || cfg.Origin != "http://127.0.0.1:8877" {
 		t.Fatalf("explicit insecure config: %v %v", cfg, e)
@@ -53,7 +53,7 @@ func TestCanonicalOrigins(t *testing.T) {
 }
 
 func TestStrictCLIFlagSpellingAndPresenceOnlyBooleans(t *testing.T) {
-	root := testTempDir(t)
+	root := t.TempDir()
 	config := []byte(`{"host":"127.0.0.1","publicOrigin":"http://127.0.0.1:8877","allowInsecureNetwork":true}`)
 	if e := os.WriteFile(filepath.Join(root, "server-config.json"), config, 0600); e != nil {
 		t.Fatal(e)
@@ -79,7 +79,7 @@ func TestStrictCLIFlagSpellingAndPresenceOnlyBooleans(t *testing.T) {
 }
 
 func TestStandaloneVCMDDefaultsAndRejectsNetworkOverrides(t *testing.T) {
-	root := testTempDir(t)
+	root := t.TempDir()
 	script := filepath.Join(root, "standalone fixture.vcmd")
 	if e := os.WriteFile(script, []byte("#!vcmd 1\necho isolated\n"), 0600); e != nil {
 		t.Fatal(e)
@@ -115,7 +115,7 @@ func TestStandaloneVCMDDefaultsAndRejectsNetworkOverrides(t *testing.T) {
 }
 
 func TestDoctorStandaloneOfflineReportMissingRenderer(t *testing.T) {
-	root := testTempDir(t)
+	root := t.TempDir()
 	o, c, e := parseOptions([]string{"--doctor"}, root)
 	if e != nil || !o.Doctor || c != nil {
 		t.Fatalf("doctor CLI: %v %v %v", o, c, e)
@@ -157,7 +157,7 @@ func TestDoctorStandaloneOfflineReportMissingRenderer(t *testing.T) {
 	}
 }
 func TestVerifierDetectsTamperAndCoverage(t *testing.T) {
-	root := testTempDir(t)
+	root := t.TempDir()
 	profile, e := os.ReadFile("ja21-profile.ja")
 	if e != nil {
 		t.Fatal(e)

@@ -16,7 +16,7 @@ import (
 	"strings"
 )
 
-const ReleaseVersion = "3.0.1"
+const ReleaseVersion = "3.0.0"
 
 type Options struct {
 	ConfigPath, Host, PublicOrigin, TLSCert, TLSKey                         string
@@ -24,10 +24,6 @@ type Options struct {
 	Origins, Roots                                                          repeatedFlag
 	Insecure, ShowToken, ServerOnly, Check, Trace, Verify, SelfTest, Doctor bool
 	VCMD, Report, Restore                                                   string
-	Local, Network, LANUnsafe                                               bool
-	CloseAfterJob                                                           bool
-	QualificationWorkspace                                                  string
-	JobOutputSink                                                           io.Writer
 }
 type Config struct {
 	Host           string
@@ -47,13 +43,13 @@ func parseOptions(args []string, root string) (*Options, *Config, error) {
 	o := &Options{}
 	if len(args) > 0 && args[0] == "--restore" {
 		if len(args) != 2 {
-			return nil, nil, errors.New("usage: BOOT.cmd --restore <export.json>")
+			return nil, nil, errors.New("usage: RESTORE.cmd <export.json>")
 		}
 		o.Restore = args[1]
 		return o, nil, nil
 	}
 	seen := map[string]bool{}
-	presenceOnly := map[string]bool{"--allow-insecure-network": true, "--show-token": true, "--server-only": true, "--check": true, "--trace": true, "--verify": true, "--self-test": true, "--doctor": true, "--local": true, "--network": true, "--lan-unsafe": true}
+	presenceOnly := map[string]bool{"--allow-insecure-network": true, "--show-token": true, "--server-only": true, "--check": true, "--trace": true, "--verify": true, "--self-test": true, "--doctor": true}
 	for _, a := range args {
 		if strings.HasPrefix(a, "-") && !strings.HasPrefix(a, "--") {
 			return nil, nil, errors.New("use full --long-option spelling; single-dash aliases are not supported")
@@ -89,9 +85,6 @@ func parseOptions(args []string, root string) (*Options, *Config, error) {
 	f.BoolVar(&o.Verify, "verify", false, "")
 	f.BoolVar(&o.SelfTest, "self-test", false, "")
 	f.BoolVar(&o.Doctor, "doctor", false, "")
-	f.BoolVar(&o.Local, "local", false, "")
-	f.BoolVar(&o.Network, "network", false, "")
-	f.BoolVar(&o.LANUnsafe, "lan-unsafe", false, "")
 	if err := f.Parse(args); err != nil {
 		return nil, nil, err
 	}
@@ -109,59 +102,6 @@ func parseOptions(args []string, root string) (*Options, *Config, error) {
 	}
 	if o.VCMD != "" && o.ServerOnly {
 		return nil, nil, errors.New("standalone VCMD requires its native engine window")
-	}
-	modeCount := 0
-	for _, selected := range []bool{o.Local, o.Network, o.LANUnsafe} {
-		if selected {
-			modeCount++
-		}
-	}
-	if modeCount > 1 {
-		return nil, nil, errors.New("choose one of --local, --network, or --lan-unsafe")
-	}
-	if o.VCMD != "" && modeCount > 0 {
-		return nil, nil, errors.New("standalone VCMD cannot be combined with a network or local console mode")
-	}
-	if o.Local {
-		for _, option := range []string{"--config", "--host", "--public-origin", "--allow-origin", "--tls-cert", "--tls-key", "--allow-insecure-network"} {
-			if seen[option] {
-				return nil, nil, fmt.Errorf("%s cannot override local console isolation; select --network or --lan-unsafe explicitly", option)
-			}
-		}
-		port := 8877
-		if seen["--port"] {
-			port = o.Port
-		}
-		if port < 1024 || port > 65535 {
-			return nil, nil, errors.New("port must be 1024..65535")
-		}
-		if len(o.Roots) > 8 {
-			return nil, nil, errors.New("at most 8 source roots")
-		}
-		host := net.JoinHostPort("127.0.0.1", strconv.Itoa(port))
-		origin := "http://" + host
-		c := &Config{Host: "127.0.0.1", Port: port, Origin: origin, Origins: map[string]bool{origin: true}, Hosts: map[string]bool{host: true}}
-		for _, r := range o.Roots {
-			if !filepath.IsAbs(r) {
-				r = filepath.Join(root, r)
-			}
-			p, e := plainPath(r, false)
-			if e != nil {
-				return nil, nil, e
-			}
-			c.Roots = append(c.Roots, p)
-		}
-		return o, c, nil
-	}
-	if o.Network && seen["--allow-insecure-network"] {
-		return nil, nil, errors.New("--network requires TLS; use --lan-unsafe only for an explicitly unencrypted test network")
-	}
-	if o.LANUnsafe {
-		for _, option := range []string{"--config", "--tls-cert", "--tls-key", "--allow-insecure-network"} {
-			if seen[option] {
-				return nil, nil, fmt.Errorf("%s cannot be combined with --lan-unsafe; provide LAN settings explicitly", option)
-			}
-		}
 	}
 	if o.VCMD != "" {
 		for _, option := range []string{"--config", "--host", "--port", "--public-origin", "--allow-origin", "--tls-cert", "--tls-key", "--allow-insecure-network"} {
@@ -184,7 +124,7 @@ func parseOptions(args []string, root string) (*Options, *Config, error) {
 		return nil, nil, err
 	}
 	var data []byte
-	if !o.LANUnsafe {
+	if !(o.VCMD != "" && o.ConfigPath == "") {
 		data, err = readRegular(path, 65536, o.ConfigPath == "")
 		if err != nil {
 			return nil, nil, err
@@ -219,9 +159,6 @@ func parseOptions(args []string, root string) (*Options, *Config, error) {
 	port := 8877
 	pub, cert, key := "", "", ""
 	insecure := false
-	if o.LANUnsafe {
-		insecure = true
-	}
 	if v, ok := m["host"].(string); ok {
 		host = v
 	}
@@ -293,9 +230,6 @@ func parseOptions(args []string, root string) (*Options, *Config, error) {
 	}
 	if cert == "" && !insecure {
 		return nil, nil, errors.New("TLS is required; configure certificate/key or explicitly select --allow-insecure-network for an isolated test network")
-	}
-	if o.Network && cert == "" {
-		return nil, nil, errors.New("--network requires a configured TLS certificate and key; inspect server-config.example.json")
 	}
 	c := &Config{Host: host, Port: port, Origins: map[string]bool{}, Hosts: map[string]bool{}}
 	scheme := "http"

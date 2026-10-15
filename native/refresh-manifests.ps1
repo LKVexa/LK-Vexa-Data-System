@@ -17,7 +17,7 @@ foreach($jpEntry in $jpOldSeal.files) {
 foreach($jpRel in @('host/JPConsoleEntry.cs','bin/JPConsole.exe','bin/Microsoft.Web.WebView2.Core.dll','bin/Microsoft.Web.WebView2.Wpf.dll','bin/WebView2Loader.dll','source/jp250-service.ja')) {
   if($jpSeen.Add($jpRel)) { [void]$jpEntries.Add((Get-JPEntry $jpRel)) }
 }
-$jpSeal=[ordered]@{format='vb-ja21-runtime-seal/4';product='JA21 Photon Console 3.0.1 compiled native presenter';version='9.8.7';scope='Retained presenter ABI and source/IR; compiled entry point; no historical bootstrap or runtime provisioning. Hashes are not signatures.';files=$jpEntries.ToArray()}
+$jpSeal=[ordered]@{format='vb-ja21-runtime-seal/4';product='JA21 Photon Console 3.0.0 compiled native presenter';version='9.8.7';scope='Retained presenter ABI and source/IR; compiled entry point; no historical bootstrap or runtime provisioning. Hashes are not signatures.';files=$jpEntries.ToArray()}
 [IO.File]::WriteAllText($jpSealPath,($jpSeal | ConvertTo-Json -Depth 10)+"`n",$jpUtf8)
 $jpLines=New-Object Collections.Generic.List[string]
 foreach($jpFile in Get-ChildItem -LiteralPath $jpRoot -Recurse -File -Force | Sort-Object FullName) {

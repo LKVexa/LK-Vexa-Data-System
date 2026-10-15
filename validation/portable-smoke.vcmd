@@ -1,9 +1,0 @@
-#!vcmd 1
-echo JP300_QUALIFY_BEGIN
-mkdir -p /tmp/portability
-echo JP300_FILE_READBACK_OK > /tmp/portability/probe.txt
-cat /tmp/portability/probe.txt
-photon status
-photon verify
-photon snapshot
-echo JP300_QUALIFY_END

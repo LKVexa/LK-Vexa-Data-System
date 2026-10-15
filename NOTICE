@@ -23,8 +23,9 @@ for the rights holder's included material. Historical HERMIT attribution
 is preserved in licenses/HERMIT-HISTORICAL-NOTICE.txt. Original JA21 and
 Photon attribution remains in the corresponding licenses and notices.
 
-This repository is a source distribution. It excludes Microsoft browser
-runtime/SDK binaries, compiled application and test executables, archived
-private packages, certificates, active configuration and user state.
-Separately acquired third-party software retains its own terms. See
-LICENSING.md and THIRD_PARTY_NOTICES.md for component boundaries.
+This is the JP300 3.0.0 legacy reference binary distribution. Original
+application binaries and corresponding source are preserved. Microsoft
+runtime/SDK binaries retain their own terms, separate from the project GPL
+grant. Historical nested packages, private validation logs, certificates,
+active configuration and user state are excluded. See README.md, STATUS.md,
+LICENSING.md and THIRD_PARTY_NOTICES.md.

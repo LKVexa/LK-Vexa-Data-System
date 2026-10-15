@@ -50,7 +50,6 @@ type Broker struct {
 	stopOnce               sync.Once
 	jobOnce                sync.Once
 	JobDone                chan JobResult
-	jobCapture             io.Writer
 	outputBytes            int64
 }
 
@@ -756,11 +755,7 @@ func (b *Broker) engine(w *WS, loopback bool) error {
 			if stream == "stderr" {
 				dest = os.Stderr
 			}
-			var output io.Writer = dest
-			if b.jobCapture != nil {
-				output = io.MultiWriter(dest, b.jobCapture)
-			}
-			if _, e = io.WriteString(output, s); e != nil {
+			if _, e = io.WriteString(dest, s); e != nil {
 				return e
 			}
 		case "job.done":

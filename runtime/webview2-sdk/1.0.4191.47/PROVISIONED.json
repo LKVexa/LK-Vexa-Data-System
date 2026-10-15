@@ -1,0 +1,21 @@
+﻿{
+    "schema":  "VB-JA21/WEBVIEW2_ADAPTER/1",
+    "version":  "1.0.4191.47",
+    "source":  "https://www.nuget.org/api/v2/package/Microsoft.Web.WebView2/1.0.4191.47",
+    "provisioned_utc":  "2026-09-18T14:29:01.8402601Z",
+    "package_sha256":  "f492bbf547d0da329553b6727435b677579b1e9f91cc9e4a1ad029366d5f23d0",
+    "files":  [
+                  {
+                      "name":  "Microsoft.Web.WebView2.Core.dll",
+                      "sha256":  "e6f54c8ce208e3797c427d01ad671b47cb25abc85604753d6ec2546d0ffef550"
+                  },
+                  {
+                      "name":  "Microsoft.Web.WebView2.Wpf.dll",
+                      "sha256":  "6942b85a3388ece45febde5584d2bfc035d84315f2dd5a4a47913f01a0193800"
+                  },
+                  {
+                      "name":  "WebView2Loader.dll",
+                      "sha256":  "c66e4a92fdc7a216118e43b7a5024ea2200e8c43f9310bf20d96a0084f82c5bc"
+                  }
+              ]
+}

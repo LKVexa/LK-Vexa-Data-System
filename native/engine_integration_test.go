@@ -382,11 +382,11 @@ func TestRetainedJSEngineNativeBrokerIntegration(t *testing.T) {
 		filepath.Join("..", "source", "JP250"), // Preserved source while candidate is assembled.
 	}, filepath.Join("photon", "config", "vec1.json"))
 	t.Logf("Development runner only: retained engine=%s; native Photon input=%s; WPF/WebView2/Worker UI NOT exercised", web, packageRoot)
-	workspace := testTempDir(t)
-	grant := testTempDir(t)
+	workspace := t.TempDir()
+	grant := t.TempDir()
 	rootScript := filepath.Join(grant, "main.vcmd")
 	childScript := filepath.Join(grant, "child.vcmd")
-	outside := filepath.Join(testTempDir(t), "outside.vcmd")
+	outside := filepath.Join(t.TempDir(), "outside.vcmd")
 	for path, content := range map[string]string{
 		rootScript:  "#!vcmd 1\n@name Actual native include integration\n@include \"child.vcmd\"\necho ROOT_INCLUDE_FINISHED\n",
 		childScript: "#!vcmd 1\necho INCLUDED_NATIVE > /tmp/native-include.txt\ncat /tmp/native-include.txt\n",

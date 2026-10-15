@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
 	"errors"
@@ -27,18 +28,6 @@ func runMain(args []string) int {
 		fmt.Fprintln(os.Stderr, "STARTUP FAILED:", e)
 		return 1
 	}
-	args, action, e := bootArguments(args)
-	if e != nil {
-		fmt.Fprintln(os.Stderr, "STARTUP FAILED:", e)
-		return 1
-	}
-	if action == "help" {
-		fmt.Print(bootUsage)
-		return 0
-	}
-	if action == "qualify" {
-		return runQualification(root)
-	}
 	o, c, e := parseOptions(args, root)
 	if e == nil {
 		if o.Doctor {
@@ -56,19 +45,14 @@ func runMain(args []string) int {
 			}
 		} else {
 			var verification map[string]any
-			if o.Verify {
-				verification, e = verifyPackage(root)
-			} else {
-				if code := runDoctorQuiet(root); code != 0 {
-					return code
-				}
-			}
+			verification, e = verifyPackage(root)
 			if e == nil && o.Verify {
 				data, _ := json.MarshalIndent(verification, "", "  ")
 				fmt.Println(string(data))
 				return 0
 			}
 			if e == nil {
+				fmt.Printf("Integrity: %v shipped files matched.\n", verification["filesMatched"])
 				var code int
 				code, e = runService(root, o, c)
 				if e == nil {
@@ -85,14 +69,7 @@ func runService(root string, o *Options, cfg *Config) (exitCode int, retErr erro
 	if e != nil {
 		return 1, e
 	}
-	workspacePath := filepath.Join(root, "workspace")
-	if o.QualificationWorkspace != "" {
-		workspacePath, e = qualificationWorkspacePath(root, o.QualificationWorkspace)
-		if e != nil {
-			return 1, e
-		}
-	}
-	workspace, e := plainPath(workspacePath, true)
+	workspace, e := plainPath(filepath.Join(root, "workspace"), true)
 	if e != nil {
 		return 1, e
 	}
@@ -130,7 +107,6 @@ func runService(root string, o *Options, cfg *Config) (exitCode int, retErr erro
 	if e != nil {
 		return 1, e
 	}
-	b.jobCapture = o.JobOutputSink
 	if e = b.Start(); e != nil {
 		return 1, e
 	}
@@ -168,20 +144,13 @@ func runService(root string, o *Options, cfg *Config) (exitCode int, retErr erro
 	if e != nil {
 		return 1, e
 	}
-	qualificationWorkspace := ""
-	if o.QualificationWorkspace != "" {
-		qualificationWorkspace = workspace
-	}
-	payload, e := consoleBootstrap(cfg.Origin, b.token, b.engineToken, qualificationWorkspace)
+	payload, e := jsonBytes(map[string]any{"protocol": 2, "origin": cfg.Origin, "token": b.token, "engineToken": b.engineToken})
 	if e != nil {
 		return 1, e
 	}
 	child = exec.Command(host)
 	child.Dir = root
 	child.Env = hostEnvironment()
-	if o.QualificationWorkspace != "" {
-		child.Env = qualificationEnvironment(filepath.Join(workspace, "temp"))
-	}
 	child.Stdin = bytes.NewReader(payload)
 	child.Stdout = os.Stdout
 	child.Stderr = os.Stderr
@@ -209,20 +178,12 @@ func runService(root string, o *Options, cfg *Config) (exitCode int, retErr erro
 	fmt.Println("JA21 transport + native JavaScript engine ready. Commands / Scripts tabs retained.")
 	if cfg.Job != nil {
 		var result JobResult
-		var jobDeadline <-chan time.Time
-		if o.CloseAfterJob {
-			jobTimer := time.NewTimer(60 * time.Second)
-			defer jobTimer.Stop()
-			jobDeadline = jobTimer.C
-		}
 		select {
 		case result = <-b.JobDone:
 		case <-childDone:
 			return 1, errors.New("native window closed before script completion")
 		case <-interrupt:
 			return 130, nil
-		case <-jobDeadline:
-			return 1, errors.New("qualification standalone job did not complete within 60 seconds")
 		}
 		if result.Err != nil {
 			return 1, result.Err
@@ -240,14 +201,7 @@ func runService(root string, o *Options, cfg *Config) (exitCode int, retErr erro
 				return 1, e
 			}
 		}
-		fmt.Printf("\nStandalone result: %d (isolated virtual volume)\n", code)
-		if o.CloseAfterJob {
-			if e = closeQualificationWindow(b, child, childDone); e != nil {
-				return 1, e
-			}
-			return int(code), nil
-		}
-		fmt.Println("Close the native window to finish this standalone launcher.")
+		fmt.Printf("\nStandalone result: %d (isolated virtual volume)\nClose the native window to finish this standalone launcher.\n", code)
 		select {
 		case <-childDone:
 			return int(code), nil
@@ -257,9 +211,6 @@ func runService(root string, o *Options, cfg *Config) (exitCode int, retErr erro
 	}
 	select {
 	case <-childDone:
-		if !b.Clean() {
-			waitPresenterAcknowledgement(b, 3*time.Second)
-		}
 		if !b.Clean() {
 			fmt.Fprintln(os.Stderr, "WARNING: engine shutdown was not acknowledged; last completed per-command saves may exist, but unsaved work is not guaranteed.")
 			if childErr == nil {
@@ -276,44 +227,6 @@ func runService(root string, o *Options, cfg *Config) (exitCode int, retErr erro
 	case <-interrupt:
 		return 130, nil
 	}
-}
-func qualificationWorkspacePath(root, workspace string) (string, error) {
-	if !filepath.IsAbs(workspace) {
-		return "", errors.New("qualification workspace must be an absolute path inside workspace/qualification")
-	}
-	boundary, e := filepath.Abs(filepath.Join(root, "workspace", "qualification"))
-	if e != nil {
-		return "", e
-	}
-	original := workspace
-	workspace, e = filepath.Abs(workspace)
-	if e != nil {
-		return "", e
-	}
-	if !strings.EqualFold(workspace, original) {
-		return "", errors.New("qualification workspace must be canonical without Windows path aliases")
-	}
-	relative, e := filepath.Rel(boundary, workspace)
-	if e != nil || relative == "." || relative == ".." || strings.HasPrefix(relative, ".."+string(os.PathSeparator)) || filepath.IsAbs(relative) {
-		return "", errors.New("qualification workspace must be a descendant of workspace/qualification")
-	}
-	for _, part := range strings.Split(relative, string(os.PathSeparator)) {
-		if strings.HasSuffix(part, ".") || strings.HasSuffix(part, " ") || strings.ContainsAny(part, `<>:"|?*`) || strings.IndexFunc(part, func(r rune) bool { return r < 32 }) >= 0 {
-			return "", errors.New("invalid qualification workspace component")
-		}
-	}
-	return plainPath(workspace, true)
-}
-func consoleBootstrap(origin, token, engineToken, qualificationWorkspace string) ([]byte, error) {
-	value := map[string]any{"protocol": 2, "origin": origin, "token": token, "engineToken": engineToken}
-	if qualificationWorkspace != "" {
-		value["qualificationWorkspace"] = qualificationWorkspace
-	}
-	data, e := jsonBytes(value)
-	if e == nil && len(data) > 2048 {
-		e = errors.New("native bootstrap exceeds its size limit")
-	}
-	return data, e
 }
 func hostEnvironment() []string {
 	out := []string{}
@@ -450,10 +363,11 @@ func verifyPackage(root string) (map[string]any, error) {
 		if !strings.HasPrefix(strings.ToLower(p), strings.ToLower(root)+string(os.PathSeparator)) {
 			return nil, errors.New("checksum path escaped root")
 		}
-		hash, e := hashRegular(p, 512*1024*1024)
+		data, e := readRegular(p, 512*1024*1024, false)
 		if e != nil {
 			return nil, e
 		}
+		hash := sha256.Sum256(data)
 		if hex.EncodeToString(hash[:]) != m[1] {
 			return nil, fmt.Errorf("checksum mismatch: %s", rel)
 		}

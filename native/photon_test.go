@@ -12,8 +12,8 @@ const testPhotonConfig = `{"schema":"VEC1/CONFIG/1","version":"0.2.0","default_p
 
 func photonFixture(t *testing.T) (*PhotonBridge, string, string) {
 	t.Helper()
-	pkg := testTempDir(t)
-	ws := testTempDir(t)
+	pkg := t.TempDir()
+	ws := t.TempDir()
 	for _, d := range []string{"config", "programs"} {
 		if e := os.MkdirAll(filepath.Join(pkg, "photon", d), 0700); e != nil {
 			t.Fatal(e)
@@ -281,8 +281,8 @@ func TestSuppliedPythonSnapshotCompatibility(t *testing.T) {
 		t.Fatal(e)
 	}
 	f := object(raw)
-	pkg := testTempDir(t)
-	ws := testTempDir(t)
+	pkg := t.TempDir()
+	ws := t.TempDir()
 	state := object(f["state"])
 	id := str(state["electron_id"])
 	root := filepath.Join(ws, "photon")

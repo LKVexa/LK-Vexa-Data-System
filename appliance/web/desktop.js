@@ -9,7 +9,7 @@ export function validateBootstrap(value,origin,nonce){
 }
 export function requestDesktopSession({bridge,origin,random=globalThis.crypto,timeoutMs=10000}={}){
  return new Promise((resolve,reject)=>{
-  if(!bridge?.addEventListener||!bridge?.removeEventListener||!bridge?.postMessage){reject(new Error('Native JA21 bridge is unavailable. Launch using BOOT.cmd, or remove #ja21-desktop to use an ordinary browser.'));return;}
+  if(!bridge?.addEventListener||!bridge?.removeEventListener||!bridge?.postMessage){reject(new Error('Native JA21 bridge is unavailable. Launch using Start Console.cmd, or remove #ja21-desktop to use an ordinary browser.'));return;}
   if(!/^https?:\/\//.test(origin)){reject(new Error('The native session requires an HTTP(S) origin'));return;}
   let nonce;try{nonce=Array.from(random.getRandomValues(new Uint8Array(16)),x=>x.toString(16).padStart(2,'0')).join('');}catch{reject(new Error('Secure random bytes are unavailable'));return;}
   let timer,done=false;

@@ -29,7 +29,7 @@ func TestVolumeCrashHelper(t *testing.T) {
 	os.Exit(0)
 }
 func TestVolumeLockReleasedAfterProcessExit(t *testing.T) {
-	dir := testTempDir(t)
+	dir := t.TempDir()
 	cmd := exec.Command(os.Args[0], "-test.run=^TestVolumeCrashHelper$")
 	cmd.Env = append(os.Environ(), "JP250_TEST_CRASH_VOLUME="+dir)
 	if b, e := cmd.CombinedOutput(); e != nil {
@@ -62,7 +62,7 @@ func TestStrictJSONBoundaries(t *testing.T) {
 	}
 }
 func TestVolumePersistenceLockAndDisappearance(t *testing.T) {
-	dir := testTempDir(t)
+	dir := t.TempDir()
 	s, e := NewVolumeStore(dir, false)
 	if e != nil {
 		t.Fatal(e)
@@ -105,7 +105,7 @@ func TestVolumePersistenceLockAndDisappearance(t *testing.T) {
 	}
 }
 func TestLegacyLockAndUnsafeFiles(t *testing.T) {
-	dir := testTempDir(t)
+	dir := t.TempDir()
 	if e := os.WriteFile(filepath.Join(dir, "server.lock"), []byte(`{"pid":12}`), 0600); e != nil {
 		t.Fatal(e)
 	}
@@ -152,7 +152,7 @@ func TestVolumeSchemaQuotas(t *testing.T) {
 	}
 }
 func TestSourceGrantConfinement(t *testing.T) {
-	dir := testTempDir(t)
+	dir := t.TempDir()
 	p := filepath.Join(dir, "test.vcmd")
 	if e := os.WriteFile(p, []byte("\xef\xbb\xbf#!vcmd 1\r\necho hello\r\n"), 0600); e != nil {
 		t.Fatal(e)
@@ -173,7 +173,7 @@ func TestSourceGrantConfinement(t *testing.T) {
 			t.Errorf("accepted %s", path)
 		}
 	}
-	if _, e = s.Read(filepath.Join(testTempDir(t), "other.vcmd"), ""); e == nil {
+	if _, e = s.Read(filepath.Join(t.TempDir(), "other.vcmd"), ""); e == nil {
 		t.Fatal("accepted outside path")
 	}
 	none, _ := NewLocalSources(nil)

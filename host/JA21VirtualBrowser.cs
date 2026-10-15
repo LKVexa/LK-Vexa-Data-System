@@ -3593,7 +3593,7 @@ namespace VBJA21
         private void SyncChrome()
         {
             BrowserTab t=ActiveTab;if(t==null)return;
-            if (Ja21Design.ConsoleMode) { Title = DesktopSession.Enabled ? "JA21 Photon Console 3.0.1" : "JA21 Virtual Console"; return; }
+            if (Ja21Design.ConsoleMode) { Title = DesktopSession.Enabled ? "JA21 Photon Console 3.0.0" : "JA21 Virtual Console"; return; }
             // 9.8.7 edit/focus-state hardening: a dirty omni draft belongs to the active tab and wins
             // over all page-driven URL/title refreshes until the user explicitly commits, cancels,
             // or switches tabs. This includes an intentionally empty string.
@@ -3800,7 +3800,7 @@ namespace VBJA21
             VecSubstrate vec = null;
             if (!DesktopSession.Enabled)
             {
-                throw new Exception("This compact Photon release starts through BOOT.cmd. The historical standalone browser/backends are preserved in history/JP250.zip.");
+                throw new Exception("This compact Photon release starts through Start Console.cmd. The historical standalone browser/backends are preserved in history/JP240.zip.");
             }
             // The compatible Photon control plane is owned by the compiled native host. The modern
             // integrated surface has no native DF_Medium fallback and must not initialize

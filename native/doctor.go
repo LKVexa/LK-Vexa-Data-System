@@ -13,9 +13,7 @@ import (
 // runDoctor is offline and never starts a listener, renderer or other process.
 // Exit 0 means the packaged prerequisites are present and the integrity/profile
 // checks pass; exit 2 means not ready; exit 1 means the report could not be saved.
-func runDoctor(root string) int      { return doctorReport(root, true) }
-func runDoctorQuiet(root string) int { return doctorReport(root, false) }
-func doctorReport(root string, verbose bool) int {
+func runDoctor(root string) int {
 	checks := []any{}
 	ready := true
 	add := func(name string, detail any, e error) {
@@ -31,8 +29,6 @@ func doctorReport(root string, verbose bool) int {
 		platformErr = errors.New("this release requires Windows x64")
 	}
 	add("windows-x64", runtime.GOOS+"/"+runtime.GOARCH, platformErr)
-	platform, platformCheck := portableWindowsPlatform(root)
-	add("windows-11-local-deployment", platform, platformCheck)
 	verification, e := verifyPackage(root)
 	add("immutable-package-integrity", verification, e)
 	profile, e := LoadJA21Profile(filepath.Join(root, "source", "jp250-service.ja"))
@@ -75,21 +71,9 @@ func doctorReport(root string, verbose bool) int {
 		fmt.Fprintln(os.Stderr, "Doctor report could not be saved:", e)
 		return 1
 	}
-	if verbose {
-		pretty, _ := json.MarshalIndent(report, "", "  ")
-		fmt.Println(string(pretty))
-		fmt.Println("Doctor report:", reportPath)
-	} else if ready {
-		fmt.Println("Portable installation checks passed.")
-	} else {
-		fmt.Fprintln(os.Stderr, "Portable installation checks failed. Details:", reportPath)
-		for _, value := range checks {
-			check := value.(map[string]any)
-			if check["ok"] == false {
-				fmt.Fprintf(os.Stderr, "  %s: %v\n", check["name"], check["detail"])
-			}
-		}
-	}
+	pretty, _ := json.MarshalIndent(report, "", "  ")
+	fmt.Println(string(pretty))
+	fmt.Println("Doctor report:", reportPath)
 	if !ready {
 		return 2
 	}

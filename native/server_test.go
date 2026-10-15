@@ -21,7 +21,7 @@ import (
 
 func testBroker(t *testing.T, tlsConfig *tls.Config) *Broker {
 	t.Helper()
-	root := testTempDir(t)
+	root := t.TempDir()
 	store, e := NewVolumeStore(filepath.Join(root, "server"), true)
 	if e != nil {
 		t.Fatal(e)

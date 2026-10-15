@@ -1,18 +1,18 @@
 {
   "format": "vb-ja21-runtime-seal/4",
-  "product": "JA21 Photon Console 3.0.1 compiled native presenter",
+  "product": "JA21 Photon Console 3.0.0 compiled native presenter",
   "version": "9.8.7",
   "scope": "Retained presenter ABI and source/IR; compiled entry point; no historical bootstrap or runtime provisioning. Hashes are not signatures.",
   "files": [
     {
       "path": "CONSOLE_VERSION",
       "bytes": 6,
-      "sha256": "06e3fe4a7a1884d20d81cc7065ca8cfd4c394ec602c4d180ddc39bbd4f7da521"
+      "sha256": "2985be8b28d3ade858e8d8fb4bc22f565b1bf6020dff982dce141f7721b9999c"
     },
     {
       "path": "VERSION",
       "bytes": 6,
-      "sha256": "06e3fe4a7a1884d20d81cc7065ca8cfd4c394ec602c4d180ddc39bbd4f7da521"
+      "sha256": "2985be8b28d3ade858e8d8fb4bc22f565b1bf6020dff982dce141f7721b9999c"
     },
     {
       "path": "console.json",
@@ -56,8 +56,8 @@
     },
     {
       "path": "host/JA21VirtualBrowser.cs",
-      "bytes": 235663,
-      "sha256": "6a5c68e0306aec7f2008542f5b039e1ff168b50615efb09879dc6d308c9a7eb2"
+      "bytes": 235672,
+      "sha256": "be4d60f8c95051230138e82ce25df2205a73a8b98f0f1d09426929d28bb24f25"
     },
     {
       "path": "host/LiveWebBridge.cs",
@@ -141,13 +141,13 @@
     },
     {
       "path": "host/JPConsoleEntry.cs",
-      "bytes": 8647,
-      "sha256": "d27c048957de0636a4792ee0ef7196d61b27bb40ee99a34231af0b6921c140e7"
+      "bytes": 5160,
+      "sha256": "aae90207862045db6daa5d84b54faae802fed9459eb7074308fba284476c6aa9"
     },
     {
       "path": "bin/JPConsole.exe",
-      "bytes": 205824,
-      "sha256": "3f3dab54fd49aac2dff793cb253f1a4297ffdc543e710fd2c2bf4b5813aa623c"
+      "bytes": 204288,
+      "sha256": "a097a13f6b919a4921a369780a006e42644a49f4d708ae629f059c1e2addb63e"
     },
     {
       "path": "bin/Microsoft.Web.WebView2.Core.dll",
