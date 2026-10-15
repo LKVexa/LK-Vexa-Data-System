@@ -6,11 +6,13 @@
 
 LK/Vexa Data System is a Windows application source distribution combining a native transport broker, a WPF/WebView2 presenter, a browser Worker command engine, a bounded virtual filesystem, source-evaluated admission policy, and a compatible Photon identity/state adapter. The repository includes the application, HERMIT/SPIRAL command implementation, browser interface, VCMD support, native adapters, tests and supporting source material.
 
-**The 3.0.1 candidate is not an accepted portable release.** The earlier local qualification reached 28 passed top-level native test groups before temporary-directory cleanup timed out. Local rebuilding and acceptance of the fixture-retention correction remain incomplete because subsequent diagnostic processes stalled; the cause remains unconfirmed. A genuine clean Windows guest was unavailable. Fresh hosted build/regression results, when available, are recorded with the named release and its workflow run. Those results do not establish clean Windows 11 desktop acceptance. Historical 3.0.0 results do not validate the current candidate. See [STATUS.md](STATUS.md).
+**A complete executable 3.0.1 candidate is available.** The exact-source Windows build passed 57 top-level native test groups, 83 JavaScript tests and 34 path/ZIP cases. A separate fresh Windows Server 2025 runner downloaded the published ZIP, verified its SHA-256 and immutable contents, and passed the actual WPF/WebView2 Worker command qualification. Clean Windows 11 desktop acceptance and the normal no-argument BOOT check on that guest remain outstanding. See [STATUS.md](STATUS.md) for evidence and scope.
 
 This is a **source repository**, not a complete executable appliance. Precompiled executables, Microsoft browser/runtime binaries, historical archives, user workspaces, credentials and private execution logs are excluded. A source checkout must be built and supplied with the documented Microsoft dependencies before `BOOT.cmd` can start the application.
 
 ## Windows download
+
+**[Download the complete Windows x64 candidate (331,597,148 bytes)](https://github.com/LKVexa/LK-Vexa-Data-System/releases/download/v3.0.1-candidate.3/LKVS-3.0.1-Windows-x64-candidate.zip)** — extract all files into `C:\LKVS` or `D:\LKVS`, then run `BOOT.cmd`. The release is a prerelease while clean Windows 11 acceptance remains open.
 
 For a runnable application, choose the named Windows x64 asset under [GitHub Releases](https://github.com/LKVexa/LK-Vexa-Data-System/releases). GitHub's automatic source ZIP contains source only. The complete Windows package also needs the compiled programs, WebView2 adapters, entire Fixed Version browser and matching inventories. See [RELEASES.md](RELEASES.md) for package contents and version boundaries.
 
@@ -278,18 +280,18 @@ WebSocket writes are serialized with deadlines and pending-byte backpressure. HT
 
 ## 15. Integrity and qualification
 
-The outer SHA-256 inventory checks immutable bytes and exact coverage, rejecting duplicate aliases, traversal and unexpected executable caches. Mutable exclusions include `workspace/`, `work/`, `certs/` and `server-config.json`; Git metadata and inventory self-references are also excluded. Current source hashes large renderer files with a fixed 1 MiB streaming buffer. The corresponding candidate rebuild remains part of pending acceptance.
+The outer SHA-256 inventory checks immutable bytes and exact coverage, rejecting duplicate aliases, traversal and unexpected executable caches. Mutable exclusions include `workspace/`, `work/`, `certs/` and `server-config.json`; Git metadata and inventory self-references are also excluded. Current source hashes large renderer files with a fixed 1 MiB streaming buffer. The published candidate was rebuilt from source commit `629d44dc5c975ee5cb9d49576201d1b9aa5b4464`; its receipt and package passed the hosted build and downloaded-package checks.
 
 `--qualify` is designed to run precompiled regressions without target compilation, restrict PATH to Windows directories, use package-local temporary data, probe the actual CLR/WPF/SDK/Fixed browser, and launch the real native presenter/Worker against an isolated VCMD smoke workflow. Output checks include file readback, Photon verification/snapshot, successful result and graceful persistence acknowledgment.
 
 | Evidence scope | Recorded status |
 |---|---|
-| Current 3.0.1 native qualification | Incomplete; 28 groups passed before cleanup timeout |
-| Current fixture-retention correction | Source present; fresh build/acceptance pending |
-| Genuine clean Windows machine | Not performed; suitable guest unavailable |
-| Historical 3.0.0 native suite | 44 top-level groups passed; historical scope only |
-| Historical retained JavaScript suite | 83 tests passed; historical scope only |
-| Historical native window/Worker and standalone execution | Observed in 3.0.0; not current-candidate acceptance |
+| Candidate.3 exact-source Windows build | Passed; 57 top-level native groups, 83 JavaScript tests, 34 path/ZIP cases; zero skips in these build suites |
+| Downloaded candidate on a separate Windows Server 2025 runner | Integrity, dependency probe, offline doctor and actual window/Worker commands passed; packaged native suite: 56 groups passed, one optional Node integration skipped |
+| Ordinary no-argument BOOT on a clean Windows 11 desktop | Pending |
+| Independently attested clean Windows 11 machine | Pending; hosted Windows Server does not establish this provenance |
+| Earlier local 3.0.1 run | Historical incomplete run: 28 native groups before cleanup timeout; superseded for build regression evidence by the successful hosted run |
+| Historical 3.0.0 results | Retained as baseline only; they do not validate the current candidate |
 
 Qualification reports deliberately set `cleanMachineCertified:false`. Neither a new folder, restricted PATH nor operator-provided flag proves a clean OS. Independent guest provenance and a complete successful run remain necessary. Unsigned inventories also do not authenticate their own publisher or make a modified candidate equivalent to an accepted release.
 

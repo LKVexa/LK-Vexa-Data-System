@@ -25,7 +25,7 @@ This policy does not assert that every Windows component supports arbitrary long
 
 The source guards reject invalid characters, alternate data streams, Windows device aliases and trailing dot/space names. The package auditor also rejects traversal, absolute ZIP members, case collisions, file/directory collisions and links. Actual local identity checks continue to apply in the broker.
 
-## Corrections in the current source
+## Corrections included in candidate.3
 
 - The launcher checks the installation-root budget before starting native dependencies. The broker and presenter enforce the same root policy.
 - Native and managed ordinary filesystem paths are checked before operations that depend on legacy Windows APIs.
@@ -49,7 +49,7 @@ The package workflow audits both the staging directory and final ZIP at the maxi
 
 The older 372,186,648-byte JP300 ZIP has a longest installed-relative file tail of 85 units after removing its outer `JP300/` folder. At a 100-unit root, the corresponding static full path is 186 units. The size discrepancy was not caused by corrupted or truncated files: all 409 ZIP members passed independent CRC/length checks and the archive SHA-256 matched its prior receipt.
 
-Static archive checks do not prove all browser-generated profile names fit the envelope. Full native/window/Worker workloads and a genuine clean Windows 11 x64 test remain necessary. An excessively deep user-supplied report, export or VCMD source path is rejected rather than silently truncated or redirected.
+Candidate.3 passed the native regressions and actual window/Worker qualification on a fresh hosted Windows Server 2025 runner. Static archive checks and this short-root workload do not prove all browser-generated profile names fit at the maximum 100-unit installation root. A genuine clean Windows 11 x64 test, including normal BOOT behavior, remains necessary. An excessively deep user-supplied report, export or VCMD source path is rejected rather than silently truncated or redirected.
 
 ## Packaging
 
